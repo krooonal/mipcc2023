@@ -36,7 +36,6 @@ if not os.path.isdir(solution_folder):
 base_folder = os.path.join(os.path.dirname(meta_file), "../..")
 
 overall_total_score = 0
-solutions = {}
 for index, instance in enumerate(instances):
     instance_base = os.path.basename(instance)
     print("[INSTANCE]", instance_base)
@@ -47,36 +46,44 @@ for index, instance in enumerate(instances):
     # set time limit
     model.setRealParam("limits/time", time_limit)
 
-    # read instance
+    # read instance and solve it.
     instance_path = os.path.join(base_folder, instance)
+
+    # Presolving
+    print("Presolving model")
     model.readProblem(instance_path)
     scip_vars = []
     for j in range(model.getNVars()):
         v = model.getVars()[j]
         scip_vars.append(v)
+    print("Model number of variables: ", model.getNVars())
+    model.optimize()
+    current_solution = {}
+    if model.getNSols() > 0:
+        primal_bound = model.getObjVal()
+        sol = model.getBestSol()
+        for v in scip_vars:
+            name = v.name
+            val = model.getVal(v)
+            current_solution[name] = val
+
+    print("Model number of variables: ", model.getNVars())
 
     # Give hint using previous solutions.
-    solution_hint = model.createPartialSol()
+    print("Resolving with optimal solution")
+    model.readProblem(instance_path)
+    print("Model number of variables: ", model.getNVars())
+    solution_hint = model.createSol()
     partial_solution_generated = False
     for j in range(model.getNVars()):
         v = model.getVars()[j]
-        if v.vtype() == "CONTINUOUS":
-            continue
         name = v.name
-        if name not in solutions:
+        if name not in current_solution:
+            print("Something is still wrong!")
+            model.setSolVal(solution_hint, v, 0.0)
             continue
-
-        best_val = 0
-        best_freq = 0
-        for val in solutions[name]:
-
-            if solutions[name][val] > best_freq:
-                best_freq = solutions[name][val]
-                best_val = val
-        if best_freq > 0:
-            partial_solution_generated = True
-            model.setSolVal(solution_hint, v, best_val)
-            # print(name, best_val)
+        partial_solution_generated = True
+        model.setSolVal(solution_hint, v, current_solution[name])
     if partial_solution_generated:
         try:
             print("Trying solution")
@@ -105,20 +112,6 @@ for index, instance in enumerate(instances):
     if model.getNSols() > 0:
         primal_bound = model.getObjVal()
         sol = model.getBestSol()
-        with open(os.path.join(solution_folder, f"{instance_base}.sol"), 'w') as f:
-            for v in scip_vars:
-                name = v.name
-                val = model.getVal(v)
-                f.write(name)
-                f.write("    ")
-                f.write(str(val))
-                f.write("\n")
-                if name not in solutions:
-                    solutions[name] = {}
-                if val not in solutions[name]:
-                    solutions[name][val] = 1
-                else:
-                    solutions[name][val] += 1
 
     else:
         print("No solution found")

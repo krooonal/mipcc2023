@@ -28,15 +28,15 @@ def main(argv):
     # Solve it with scip/cp-sat
     sat_params = "interleave_search: true"
 
-    solver = pywraplp.Solver.CreateSolver('sat')
+    solver = pywraplp.Solver.CreateSolver('scip')
     if not solver:
         return
     params_set = solver.SetSolverSpecificParametersAsString(sat_params)
     print("Params set: ", params_set)
 
     solver.set_time_limit(300*1000)
-    solver.LoadModelFromProto(model_proto)
-    solver.EnableOutput()
+    solver.LoadModelFromProtoWithUniqueNamesOrDie(model_proto)
+    # solver.EnableOutput()
     solver.SetNumThreads(1)
     solver.Solve()
 
@@ -47,6 +47,9 @@ def main(argv):
     # Print solution
     print('Solution:')
     print('Objective value =', solver.Objective().Value())
+
+    for var in solver.variables():
+        print(var.name(), var.solution_value())
     return
 
 
