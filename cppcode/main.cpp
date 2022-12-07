@@ -8,6 +8,7 @@
 
 using namespace std;
 
+
 SCIP_RETCODE execmain(int argc, const char **argv)
 {
     string meta_file_name = argv[1];
@@ -47,6 +48,8 @@ SCIP_RETCODE execmain(int argc, const char **argv)
     // Creating the SCIP Problem.
     SCIP_CALL(SCIPcreateProbBasic(scip, "Reoptimization"));
 
+    // TODO: ADD TIME LIMIT
+    //
     // disable scip output to stdout
     //SCIPmessagehdlrSetQuiet(SCIPgetMessagehdlr(scip), TRUE);
     SCIP_RESULT *result;
@@ -58,14 +61,16 @@ SCIP_RETCODE execmain(int argc, const char **argv)
         // Read in *.MPS file
         SCIP_CALL(SCIPreadMps(scip, reader, filename.c_str(), result, NULL, NULL,
                     NULL, NULL, NULL, NULL));
-
+        
+        system("date -Iseconds");
         // Solve
         SCIP_CALL(SCIPsolve(scip));
-        // Display solution
+        // TODO: Write solution
         SCIP_VAR **vars;
         vars = SCIPgetVars(scip);
         SCIP_SOL *sol;
         sol = SCIPgetBestSol(scip);
+        system("date -Iseconds");
     }
 
     return SCIP_OKAY;

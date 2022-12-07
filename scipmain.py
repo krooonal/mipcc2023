@@ -33,7 +33,8 @@ solution_folder = os.path.join(
 if not os.path.isdir(solution_folder):
     os.mkdir(solution_folder)
 
-base_folder = os.path.join(os.path.dirname(meta_file), "../..")
+# base_folder = os.path.join(os.path.dirname(meta_file), "../..")
+base_folder = os.getcwd()
 
 overall_total_score = 0
 solutions = {}
