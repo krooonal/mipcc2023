@@ -51,7 +51,7 @@ SCIP_RETCODE execmain(int argc, const char **argv)
     // TODO: ADD TIME LIMIT
     //
     // disable scip output to stdout
-    //SCIPmessagehdlrSetQuiet(SCIPgetMessagehdlr(scip), TRUE);
+    // SCIPmessagehdlrSetQuiet(SCIPgetMessagehdlr(scip), TRUE);
     SCIP_RESULT *result;
     result = new SCIP_RESULT[3];
 
@@ -62,7 +62,9 @@ SCIP_RETCODE execmain(int argc, const char **argv)
         SCIP_CALL(SCIPreadMps(scip, reader, filename.c_str(), result, NULL, NULL,
                     NULL, NULL, NULL, NULL));
         
+        // Print the time
         system("date -Iseconds");
+
         // Solve
         SCIP_CALL(SCIPsolve(scip));
         // TODO: Write solution
