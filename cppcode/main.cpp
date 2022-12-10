@@ -5,9 +5,56 @@
 #include <fstream>
 #include <sstream>
 #include <vector>
+#include <string>
+#include <map>
 
 using namespace std;
 
+class Solution
+{
+public:
+    void Populate(SCIP *scip, const std::vector<SCIP_VAR *> &scip_variables,
+                  SCIP_SOL *solution)
+    {
+        for (SCIP_VAR *var : scip_variables)
+        {
+            const string name = SCIPvarGetName(var);
+            const double val = SCIPgetSolVal(scip, solution, var);
+            varvalues_[name] = val;
+        }
+    }
+
+    SCIP_RETCODE AddToModel(SCIP *scip, std::vector<SCIP_VAR *> &scip_variables)
+    {
+        SCIP_SOL *solution;
+        SCIP_CALL(SCIPcreatePartialSol(scip, &solution, NULL));
+        SCIP_VAR **vars;
+        vars = SCIPgetOrigVars(scip);
+        int num_vars = SCIPgetNOrigVars(scip);
+        for (SCIP_VAR *var : scip_variables)
+        {
+            const string name = SCIPvarGetName(var);
+            double val = varvalues_.at(name);
+            SCIP_CALL(SCIPsetSolVal(scip, solution, var, val));
+        }
+        SCIP_Bool is_stored;
+        SCIP_CALL(SCIPaddSolFree(scip, &solution, &is_stored));
+        if (is_stored)
+        {
+            cout << "Added a partial solution\n";
+        }
+    }
+
+private:
+    std::map<string, double> varvalues_;
+    double fscore_ = 0.0;
+};
+
+class SolutionPool
+{
+public:
+private:
+};
 
 SCIP_RETCODE execmain(int argc, const char **argv)
 {
@@ -48,20 +95,34 @@ SCIP_RETCODE execmain(int argc, const char **argv)
     // Creating the SCIP Problem.
     SCIP_CALL(SCIPcreateProbBasic(scip, "Reoptimization"));
 
-    // TODO: ADD TIME LIMIT
-    //
     // disable scip output to stdout
     // SCIPmessagehdlrSetQuiet(SCIPgetMessagehdlr(scip), TRUE);
     SCIP_RESULT *result;
     result = new SCIP_RESULT[3];
 
-    for (string instance : instances)
+    for (int index = 0; index < instances.size(); ++index)
     {
+        string instance = instances[index];
         string filename = base_dir + instance;
         // Read in *.MPS file
         SCIP_CALL(SCIPreadMps(scip, reader, filename.c_str(), result, NULL, NULL,
-                    NULL, NULL, NULL, NULL));
-        
+                              NULL, NULL, NULL, NULL));
+
+        SCIP_CALL(SCIPsetRealParam(scip, "limits/time", timeout - 5));
+        SCIP_VAR **vars;
+        vars = SCIPgetOrigVars(scip);
+        int num_vars = SCIPgetNOrigVars(scip);
+        std::vector<SCIP_VAR *> scip_variables;
+        for (int i = 0; i < num_vars; ++i)
+        {
+            SCIP_VAR *var = vars[i];
+            scip_variables.push_back(var);
+        }
+        if (index > 0)
+        {
+            // TODO: Add previous solution.
+        }
+
         // Print the time
         system("date -Iseconds");
 
@@ -72,6 +133,7 @@ SCIP_RETCODE execmain(int argc, const char **argv)
         vars = SCIPgetVars(scip);
         SCIP_SOL *sol;
         sol = SCIPgetBestSol(scip);
+        // TODO: Add solution to file and pool.
         system("date -Iseconds");
     }
 
