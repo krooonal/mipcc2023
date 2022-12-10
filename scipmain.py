@@ -20,8 +20,8 @@ class Solution:
     def add_to_model(self, model):
         solution_hint = model.createPartialSol()
         partial_solution_generated = False
-        for j in range(model.getNVars()):
-            v = model.getVars()[j]
+        scip_vars = model.getVars()
+        for v in scip_vars:
             # Ignore continuous variables.
             if v.vtype() == "CONTINUOUS":
                 continue
@@ -106,7 +106,7 @@ for index, instance in enumerate(instances):
     print("[INSTANCE]", instance_base)
 
     # optionally disable SCIP output
-    # model.setIntParam("display/verblevel", 0)
+    model.setIntParam("display/verblevel", 0)
 
     # set time limit
     model.setRealParam("limits/time", time_limit)
@@ -114,10 +114,7 @@ for index, instance in enumerate(instances):
     # read instance
     instance_path = os.path.join(base_folder, instance)
     model.readProblem(instance_path)
-    scip_vars = []
-    for j in range(model.getNVars()):
-        v = model.getVars()[j]
-        scip_vars.append(v)
+    scip_vars = model.getVars()
 
     # Give hint using previous solutions.
     for solution in solution_pool.solutions:
