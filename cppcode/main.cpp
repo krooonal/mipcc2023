@@ -165,6 +165,7 @@ SCIP_RETCODE execmain(int argc, const char **argv)
         }
 
         // Print the time
+        cout << "[START] ";
         system("date -Iseconds");
 
         // Solve
@@ -176,6 +177,10 @@ SCIP_RETCODE execmain(int argc, const char **argv)
         }
         SCIP_SOL *sol;
         sol = SCIPgetBestSol(scip);
+
+        // Dual bound.
+        double dual_bound = SCIPgetDualbound(scip);
+        cout << "[DUALBOUND] " << dual_bound << "\n";
         // TODO: Add solution to file and pool.
         ofstream solution_file;
         solution_file.open("solutions/" + meta_file_name + ".sol");
@@ -191,6 +196,7 @@ SCIP_RETCODE execmain(int argc, const char **argv)
         solution_pool.AddSolution(solution);
         solution_file.close();
 
+        cout << "[END] ";
         system("date -Iseconds");
     }
 
