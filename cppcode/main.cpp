@@ -101,6 +101,8 @@ SCIP_RETCODE execmain(int argc, const char **argv)
     cout << base_dir << endl;
     pos = meta_file_path.find_last_of("/");
     string meta_file_name = meta_file_path.substr(pos + 1, string::npos);
+    pos = meta_file_name.find(".");
+    string meta_file_name_wo_ext = meta_file_name.substr(0, pos);
 
     int timeout = 0;
     vector<string> instances;
@@ -143,7 +145,11 @@ SCIP_RETCODE execmain(int argc, const char **argv)
     for (int index = 0; index < instances.size(); ++index)
     {
         string instance = instances[index];
+        int pos = instance.find_last_of('/');
+        string instance_name = instance.substr(pos + 1, string::npos);
         string filename = base_dir + instance;
+
+        cout << "[INSTANCE] " << instance_name << "\n";
         // Read in *.MPS file
         SCIP_CALL(SCIPreadMps(scip, reader, filename.c_str(), result, NULL, NULL,
                               NULL, NULL, NULL, NULL));
@@ -183,7 +189,7 @@ SCIP_RETCODE execmain(int argc, const char **argv)
         cout << "[DUALBOUND] " << dual_bound << "\n";
         // TODO: Add solution to file and pool.
         ofstream solution_file;
-        solution_file.open("solutions/" + meta_file_name + ".sol");
+        solution_file.open("solutions/" + meta_file_name_wo_ext + "/" + instance_name + ".sol");
         solution_file << "#Writing this to a file.\n";
         for (SCIP_VAR *scip_var : scip_variables)
         {
