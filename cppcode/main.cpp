@@ -136,7 +136,7 @@ SCIP_RETCODE execmain(int argc, const char **argv)
     SCIP_CALL(SCIPcreateProbBasic(scip, "Reoptimization"));
 
     // disable scip output to stdout
-    // SCIPmessagehdlrSetQuiet(SCIPgetMessagehdlr(scip), TRUE);
+    SCIPmessagehdlrSetQuiet(SCIPgetMessagehdlr(scip), TRUE);
     SCIP_RESULT *result;
     result = new SCIP_RESULT[3];
 
@@ -171,8 +171,8 @@ SCIP_RETCODE execmain(int argc, const char **argv)
         }
 
         // Print the time
-        cout << "[START] ";
-        system("date -Iseconds");
+        // cout << "[START] ";
+        system("echo -n \"[START] \"; date -Iseconds");
 
         // Solve
         SCIP_CALL(SCIPsolve(scip));
@@ -202,8 +202,8 @@ SCIP_RETCODE execmain(int argc, const char **argv)
         solution_pool.AddSolution(solution);
         solution_file.close();
 
-        cout << "[END] ";
-        system("date -Iseconds");
+        // cout << "[END] ";
+        system("echo -n \"[END] \";date -Iseconds");
     }
 
     return SCIP_OKAY;
