@@ -43,6 +43,7 @@ public:
         if (is_stored)
         {
             cout << "Added a partial solution\n";
+            // cout << "Number of partial solutions: " << SCIPgetNPartialSols(scip) << "\n";
         }
         return SCIP_OKAY;
     }
@@ -137,7 +138,7 @@ SCIP_RETCODE execmain(int argc, const char **argv)
     SCIP_CALL(SCIPcreateProbBasic(scip, "Reoptimization"));
 
     // disable scip output to stdout
-    SCIPmessagehdlrSetQuiet(SCIPgetMessagehdlr(scip), TRUE);
+    // SCIPmessagehdlrSetQuiet(SCIPgetMessagehdlr(scip), TRUE);
     SCIP_RESULT *result;
     result = new SCIP_RESULT[3];
 
@@ -155,7 +156,8 @@ SCIP_RETCODE execmain(int argc, const char **argv)
         SCIP_CALL(SCIPreadMps(scip, reader, filename.c_str(), result, NULL, NULL,
                               NULL, NULL, NULL, NULL));
 
-        SCIP_CALL(SCIPsetRealParam(scip, "limits/time", timeout - 5));
+        SCIP_CALL(SCIPsetRealParam(scip, "limits/time", timeout - 1));
+        SCIP_CALL(SCIPsetIntParam(scip, "presolving/maxrestarts", 0));
         SCIP_VAR **vars;
         vars = SCIPgetOrigVars(scip);
         int num_vars = SCIPgetNOrigVars(scip);
