@@ -43,6 +43,11 @@ public:
         {
             cout << "Added a partial solution\n";
         }
+        return SCIP_OKAY;
+    }
+    std::map<string, double> GetVarValue()
+    {
+        return varvalues_;
     }
 
 private:
@@ -53,20 +58,53 @@ private:
 class SolutionPool
 {
 public:
+    void AddSolution(Solution solution)
+    {
+        solutions_.push_back(solution);
+        std::map<string, double> varvalues = solution.GetVarValue();
+        for (auto var_val : varvalues)
+        {
+            string var_name = var_val.first;
+            double value = var_val.second;
+            if (varvaluefreq_.find(var_name) == varvaluefreq_.end())
+            {
+                varvaluefreq_[var_name] = 1;
+            }
+            else
+            {
+                varvaluefreq_[var_name] += 1;
+            }
+        }
+    }
+
+    SCIP_RETCODE AddToModel(SCIP *scip, std::vector<SCIP_VAR *> &scip_variables)
+    {
+        for (Solution solution : solutions_)
+        {
+            SCIP_CALL(solution.AddToModel(scip, scip_variables));
+        }
+        return SCIP_OKAY;
+    }
+
 private:
+    std::vector<Solution> solutions_;
+    std::map<string, double> varvaluefreq_;
 };
 
 SCIP_RETCODE execmain(int argc, const char **argv)
 {
-    string meta_file_name = argv[1];
-    cout << meta_file_name << endl;
-    int pos = meta_file_name.find("datasets");
-    string base_dir = meta_file_name.substr(0, pos);
+    string meta_file_path = argv[1];
+    cout << meta_file_path << endl;
+    int pos = meta_file_path.find("datasets");
+    // TODO: Fix this. base_dir is current working directory.
+    string base_dir = meta_file_path.substr(0, pos);
     cout << base_dir << endl;
+    pos = meta_file_path.find_last_of("/");
+    string meta_file_name = meta_file_path.substr(pos + 1, string::npos);
 
     int timeout = 0;
     vector<string> instances;
-    ifstream meta_file(meta_file_name);
+    ifstream meta_file(meta_file_path);
     if (meta_file.is_open())
     {
         string timeout_str;
@@ -100,6 +138,8 @@ SCIP_RETCODE execmain(int argc, const char **argv)
     SCIP_RESULT *result;
     result = new SCIP_RESULT[3];
 
+    SolutionPool solution_pool;
+
     for (int index = 0; index < instances.size(); ++index)
     {
         string instance = instances[index];
@@ -121,6 +161,7 @@ SCIP_RETCODE execmain(int argc, const char **argv)
         if (index > 0)
         {
             // TODO: Add previous solution.
+            solution_pool.AddToModel(scip, scip_variables);
         }
 
         // Print the time
@@ -129,11 +170,27 @@ SCIP_RETCODE execmain(int argc, const char **argv)
         // Solve
         SCIP_CALL(SCIPsolve(scip));
         // TODO: Write solution
-        SCIP_VAR **vars;
-        vars = SCIPgetVars(scip);
+        if (SCIPgetNSols(scip) <= 0)
+        {
+            continue;
+        }
         SCIP_SOL *sol;
         sol = SCIPgetBestSol(scip);
         // TODO: Add solution to file and pool.
+        ofstream solution_file;
+        solution_file.open("solutions/" + meta_file_name + ".sol");
+        solution_file << "#Writing this to a file.\n";
+        for (SCIP_VAR *scip_var : scip_variables)
+        {
+            const string name = SCIPvarGetName(scip_var);
+            const double val = SCIPgetSolVal(scip, sol, scip_var);
+            solution_file << name << " " << val << "\n";
+        }
+        Solution solution;
+        solution.Populate(scip, scip_variables, sol);
+        solution_pool.AddSolution(solution);
+        solution_file.close();
+
         system("date -Iseconds");
     }
 
