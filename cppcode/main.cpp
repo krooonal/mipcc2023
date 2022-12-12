@@ -195,7 +195,7 @@ SCIP_RETCODE execmain(int argc, const char **argv)
         {
             const string name = SCIPvarGetName(scip_var);
             const double val = SCIPgetSolVal(scip, sol, scip_var);
-            solution_file << name << " " << val << "\n";
+            solution_file << name << " " << std::fixed << std::setprecision(9) << val << "\n";
         }
         Solution solution;
         solution.Populate(scip, scip_variables, sol);
