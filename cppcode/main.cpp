@@ -5,9 +5,10 @@
 #include <fstream>
 #include <sstream>
 #include <vector>
-#include <string>
 #include <map>
 #include <iomanip>
+#include <stdio.h>
+#include <time.h>
 
 using namespace std;
 
@@ -93,6 +94,20 @@ private:
     std::map<string, double> varvaluefreq_;
 };
 
+// Get current date/time, format is YYYY-MM-DDTHH:mm:ss
+const std::string CurrentDateTime()
+{
+    time_t now = time(0);
+    struct tm tstruct;
+    char buf[80];
+    tstruct = *localtime(&now);
+    // Visit http://en.cppreference.com/w/cpp/chrono/c/strftime
+    // for more information about date/time format
+    strftime(buf, sizeof(buf), "%Y-%m-%dT%X", &tstruct);
+
+    return buf;
+}
+
 SCIP_RETCODE execmain(int argc, const char **argv)
 {
     string meta_file_path = argv[1];
@@ -151,7 +166,8 @@ SCIP_RETCODE execmain(int argc, const char **argv)
         string instance_name = instance.substr(pos + 1, string::npos);
         string filename = base_dir + instance;
 
-        cout << "[INSTANCE] " << instance_name << "\n";
+        cout << "[INSTANCE] " << instance_name << "\n"
+             << std::flush;
         // Read in *.MPS file
         SCIP_CALL(SCIPreadMps(scip, reader, filename.c_str(), result, NULL, NULL,
                               NULL, NULL, NULL, NULL));
@@ -175,7 +191,9 @@ SCIP_RETCODE execmain(int argc, const char **argv)
 
         // Print the time
         // cout << "[START] ";
-        system("echo -n \"[START] \"; date -Iseconds");
+        // system("echo -n \"[START] \"; date -Iseconds");
+        cout << "[START] " << CurrentDateTime() << "\n"
+             << std::flush;
 
         // Solve
         SCIP_CALL(SCIPsolve(scip));
@@ -189,7 +207,8 @@ SCIP_RETCODE execmain(int argc, const char **argv)
 
         // Dual bound.
         double dual_bound = SCIPgetDualbound(scip);
-        cout << "[DUALBOUND] " << dual_bound << "\n";
+        cout << "[DUALBOUND] " << dual_bound << "\n"
+             << std::flush;
         // TODO: Add solution to file and pool.
         ofstream solution_file;
         solution_file.open("solutions/" + meta_file_name_wo_ext + "/" + instance_name + ".sol");
@@ -206,7 +225,9 @@ SCIP_RETCODE execmain(int argc, const char **argv)
         solution_file.close();
 
         // cout << "[END] ";
-        system("echo -n \"[END] \";date -Iseconds");
+        // system("echo -n \"[END] \";date -Iseconds");
+        cout << "[END] " << CurrentDateTime() << "\n"
+             << std::flush;
     }
 
     return SCIP_OKAY;
