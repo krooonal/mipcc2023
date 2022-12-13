@@ -137,10 +137,11 @@ SCIP_RETCODE execmain(int argc, const char **argv)
             instances.push_back(line);
         }
 
-        for (string instance : instances)
-        {
-            cout << instance << endl;
-        }
+        // DO NOT PRINT INSTANCE NAMES. IT SPOILS THE EVAL.
+        // for (string instance : instances)
+        // {
+        //     cout << instance << endl;
+        // }
         meta_file.close();
     }
 
