@@ -153,7 +153,7 @@ SCIP_RETCODE execmain(int argc, const char **argv)
     SCIP_CALL(SCIPcreateProbBasic(scip, "Reoptimization"));
 
     // disable scip output to stdout
-    // SCIPmessagehdlrSetQuiet(SCIPgetMessagehdlr(scip), TRUE);
+    SCIPmessagehdlrSetQuiet(SCIPgetMessagehdlr(scip), TRUE);
     SCIP_RESULT *result;
     result = new SCIP_RESULT[3];
 
@@ -213,7 +213,8 @@ SCIP_RETCODE execmain(int argc, const char **argv)
         // TODO: Add solution to file and pool.
         ofstream solution_file;
         solution_file.open("solutions/" + meta_file_name_wo_ext + "/" + instance_name + ".sol");
-        solution_file << "#Writing this to a file.\n";
+        solution_file << "#Writing this to a file.\n"
+                      << std::flush;
         for (SCIP_VAR *scip_var : scip_variables)
         {
             const string name = SCIPvarGetName(scip_var);
@@ -222,10 +223,10 @@ SCIP_RETCODE execmain(int argc, const char **argv)
                           << val << "\n"
                           << std::flush;
         }
+        solution_file.close();
         Solution solution;
         solution.Populate(scip, scip_variables, sol);
         solution_pool.AddSolution(solution);
-        solution_file.close();
 
         // cout << "[END] ";
         // system("echo -n \"[END] \";date -Iseconds");

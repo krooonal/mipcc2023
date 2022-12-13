@@ -82,9 +82,9 @@ for instance in instances:
     time_modified = os.path.getmtime(sol_file)
     time_modification_solfile = datetime.datetime.fromtimestamp(time_modified)
     # leaving 2sec margin
-    # if (time_modification_solfile - end_time).total_seconds() > 2:
-    #     raise ValueError("Solution file written after the end timestamp: ",
-    #                      (time_modification_solfile - end_time).total_seconds())
+    if (time_modification_solfile - end_time).total_seconds() > 2:
+        raise ValueError("Solution file written after the end timestamp: ",
+                         (time_modification_solfile - end_time).total_seconds())
     m = pyscipopt.Model()
     m.setIntParam("display/verblevel", 0)
     m.readProblem(os.path.join(base_path, instance))
