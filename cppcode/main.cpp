@@ -207,7 +207,8 @@ SCIP_RETCODE execmain(int argc, const char **argv)
 
         // Dual bound.
         double dual_bound = SCIPgetDualbound(scip);
-        cout << "[DUALBOUND] " << dual_bound << "\n"
+        cout << "[DUALBOUND] " << std::fixed << std::setprecision(9)
+             << dual_bound << "\n"
              << std::flush;
         // TODO: Add solution to file and pool.
         ofstream solution_file;
@@ -217,7 +218,9 @@ SCIP_RETCODE execmain(int argc, const char **argv)
         {
             const string name = SCIPvarGetName(scip_var);
             const double val = SCIPgetSolVal(scip, sol, scip_var);
-            solution_file << name << " " << std::fixed << std::setprecision(9) << val << "\n";
+            solution_file << name << " " << std::fixed << std::setprecision(9)
+                          << val << "\n"
+                          << std::flush;
         }
         Solution solution;
         solution.Populate(scip, scip_variables, sol);
