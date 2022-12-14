@@ -42,8 +42,8 @@ public:
             const string name = SCIPvarGetName(var);
             // SCIP_VAR *trans_var = SCIPvarGetTransVar(var);
             SCIP_HISTORY var_history = var_histories_.at(name);
-            var_histories_[name] = var_history;
-            SCIPhistoryUnite(var->history, &var_history, FALSE);
+            // SCIPhistoryUnite(var->history, &var_history, FALSE);
+            *(var->history) = var_history;
             if (var_history.pscostweightedmean[0] > 0)
             {
                 cout << name << " " << var->history->pscostweightedmean[0]
