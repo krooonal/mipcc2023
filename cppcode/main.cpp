@@ -1,6 +1,8 @@
 #include <iostream>
 #include <scip/scip.h>
 #include <scip/scipdefplugins.h>
+#include <scip/struct_var.h>
+#include <scip/struct_history.h>
 #include <string>
 #include <fstream>
 #include <sstream>
