@@ -3,6 +3,7 @@
 #include <scip/scipdefplugins.h>
 #include <scip/struct_var.h>
 #include <scip/struct_history.h>
+#include "scip/history.h"
 #include <string>
 #include <fstream>
 #include <sstream>
@@ -23,14 +24,30 @@ public:
         {
             var_histories_.clear();
             const string name = SCIPvarGetName(var);
-            // VarHistory var_history;
-            // var_history.pscostcount[0] = var->history->pscostcount[0];
             SCIP_VAR *trans_var = SCIPvarGetTransVar(var);
             SCIP_HISTORY var_history = *(trans_var->history);
             var_histories_[name] = var_history;
             if (var_history.pscostweightedmean[0] > 0)
             {
-                cout << name << " " << var_history.pscostweightedmean[0] << "\n";
+                cout << name << " " << var_history.pscostweightedmean[0]
+                     << "\n";
+            }
+        }
+    }
+
+    void AddToModel(SCIP *scip, std::vector<SCIP_VAR *> &scip_variables)
+    {
+        for (SCIP_VAR *var : scip_variables)
+        {
+            const string name = SCIPvarGetName(var);
+            // SCIP_VAR *trans_var = SCIPvarGetTransVar(var);
+            SCIP_HISTORY var_history = var_histories_.at(name);
+            var_histories_[name] = var_history;
+            SCIPhistoryUnite(var->history, &var_history, FALSE);
+            if (var_history.pscostweightedmean[0] > 0)
+            {
+                cout << name << " " << var->history->pscostweightedmean[0]
+                     << "\n";
             }
         }
     }
@@ -214,8 +231,8 @@ SCIP_RETCODE execmain(int argc, const char **argv)
         }
         if (index > 0)
         {
-            // TODO: Add previous solution.
             solution_pool.AddToModel(scip, scip_variables);
+            var_histories.AddToModel(scip, scip_variables);
         }
 
         // Print the time
