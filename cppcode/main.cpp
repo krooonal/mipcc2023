@@ -12,6 +12,42 @@
 
 using namespace std;
 
+struct VarHistory
+{
+    SCIP_Real pscostcount[2];         /**< nr of (partial) summands in down/upwards pseudo costs (may be fractional) */
+    SCIP_Real pscostweightedmean[2];  /**< weighted mean of (partial) pseudo cost values for down/upwards branching */
+    SCIP_Real pscostvariance[2];      /**< weighted variance of (partial) pseudo cost history for down/upwards branching */
+    SCIP_Real vsids[2];               /**< degree of how often the variable was reason for a conflict */
+    SCIP_Real conflengthsum[2];       /**< overall length of all active conflicts for which the variable gave reason */
+    SCIP_Real inferencesum[2];        /**< degree of how often branching on the variable lead to inference of another bound */
+    SCIP_Real cutoffsum[2];           /**< degree of how often branching on the variable lead to an infeasible sub problem */
+    SCIP_Real ratio;                  /**< Most recently computed value of the unpowered ratio (phi^l) in the Treemodel rules */
+    SCIP_Real balance;                /**< Most recently value of r/l used to compute a ratio in the Treemodel rules */
+    SCIP_Bool ratiovalid;             /**< Whether the ratio value is valid for the Treemodel rules */
+    SCIP_Longint nactiveconflicts[2]; /**< number of active conflicts for which the variable gave reason */
+    SCIP_Longint nbranchings[2];      /**< nr of times, the variable changed its bounds due to branching */
+    SCIP_Longint branchdepthsum[2];
+};
+
+class VarHistories
+{
+public:
+    void Populate(SCIP *scip, std::vector<SCIP_VAR *> &scip_variables)
+    {
+        for (SCIP_VAR *var : scip_variables)
+        {
+            const string name = SCIPvarGetName(var);
+            VarHistory var_history;
+            var_history.pscostcount[0] = var->history->pscostcount[0];
+            var_history_[name] = var_history;
+            cout << var_history.pscostweightedmean[0];
+        }
+    }
+
+private:
+    std::map<string, VarHistory> var_history_;
+};
+
 class Solution
 {
 public:
