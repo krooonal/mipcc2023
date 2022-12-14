@@ -269,6 +269,7 @@ SCIP_RETCODE execmain(int argc, const char **argv)
         Solution solution;
         solution.Populate(scip, scip_variables, sol);
         solution_pool.AddSolution(solution);
+        var_histories.Populate(scip, scip_variables);
 
         // cout << "[END] ";
         // system("echo -n \"[END] \";date -Iseconds");
