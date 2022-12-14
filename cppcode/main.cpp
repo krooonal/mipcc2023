@@ -20,9 +20,9 @@ class VarHistories
 public:
     void Populate(SCIP *scip, std::vector<SCIP_VAR *> &scip_variables)
     {
+        var_histories_.clear();
         for (SCIP_VAR *var : scip_variables)
         {
-            var_histories_.clear();
             const string name = SCIPvarGetName(var);
             SCIP_VAR *trans_var = SCIPvarGetTransVar(var);
             SCIP_HISTORY var_history = *(trans_var->history);
@@ -43,7 +43,7 @@ public:
             // SCIP_VAR *trans_var = SCIPvarGetTransVar(var);
             SCIP_HISTORY var_history = var_histories_.at(name);
             // SCIPhistoryUnite(var->history, &var_history, FALSE);
-            var->history = &var_histories_.at(name);
+            *(var->history) = var_histories_.at(name);
             if (var_history.pscostweightedmean[0] > 0)
             {
                 cout << name << " " << var->history->pscostweightedmean[0]
