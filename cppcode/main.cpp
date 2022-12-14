@@ -43,7 +43,7 @@ public:
             // SCIP_VAR *trans_var = SCIPvarGetTransVar(var);
             SCIP_HISTORY var_history = var_histories_.at(name);
             // SCIPhistoryUnite(var->history, &var_history, FALSE);
-            *(var->history) = var_history;
+            var->history = &var_histories_.at(name);
             if (var_history.pscostweightedmean[0] > 0)
             {
                 cout << name << " " << var->history->pscostweightedmean[0]
