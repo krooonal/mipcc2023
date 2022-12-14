@@ -28,7 +28,10 @@ public:
             SCIP_VAR *trans_var = SCIPvarGetTransVar(var);
             SCIP_HISTORY var_history = *(trans_var->history);
             var_histories_[name] = var_history;
-            cout << var_history.pscostweightedmean[0] << "\n";
+            if (var_history.pscostweightedmean[0] > 0)
+            {
+                cout << name << " " << var_history.pscostweightedmean[0] << "\n";
+            }
         }
     }
 
