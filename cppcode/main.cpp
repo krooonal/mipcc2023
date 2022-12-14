@@ -38,16 +38,18 @@ public:
     {
         for (SCIP_VAR *var : scip_variables)
         {
+            var_histories_.clear();
             const string name = SCIPvarGetName(var);
-            VarHistory var_history;
-            var_history.pscostcount[0] = var->history->pscostcount[0];
-            var_history_[name] = var_history;
+            // VarHistory var_history;
+            // var_history.pscostcount[0] = var->history->pscostcount[0];
+            SCIP_HISTORY var_history = *(var->history);
+            var_histories_[name] = var_history;
             cout << var_history.pscostweightedmean[0];
         }
     }
 
 private:
-    std::map<string, VarHistory> var_history_;
+    std::map<string, SCIP_HISTORY> var_histories_;
 };
 
 class Solution
@@ -197,6 +199,7 @@ SCIP_RETCODE execmain(int argc, const char **argv)
     result = new SCIP_RESULT[3];
 
     SolutionPool solution_pool;
+    VarHistories var_histories;
 
     for (int index = 0; index < instances.size(); ++index)
     {
