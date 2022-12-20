@@ -183,7 +183,7 @@ SCIP_RETCODE SCIPincludeEventHdlrSolFeedback(
     SCIP_CALL(SCIPsetEventhdlrDelete(scip, eventhdlr, eventDeleteSolFeedback));
     cout << "DEBUG 4\n";
 
-    SCIP_CALL(SCIPcatchEvent(scip, SCIP_EVENTTYPE_PRESOLVEROUND, eventhdlr, NULL, NULL));
+    // SCIP_CALL(SCIPcatchEvent(scip, SCIP_EVENTTYPE_PRESOLVEROUND, eventhdlr, NULL, NULL));
     // SCIPcatchEvent(scip,SCIP_EVENTTYPE_PRESOLVEROUND, eventhdlr,NULL, NULL);
     // SCIP_CALL(SCIPdropEvent(scip, SCIP_EVENTTYPE_PRESOLVEROUND, eventhdlr, NULL, NULL));
 
