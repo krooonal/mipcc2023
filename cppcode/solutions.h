@@ -44,9 +44,20 @@ public:
     Solution GetSolution(int index);
     int GetNumSolutions();
 
+    // Adds solution to currently stored scip vars.
+    SCIP_RETCODE AddSolutionToModel(int sol_index, SCIP *scip);
+    SCIP_RETCODE AddNextSolutionToModel(SCIP *scip);
+    void SetCurrentScipVars(std::vector<SCIP_VAR *> *current_scip_variables)
+    {
+        current_scip_variables_ = current_scip_variables;
+        last_added_solution_index_ = -1;
+    }
+
 private:
     std::vector<Solution> solutions_;
     std::map<string, double> varvaluefreq_;
+    std::vector<SCIP_VAR *> *current_scip_variables_;
+    int last_added_solution_index_ = -1;
 };
 
 #endif
