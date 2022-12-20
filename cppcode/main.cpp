@@ -15,6 +15,7 @@
 
 #include "var_history.h"
 #include "solutions.h"
+#include "event_solfeedback.h"
 
 using namespace std;
 
@@ -100,6 +101,7 @@ SCIP_RETCODE execmain(int argc, const char **argv)
 
         SCIP_CALL(SCIPsetRealParam(scip, "limits/time", timeout - 1));
         SCIP_CALL(SCIPsetIntParam(scip, "presolving/maxrestarts", 0));
+        SCIP_CALL(SCIPincludeEventHdlrSolFeedback(scip));
         SCIP_VAR **vars;
         vars = SCIPgetOrigVars(scip);
         int num_vars = SCIPgetNOrigVars(scip);
