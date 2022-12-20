@@ -14,6 +14,7 @@
 struct SCIP_EventhdlrData
 {
     bool solution_found = false;
+    SolutionPool *solution_pool = NULL;
 };
 
 /*
@@ -133,10 +134,16 @@ SCIP_DECL_EVENTDELETE(eventDeleteSolFeedback)
 /** execution method of event handler */
 static SCIP_DECL_EVENTEXEC(eventExecSolFeedback)
 { /*lint --e{715}*/
+    assert(scip != NULL);
+    assert(eventhdlr != NULL);
     cout << "My event handler was called.\n";
-    if (SCIPgetNSols(scip) > 0)
+    SCIP_EVENTHDLRDATA *eventhdlrdata = SCIPeventhdlrGetData(eventhdlr);
+    int num_pool_solutions = eventhdlrdata->solution_pool->GetNumSolutions();
+    cout << "Solution pool has " << num_pool_solutions << " solutions\n";
+    int n_solutions = SCIPgetNSols(scip);
+    if (n_solutions > 0)
     {
-        cout << "Found a solution by now\n";
+        cout << "Found " << n_solutions << " solutions by now\n";
     }
     else
     {
@@ -148,18 +155,17 @@ static SCIP_DECL_EVENTEXEC(eventExecSolFeedback)
 
 /** creates event handler for SolFeedback event */
 SCIP_RETCODE SCIPincludeEventHdlrSolFeedback(
-    SCIP *scip /**< SCIP data structure */
-)
+    SCIP *scip /**< SCIP data structure */,
+    SolutionPool *solution_pool)
 {
     SCIP_EVENTHDLRDATA *eventhdlrdata;
     SCIP_EVENTHDLR *eventhdlr;
-    cout << "DEBUG 1\n";
 
     /* create SolFeedback event handler data */
     eventhdlrdata = NULL;
     /* TODO: (optional) create event handler specific data here */
     SCIP_CALL(SCIPallocBlockMemory(scip, &eventhdlrdata));
-    cout << "DEBUG 2\n";
+    eventhdlrdata->solution_pool = solution_pool;
 
     eventhdlr = NULL;
 
@@ -171,7 +177,6 @@ SCIP_RETCODE SCIPincludeEventHdlrSolFeedback(
     SCIP_CALL(SCIPincludeEventhdlrBasic(scip, &eventhdlr, EVENTHDLR_NAME, EVENTHDLR_DESC,
                                         eventExecSolFeedback, eventhdlrdata));
     assert(eventhdlr != NULL);
-    cout << "DEBUG 3\n";
 
     /* set non fundamental callbacks via setter functions */
     SCIP_CALL(SCIPsetEventhdlrCopy(scip, eventhdlr, eventCopySolFeedback));
@@ -181,13 +186,6 @@ SCIP_RETCODE SCIPincludeEventHdlrSolFeedback(
     SCIP_CALL(SCIPsetEventhdlrInitsol(scip, eventhdlr, eventInitsolSolFeedback));
     SCIP_CALL(SCIPsetEventhdlrExitsol(scip, eventhdlr, eventExitsolSolFeedback));
     SCIP_CALL(SCIPsetEventhdlrDelete(scip, eventhdlr, eventDeleteSolFeedback));
-    cout << "DEBUG 4\n";
-
-    // SCIP_CALL(SCIPcatchEvent(scip, SCIP_EVENTTYPE_PRESOLVEROUND, eventhdlr, NULL, NULL));
-    // SCIPcatchEvent(scip,SCIP_EVENTTYPE_PRESOLVEROUND, eventhdlr,NULL, NULL);
-    // SCIP_CALL(SCIPdropEvent(scip, SCIP_EVENTTYPE_PRESOLVEROUND, eventhdlr, NULL, NULL));
-
-    cout << "DEBUG 5\n";
 
     /* add SolFeedback event handler parameters */
     /* TODO: (optional) add event handler specific parameters with SCIPaddTypeParam() here */

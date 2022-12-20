@@ -13,6 +13,8 @@
 #include <stdio.h>
 #include <time.h>
 
+#include "solutions.h"
+
 using namespace std;
 
 #ifndef __SCIP_EVENT_SOLFEEDBACK_H__
@@ -26,8 +28,8 @@ extern "C"
    /** creates event handler for solfeedback event */
    SCIP_EXPORT
    SCIP_RETCODE SCIPincludeEventHdlrSolFeedback(
-       SCIP *scip /**< SCIP data structure */
-   );
+       SCIP *scip /**< SCIP data structure */,
+       SolutionPool *solution_pool);
 
 #ifdef __cplusplus
 }

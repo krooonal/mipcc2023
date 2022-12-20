@@ -38,6 +38,9 @@ public:
     SCIP_RETCODE AddToModel(SCIP *scip,
                             std::vector<SCIP_VAR *> &scip_variables);
 
+    Solution GetSolution(int index);
+    int GetNumSolutions();
+
 private:
     std::vector<Solution> solutions_;
     std::map<string, double> varvaluefreq_;
