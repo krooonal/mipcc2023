@@ -13,130 +13,10 @@
 #include <stdio.h>
 #include <time.h>
 
+#include "var_history.h"
+#include "solutions.h"
+
 using namespace std;
-
-class VarHistories
-{
-public:
-    void Populate(SCIP *scip, std::vector<SCIP_VAR *> &scip_variables)
-    {
-        var_histories_.clear();
-        for (SCIP_VAR *var : scip_variables)
-        {
-            const string name = SCIPvarGetName(var);
-            SCIP_VAR *trans_var = SCIPvarGetTransVar(var);
-            SCIP_HISTORY var_history = *(trans_var->history);
-            var_histories_[name] = var_history;
-            // if (var_history.pscostweightedmean[0] > 0)
-            // {
-            //     cout << name << " " << var_history.pscostweightedmean[0]
-            //          << "\n";
-            // }
-        }
-    }
-
-    void AddToModel(SCIP *scip, std::vector<SCIP_VAR *> &scip_variables)
-    {
-        for (SCIP_VAR *var : scip_variables)
-        {
-            const string name = SCIPvarGetName(var);
-            // SCIP_VAR *trans_var = SCIPvarGetTransVar(var);
-            SCIP_HISTORY var_history = var_histories_.at(name);
-            // SCIPhistoryUnite(var->history, &var_history, FALSE);
-            *(var->history) = var_histories_.at(name);
-            // if (var_history.pscostweightedmean[0] > 0)
-            // {
-            //     cout << name << " " << var->history->pscostweightedmean[0]
-            //          << "\n";
-            // }
-        }
-    }
-
-private:
-    std::map<string, SCIP_HISTORY> var_histories_;
-};
-
-class Solution
-{
-public:
-    void Populate(SCIP *scip, const std::vector<SCIP_VAR *> &scip_variables,
-                  SCIP_SOL *solution)
-    {
-        for (SCIP_VAR *var : scip_variables)
-        {
-            const string name = SCIPvarGetName(var);
-            const double val = SCIPgetSolVal(scip, solution, var);
-            varvalues_[name] = val;
-        }
-    }
-
-    SCIP_RETCODE AddToModel(SCIP *scip, std::vector<SCIP_VAR *> &scip_variables)
-    {
-        SCIP_SOL *solution;
-        SCIP_CALL(SCIPcreatePartialSol(scip, &solution, NULL));
-        SCIP_VAR **vars;
-        vars = SCIPgetOrigVars(scip);
-        int num_vars = SCIPgetNOrigVars(scip);
-        for (SCIP_VAR *var : scip_variables)
-        {
-            const string name = SCIPvarGetName(var);
-            double val = varvalues_.at(name);
-            SCIP_CALL(SCIPsetSolVal(scip, solution, var, val));
-        }
-        SCIP_Bool is_stored;
-        SCIP_CALL(SCIPaddSolFree(scip, &solution, &is_stored));
-        if (is_stored)
-        {
-            cout << "Added a partial solution\n";
-            // cout << "Number of partial solutions: " << SCIPgetNPartialSols(scip) << "\n";
-        }
-        return SCIP_OKAY;
-    }
-    std::map<string, double> GetVarValue()
-    {
-        return varvalues_;
-    }
-
-private:
-    std::map<string, double> varvalues_;
-    double fscore_ = 0.0;
-};
-
-class SolutionPool
-{
-public:
-    void AddSolution(Solution solution)
-    {
-        solutions_.push_back(solution);
-        std::map<string, double> varvalues = solution.GetVarValue();
-        for (auto var_val : varvalues)
-        {
-            string var_name = var_val.first;
-            double value = var_val.second;
-            if (varvaluefreq_.find(var_name) == varvaluefreq_.end())
-            {
-                varvaluefreq_[var_name] = 1;
-            }
-            else
-            {
-                varvaluefreq_[var_name] += 1;
-            }
-        }
-    }
-
-    SCIP_RETCODE AddToModel(SCIP *scip, std::vector<SCIP_VAR *> &scip_variables)
-    {
-        for (Solution solution : solutions_)
-        {
-            SCIP_CALL(solution.AddToModel(scip, scip_variables));
-        }
-        return SCIP_OKAY;
-    }
-
-private:
-    std::vector<Solution> solutions_;
-    std::map<string, double> varvaluefreq_;
-};
 
 // Get current date/time, format is YYYY-MM-DDTHH:mm:ss
 const std::string CurrentDateTime()
@@ -236,7 +116,6 @@ SCIP_RETCODE execmain(int argc, const char **argv)
         }
 
         // Print the time
-        // cout << "[START] ";
         // system("echo -n \"[START] \"; date -Iseconds");
         cout << "[START] " << CurrentDateTime() << "\n"
              << std::flush;
@@ -275,7 +154,6 @@ SCIP_RETCODE execmain(int argc, const char **argv)
         solution_pool.AddSolution(solution);
         var_histories.Populate(scip, scip_variables);
 
-        // cout << "[END] ";
         // system("echo -n \"[END] \";date -Iseconds");
         cout << "[END] " << CurrentDateTime() << "\n"
              << std::flush;
