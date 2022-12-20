@@ -147,11 +147,13 @@ SCIP_RETCODE SCIPincludeEventHdlrSolFeedback(
 {
     SCIP_EVENTHDLRDATA *eventhdlrdata;
     SCIP_EVENTHDLR *eventhdlr;
+    cout << "DEBUG 1\n";
 
     /* create SolFeedback event handler data */
     eventhdlrdata = NULL;
     /* TODO: (optional) create event handler specific data here */
     SCIP_CALL(SCIPallocBlockMemory(scip, &eventhdlrdata));
+    cout << "DEBUG 2\n";
 
     eventhdlr = NULL;
 
@@ -163,6 +165,7 @@ SCIP_RETCODE SCIPincludeEventHdlrSolFeedback(
     SCIP_CALL(SCIPincludeEventhdlrBasic(scip, &eventhdlr, EVENTHDLR_NAME, EVENTHDLR_DESC,
                                         eventExecSolFeedback, eventhdlrdata));
     assert(eventhdlr != NULL);
+    cout << "DEBUG 3\n";
 
     /* set non fundamental callbacks via setter functions */
     SCIP_CALL(SCIPsetEventhdlrCopy(scip, eventhdlr, eventCopySolFeedback));
@@ -172,9 +175,12 @@ SCIP_RETCODE SCIPincludeEventHdlrSolFeedback(
     SCIP_CALL(SCIPsetEventhdlrInitsol(scip, eventhdlr, eventInitsolSolFeedback));
     SCIP_CALL(SCIPsetEventhdlrExitsol(scip, eventhdlr, eventExitsolSolFeedback));
     SCIP_CALL(SCIPsetEventhdlrDelete(scip, eventhdlr, eventDeleteSolFeedback));
+    cout << "DEBUG 4\n";
 
     SCIP_CALL(SCIPcatchEvent(scip, SCIP_EVENTTYPE_PRESOLVEROUND, eventhdlr, NULL, NULL));
     // SCIP_CALL(SCIPdropEvent(scip, SCIP_EVENTTYPE_PRESOLVEROUND, eventhdlr, NULL, NULL));
+
+    cout << "DEBUG 5\n";
 
     /* add SolFeedback event handler parameters */
     /* TODO: (optional) add event handler specific parameters with SCIPaddTypeParam() here */
