@@ -90,10 +90,35 @@ SCIP_RETCODE SolutionPool::AddToModel(SCIP *scip,
 
 Solution SolutionPool::GetSolution(int index)
 {
+    assert(index >= 0);
     assert(index < solutions_.size());
     return solutions_[index];
 }
 int SolutionPool::GetNumSolutions()
 {
     return solutions_.size();
+}
+
+SCIP_RETCODE SolutionPool::AddSolutionToModel(int sol_index, SCIP *scip)
+{
+    assert(sol_index < solutions_.size());
+    SCIP_CALL(solutions_[sol_index].AddToModel(scip, *current_scip_variables_));
+    last_added_solution_index_ = sol_index;
+    return SCIP_OKAY;
+}
+
+SCIP_RETCODE SolutionPool::AddNextSolutionToModel(SCIP *scip)
+{
+    int index = last_added_solution_index_ - 1;
+    if (last_added_solution_index_ == -1)
+    {
+        index = solutions_.size() - 1;
+    }
+    if (index < 0 || index > solutions_.size())
+    {
+        return SCIP_OKAY;
+    }
+    SCIP_CALL(solutions_[index].AddToModel(scip, *current_scip_variables_));
+    last_added_solution_index_ = index;
+    return SCIP_OKAY;
 }
