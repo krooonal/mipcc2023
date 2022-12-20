@@ -13,6 +13,9 @@
 #include <stdio.h>
 #include <time.h>
 
+#ifndef __KP_VHISTORY_H__
+#define __KP_VHISTORY_H__
+
 using namespace std;
 
 class VarHistories
@@ -25,3 +28,5 @@ public:
 private:
     std::map<string, SCIP_HISTORY> var_histories_;
 };
+
+#endif
