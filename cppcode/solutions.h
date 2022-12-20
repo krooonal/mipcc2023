@@ -13,6 +13,9 @@
 #include <stdio.h>
 #include <time.h>
 
+#ifndef __KP_SOLUTIONS_H__
+#define __KP_SOLUTIONS_H__
+
 using namespace std;
 
 class Solution
@@ -45,3 +48,5 @@ private:
     std::vector<Solution> solutions_;
     std::map<string, double> varvaluefreq_;
 };
+
+#endif
