@@ -1,0 +1,89 @@
+#include <iostream>
+#include <scip/scip.h>
+#include <scip/scipdefplugins.h>
+#include <scip/struct_var.h>
+#include <scip/struct_history.h>
+#include "scip/history.h"
+#include <string>
+#include <fstream>
+#include <sstream>
+#include <vector>
+#include <map>
+#include <iomanip>
+#include <stdio.h>
+#include <time.h>
+
+#include "solutions.h"
+
+using namespace std;
+
+void Solution::Populate(SCIP *scip,
+                        const std::vector<SCIP_VAR *> &scip_variables,
+                        SCIP_SOL *solution)
+{
+    for (SCIP_VAR *var : scip_variables)
+    {
+        const string name = SCIPvarGetName(var);
+        const double val = SCIPgetSolVal(scip, solution, var);
+        varvalues_[name] = val;
+    }
+}
+
+SCIP_RETCODE Solution::AddToModel(SCIP *scip,
+                                  std::vector<SCIP_VAR *> &scip_variables)
+{
+    SCIP_SOL *solution;
+    SCIP_CALL(SCIPcreatePartialSol(scip, &solution, NULL));
+    SCIP_VAR **vars;
+    vars = SCIPgetOrigVars(scip);
+    int num_vars = SCIPgetNOrigVars(scip);
+    for (SCIP_VAR *var : scip_variables)
+    {
+        const string name = SCIPvarGetName(var);
+        double val = varvalues_.at(name);
+        SCIP_CALL(SCIPsetSolVal(scip, solution, var, val));
+    }
+    SCIP_Bool is_stored;
+    SCIP_CALL(SCIPaddSolFree(scip, &solution, &is_stored));
+    if (is_stored)
+    {
+        cout << "Added a partial solution\n";
+        // cout << "Number of partial solutions: "
+        // << SCIPgetNPartialSols(scip) << "\n";
+    }
+    return SCIP_OKAY;
+}
+
+std::map<string, double> Solution::GetVarValue()
+{
+    return varvalues_;
+}
+
+void SolutionPool::AddSolution(Solution solution)
+{
+    solutions_.push_back(solution);
+    std::map<string, double> varvalues = solution.GetVarValue();
+    for (auto var_val : varvalues)
+    {
+        string var_name = var_val.first;
+        double value = var_val.second;
+        if (varvaluefreq_.find(var_name) == varvaluefreq_.end())
+        {
+            varvaluefreq_[var_name] = 1;
+        }
+        else
+        {
+            varvaluefreq_[var_name] += 1;
+        }
+    }
+}
+
+SCIP_RETCODE SolutionPool::AddToModel(SCIP *scip,
+                                      std::vector<SCIP_VAR *> &scip_variables)
+{
+    for (Solution solution : solutions_)
+    {
+        SCIP_CALL(solution.AddToModel(scip, scip_variables));
+    }
+    return SCIP_OKAY;
+}
