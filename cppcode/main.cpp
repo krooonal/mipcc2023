@@ -86,6 +86,8 @@ SCIP_RETCODE execmain(int argc, const char **argv)
     SolutionPool solution_pool;
     VarHistories var_histories;
 
+    SCIP_CALL(SCIPincludeEventHdlrSolFeedback(scip, &solution_pool));
+
     for (int index = 0; index < instances.size(); ++index)
     {
         string instance = instances[index];
@@ -101,7 +103,7 @@ SCIP_RETCODE execmain(int argc, const char **argv)
 
         SCIP_CALL(SCIPsetRealParam(scip, "limits/time", timeout - 1));
         SCIP_CALL(SCIPsetIntParam(scip, "presolving/maxrestarts", 0));
-        SCIP_CALL(SCIPincludeEventHdlrSolFeedback(scip));
+
         SCIP_VAR **vars;
         vars = SCIPgetOrigVars(scip);
         int num_vars = SCIPgetNOrigVars(scip);

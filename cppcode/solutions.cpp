@@ -87,3 +87,13 @@ SCIP_RETCODE SolutionPool::AddToModel(SCIP *scip,
     }
     return SCIP_OKAY;
 }
+
+Solution SolutionPool::GetSolution(int index)
+{
+    assert(index < solutions_.size());
+    return solutions_[index];
+}
+int SolutionPool::GetNumSolutions()
+{
+    return solutions_.size();
+}
