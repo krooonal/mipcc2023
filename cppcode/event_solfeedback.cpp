@@ -55,28 +55,34 @@ SCIP_DECL_EVENTFREE(eventFreeSolFeedback)
 #endif
 
 /** initialization method of event handler (called after problem was transformed) */
-#if 0
-static
-SCIP_DECL_EVENTINIT(eventInitSolFeedback)
-{  /*lint --e{715}*/
-   SCIPerrorMessage("method of SolFeedback event handler not implemented yet\n");
-   SCIPABORT(); /*lint --e{527}*/
+#if 1
+static SCIP_DECL_EVENTINIT(eventInitSolFeedback)
+{ /*lint --e{715}*/
+    assert(scip != NULL);
+    assert(eventhdlr != NULL);
+    assert(strcmp(SCIPeventhdlrGetName(eventhdlr), EVENTHDLR_NAME) == 0);
 
-   return SCIP_OKAY;
+    /* notify SCIP that your event handler wants to react on the event type presolve round finished. */
+    SCIP_CALL(SCIPcatchEvent(scip, SCIP_EVENTTYPE_PRESOLVEROUND, eventhdlr, NULL, NULL));
+
+    return SCIP_OKAY;
 }
 #else
 #define eventInitSolFeedback NULL
 #endif
 
 /** deinitialization method of event handler (called before transformed problem is freed) */
-#if 0
-static
-SCIP_DECL_EVENTEXIT(eventExitSolFeedback)
-{  /*lint --e{715}*/
-   SCIPerrorMessage("method of SolFeedback event handler not implemented yet\n");
-   SCIPABORT(); /*lint --e{527}*/
+#if 1
+static SCIP_DECL_EVENTEXIT(eventExitSolFeedback)
+{ /*lint --e{715}*/
+    assert(scip != NULL);
+    assert(eventhdlr != NULL);
+    assert(strcmp(SCIPeventhdlrGetName(eventhdlr), EVENTHDLR_NAME) == 0);
 
-   return SCIP_OKAY;
+    /* notify SCIP that your event handler wants to drop the event type presolve round finished. */
+    SCIP_CALL(SCIPdropEvent(scip, SCIP_EVENTTYPE_PRESOLVEROUND, eventhdlr, NULL, -1));
+
+    return SCIP_OKAY;
 }
 #else
 #define eventExitSolFeedback NULL
@@ -178,6 +184,7 @@ SCIP_RETCODE SCIPincludeEventHdlrSolFeedback(
     cout << "DEBUG 4\n";
 
     SCIP_CALL(SCIPcatchEvent(scip, SCIP_EVENTTYPE_PRESOLVEROUND, eventhdlr, NULL, NULL));
+    // SCIPcatchEvent(scip,SCIP_EVENTTYPE_PRESOLVEROUND, eventhdlr,NULL, NULL);
     // SCIP_CALL(SCIPdropEvent(scip, SCIP_EVENTTYPE_PRESOLVEROUND, eventhdlr, NULL, NULL));
 
     cout << "DEBUG 5\n";
