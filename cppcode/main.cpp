@@ -117,7 +117,10 @@ SCIP_RETCODE execmain(int argc, const char **argv)
         {
             // solution_pool.AddToModel(scip, scip_variables);
             solution_pool.SetCurrentScipVars(&scip_variables);
-            solution_pool.AddNextSolutionToModel(scip);
+            for (int i = 0; i < 5; ++i)
+            {
+                solution_pool.AddNextSolutionToModel(scip);
+            }
             var_histories.AddToModel(scip, scip_variables);
         }
 
