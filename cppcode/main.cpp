@@ -101,6 +101,11 @@ SCIP_RETCODE execmain(int argc, const char **argv)
         SCIP_CALL(SCIPreadMps(scip, reader, filename.c_str(), result, NULL, NULL,
                               NULL, NULL, NULL, NULL));
 
+        // Print the time
+        // system("echo -n \"[START] \"; date -Iseconds");
+        cout << "[START] " << CurrentDateTime() << "\n"
+             << std::flush;
+
         SCIP_CALL(SCIPsetRealParam(scip, "limits/time", timeout - 1));
         SCIP_CALL(SCIPsetIntParam(scip, "presolving/maxrestarts", 0));
 
@@ -123,11 +128,6 @@ SCIP_RETCODE execmain(int argc, const char **argv)
             }
             var_histories.AddToModel(scip, scip_variables);
         }
-
-        // Print the time
-        // system("echo -n \"[START] \"; date -Iseconds");
-        cout << "[START] " << CurrentDateTime() << "\n"
-             << std::flush;
 
         // Solve
         SCIP_CALL(SCIPsolve(scip));
