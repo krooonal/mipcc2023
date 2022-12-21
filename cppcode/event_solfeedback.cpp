@@ -136,18 +136,18 @@ static SCIP_DECL_EVENTEXEC(eventExecSolFeedback)
 { /*lint --e{715}*/
     assert(scip != NULL);
     assert(eventhdlr != NULL);
-    cout << "My event handler was called.\n";
+    // cout << "My event handler was called.\n";
     SCIP_EVENTHDLRDATA *eventhdlrdata = SCIPeventhdlrGetData(eventhdlr);
     SolutionPool *solution_pool = eventhdlrdata->solution_pool;
     int num_pool_solutions = solution_pool->GetNumSolutions();
-    cout << "Solution pool has " << num_pool_solutions << " solutions\n";
+    // cout << "Solution pool has " << num_pool_solutions << " solutions\n";
     int n_solutions = SCIPgetNSols(scip);
     if (n_solutions > 0)
     {
-        cout << "Found " << n_solutions << " solutions by now\n";
+        // cout << "Found " << n_solutions << " solutions by now\n";
         return SCIP_OKAY;
     }
-    cout << "No solutions found yet!\n";
+    // cout << "No solutions found yet!\n";
 
     if (num_pool_solutions > 0)
     {
