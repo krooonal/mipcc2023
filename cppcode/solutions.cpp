@@ -118,6 +118,7 @@ SCIP_RETCODE SolutionPool::AddNextSolutionToModel(SCIP *scip)
     {
         return SCIP_OKAY;
     }
+    cout << "Adding solution " << index << " to model";
     SCIP_CALL(solutions_[index].AddToModel(scip, *current_scip_variables_));
     last_added_solution_index_ = index;
     return SCIP_OKAY;
