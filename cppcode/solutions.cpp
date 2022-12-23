@@ -95,17 +95,17 @@ SCIP_RETCODE SolutionPool::AddToModel(SCIP *scip,
                                       std::vector<SCIP_VAR *> &scip_variables)
 {
     if (solutions_.empty())
-    {
         return SCIP_OKAY;
-    }
     for (Solution solution : solutions_)
     {
         SCIP_CALL(solution.AddToModel(scip, scip_variables));
     }
 
     int num_solutions = solutions_.size();
-    SCIP_SOL *solution;
-    SCIP_CALL(SCIPcreatePartialSol(scip, &solution, NULL));
+    if (num_solutions <= 1)
+        return SCIP_OKAY;
+    SCIP_SOL *common_solution;
+    SCIP_CALL(SCIPcreatePartialSol(scip, &common_solution, NULL));
     std::map<string, double> varvalues = common_sol_.GetVarValue();
     for (SCIP_VAR *var : scip_variables)
     {
@@ -120,10 +120,10 @@ SCIP_RETCODE SolutionPool::AddToModel(SCIP *scip,
                 value = var_lb;
             if (value > var_ub)
                 value = var_ub;
-            SCIP_CALL(SCIPsetSolVal(scip, solution, var, value));
+            SCIP_CALL(SCIPsetSolVal(scip, common_solution, var, value));
         }
         SCIP_Bool is_stored;
-        SCIP_CALL(SCIPaddSolFree(scip, &solution, &is_stored));
+        SCIP_CALL(SCIPaddSolFree(scip, &common_solution, &is_stored));
         if (is_stored)
         {
             cout << "Added a common partial solution\n";
