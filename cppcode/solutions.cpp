@@ -40,6 +40,8 @@ SCIP_RETCODE Solution::AddToModel(SCIP *scip,
         double val = varvalues_.at(name);
         double var_lb = var->locdom.lb;
         double var_ub = var->locdom.ub;
+        if (SCIPvarGetType(var) == SCIP_VARTYPE_CONTINUOUS)
+            continue;
         if (val < var_lb)
             val = var_lb;
         if (val > var_ub)
@@ -107,13 +109,17 @@ SCIP_RETCODE SolutionPool::AddToModel(SCIP *scip,
     SCIP_SOL *common_solution;
     SCIP_CALL(SCIPcreatePartialSol(scip, &common_solution, NULL));
     std::map<string, double> varvalues = common_sol_.GetVarValue();
+    int num_var_hinted = 0;
     for (SCIP_VAR *var : scip_variables)
     {
         string var_name = var->name;
         double value = varvalues[var_name];
+        if (SCIPvarGetType(var) == SCIP_VARTYPE_CONTINUOUS)
+            continue;
 
-        if (varvaluefreq_[var_name][value] == num_solutions)
+        if (varvaluefreq_[var_name][value] >= num_solutions * 0.8)
         {
+            num_var_hinted++;
             double var_lb = var->locdom.lb;
             double var_ub = var->locdom.ub;
             if (value < var_lb)
@@ -123,6 +129,7 @@ SCIP_RETCODE SolutionPool::AddToModel(SCIP *scip,
             SCIP_CALL(SCIPsetSolVal(scip, common_solution, var, value));
         }
     }
+    cout << "Number of vars hinted = " << num_var_hinted << endl;
     SCIP_Bool is_stored;
     SCIP_CALL(SCIPaddSolFree(scip, &common_solution, &is_stored));
     if (is_stored)
