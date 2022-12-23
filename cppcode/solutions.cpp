@@ -82,7 +82,7 @@ void SolutionPool::AddSolution(Solution solution)
         {
             varvaluefreq_[var_name] = std::map<double, int>();
         }
-        else if (
+        if (
             varvaluefreq_[var_name].find(value) == varvaluefreq_[var_name]
                                                        .end())
         {
