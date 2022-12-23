@@ -66,25 +66,25 @@ static SCIP_DECL_EVENTINIT(eventInitSolFeedback)
     /* notify SCIP that your event handler wants to react on the event type presolve round finished. */
     SCIP_CALL(SCIPcatchEvent(scip, SCIP_EVENTTYPE_PRESOLVEROUND, eventhdlr, NULL, NULL));
 
-    int n_solutions = SCIPgetNSols(scip);
-    if (n_solutions > 0)
-    {
-        // cout << "Found " << n_solutions << " solutions by now\n";
-        return SCIP_OKAY;
-    }
-    cout << "Transformed and no solutions found yet!\n";
-    SCIP_EVENTHDLRDATA *eventhdlrdata = SCIPeventhdlrGetData(eventhdlr);
-    SolutionPool *solution_pool = eventhdlrdata->solution_pool;
-    int num_pool_solutions = solution_pool->GetNumSolutions();
-    // cout << "Solution pool has " << num_pool_solutions << " solutions\n";
+    // int n_solutions = SCIPgetNSols(scip);
+    // if (n_solutions > 0)
+    // {
+    //     // cout << "Found " << n_solutions << " solutions by now\n";
+    //     return SCIP_OKAY;
+    // }
+    // cout << "Transformed and no solutions found yet!\n";
+    // SCIP_EVENTHDLRDATA *eventhdlrdata = SCIPeventhdlrGetData(eventhdlr);
+    // SolutionPool *solution_pool = eventhdlrdata->solution_pool;
+    // int num_pool_solutions = solution_pool->GetNumSolutions();
+    // // cout << "Solution pool has " << num_pool_solutions << " solutions\n";
 
-    if (num_pool_solutions > 0)
-    {
-        for (int i = 0; i < 5; ++i)
-        {
-            SCIP_CALL(solution_pool->AddNextSolutionToModel(scip));
-        }
-    }
+    // if (num_pool_solutions > 0)
+    // {
+    //     for (int i = 0; i < 5; ++i)
+    //     {
+    //         SCIP_CALL(solution_pool->AddNextSolutionToModel(scip));
+    //     }
+    // }
 
     return SCIP_OKAY;
 }
@@ -165,18 +165,18 @@ static SCIP_DECL_EVENTEXEC(eventExecSolFeedback)
         return SCIP_OKAY;
     }
     cout << "No solutions found yet!\n";
-    SCIP_EVENTHDLRDATA *eventhdlrdata = SCIPeventhdlrGetData(eventhdlr);
-    SolutionPool *solution_pool = eventhdlrdata->solution_pool;
-    int num_pool_solutions = solution_pool->GetNumSolutions();
-    // cout << "Solution pool has " << num_pool_solutions << " solutions\n";
+    // SCIP_EVENTHDLRDATA *eventhdlrdata = SCIPeventhdlrGetData(eventhdlr);
+    // SolutionPool *solution_pool = eventhdlrdata->solution_pool;
+    // int num_pool_solutions = solution_pool->GetNumSolutions();
+    // // cout << "Solution pool has " << num_pool_solutions << " solutions\n";
 
-    if (num_pool_solutions > 0)
-    {
-        for (int i = 0; i < 5; ++i)
-        {
-            SCIP_CALL(solution_pool->AddNextSolutionToModel(scip));
-        }
-    }
+    // if (num_pool_solutions > 0)
+    // {
+    //     for (int i = 0; i < 5; ++i)
+    //     {
+    //         SCIP_CALL(solution_pool->AddNextSolutionToModel(scip));
+    //     }
+    // }
 
     return SCIP_OKAY;
 }
