@@ -26,8 +26,6 @@ public:
 
     SCIP_RETCODE AddToModel(SCIP *scip,
                             std::vector<SCIP_VAR *> &scip_variables);
-    SCIP_RETCODE AddToModelTransformed(SCIP *scip,
-                                       std::vector<SCIP_VAR *> &scip_variables);
     std::map<string, double> GetVarValue();
 
 private:
@@ -49,7 +47,6 @@ public:
     // Adds solution to currently stored scip vars.
     SCIP_RETCODE AddSolutionToModel(int sol_index, SCIP *scip);
     SCIP_RETCODE AddNextSolutionToModel(SCIP *scip);
-    SCIP_RETCODE AddNextSolutionToModelTransformed(SCIP *scip);
     void SetCurrentScipVars(std::vector<SCIP_VAR *> *current_scip_variables)
     {
         current_scip_variables_ = current_scip_variables;
