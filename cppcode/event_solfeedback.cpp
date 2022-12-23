@@ -82,7 +82,7 @@ static SCIP_DECL_EVENTINIT(eventInitSolFeedback)
     {
         for (int i = 0; i < 5; ++i)
         {
-            SCIP_CALL(solution_pool->AddNextSolutionToModelTransformed(scip));
+            SCIP_CALL(solution_pool->AddNextSolutionToModel(scip));
         }
     }
 
@@ -174,7 +174,7 @@ static SCIP_DECL_EVENTEXEC(eventExecSolFeedback)
     {
         for (int i = 0; i < 5; ++i)
         {
-            SCIP_CALL(solution_pool->AddNextSolutionToModelTransformed(scip));
+            SCIP_CALL(solution_pool->AddNextSolutionToModel(scip));
         }
     }
 
