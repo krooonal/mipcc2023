@@ -34,9 +34,6 @@ SCIP_RETCODE Solution::AddToModel(SCIP *scip,
 {
     SCIP_SOL *solution;
     SCIP_CALL(SCIPcreatePartialSol(scip, &solution, NULL));
-    SCIP_VAR **vars;
-    vars = SCIPgetOrigVars(scip);
-    int num_vars = SCIPgetNOrigVars(scip);
     for (SCIP_VAR *var : scip_variables)
     {
         const string name = SCIPvarGetName(var);
@@ -68,6 +65,10 @@ std::map<string, double> Solution::GetVarValue()
 void SolutionPool::AddSolution(Solution solution)
 {
     solutions_.push_back(solution);
+    if (solutions_.size() == 1)
+    {
+        common_sol_ = solution;
+    }
     std::map<string, double> varvalues = solution.GetVarValue();
     for (auto var_val : varvalues)
     {
@@ -75,11 +76,17 @@ void SolutionPool::AddSolution(Solution solution)
         double value = var_val.second;
         if (varvaluefreq_.find(var_name) == varvaluefreq_.end())
         {
-            varvaluefreq_[var_name] = 1;
+            varvaluefreq_[var_name] = std::map<double, int>();
+        }
+        else if (
+            varvaluefreq_[var_name].find(value) == varvaluefreq_[var_name]
+                                                       .end())
+        {
+            varvaluefreq_[var_name][value] = 1;
         }
         else
         {
-            varvaluefreq_[var_name] += 1;
+            varvaluefreq_[var_name][value] += 1;
         }
     }
 }
@@ -87,9 +94,42 @@ void SolutionPool::AddSolution(Solution solution)
 SCIP_RETCODE SolutionPool::AddToModel(SCIP *scip,
                                       std::vector<SCIP_VAR *> &scip_variables)
 {
+    if (solutions_.empty())
+    {
+        return SCIP_OKAY;
+    }
     for (Solution solution : solutions_)
     {
         SCIP_CALL(solution.AddToModel(scip, scip_variables));
+    }
+
+    int num_solutions = solutions_.size();
+    SCIP_SOL *solution;
+    SCIP_CALL(SCIPcreatePartialSol(scip, &solution, NULL));
+    std::map<string, double> varvalues = common_sol_.GetVarValue();
+    for (SCIP_VAR *var : scip_variables)
+    {
+        string var_name = var->name;
+        double value = varvalues[var_name];
+
+        if (varvaluefreq_[var_name][value] == num_solutions)
+        {
+            double var_lb = var->locdom.lb;
+            double var_ub = var->locdom.ub;
+            if (value < var_lb)
+                value = var_lb;
+            if (value > var_ub)
+                value = var_ub;
+            SCIP_CALL(SCIPsetSolVal(scip, solution, var, value));
+        }
+        SCIP_Bool is_stored;
+        SCIP_CALL(SCIPaddSolFree(scip, &solution, &is_stored));
+        if (is_stored)
+        {
+            cout << "Added a common partial solution\n";
+            // cout << "Number of partial solutions: "
+            // << SCIPgetNPartialSols(scip) << "\n";
+        }
     }
     return SCIP_OKAY;
 }

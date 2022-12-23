@@ -55,7 +55,8 @@ public:
 
 private:
     std::vector<Solution> solutions_;
-    std::map<string, double> varvaluefreq_;
+    Solution common_sol_;
+    std::map<string, std::map<double, int>> varvaluefreq_;
     std::vector<SCIP_VAR *> *current_scip_variables_;
     int last_added_solution_index_ = -1;
 };
