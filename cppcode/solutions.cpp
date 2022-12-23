@@ -130,6 +130,10 @@ SCIP_RETCODE SolutionPool::AddToModel(SCIP *scip,
                 value = var_ub;
             SCIP_CALL(SCIPsetSolVal(scip, common_solution, var, value));
         }
+        else
+        {
+            cout << varvaluefreq_[var_name][value] << " did not qualify\n";
+        }
     }
     cout << "Number of vars hinted = " << num_var_hinted << endl;
     SCIP_Bool is_stored;
