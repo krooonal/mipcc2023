@@ -54,6 +54,33 @@ SCIP_RETCODE Solution::AddToModel(SCIP *scip,
     return SCIP_OKAY;
 }
 
+SCIP_RETCODE Solution::AddToModelTransformed(
+    SCIP *scip,
+    std::vector<SCIP_VAR *> &scip_variables)
+{
+    SCIP_SOL *solution;
+    SCIP_CALL(SCIPcreatePartialSol(scip, &solution, NULL));
+    SCIP_VAR **vars;
+    vars = SCIPgetOrigVars(scip);
+    int num_vars = SCIPgetNOrigVars(scip);
+    for (SCIP_VAR *var : scip_variables)
+    {
+        const string name = SCIPvarGetName(var);
+        double val = varvalues_.at(name);
+        SCIP_VAR *trans_var = SCIPvarGetTransVar(var);
+        SCIP_CALL(SCIPsetSolVal(scip, solution, trans_var, val));
+    }
+    SCIP_Bool is_stored;
+    SCIP_CALL(SCIPaddSolFree(scip, &solution, &is_stored));
+    if (is_stored)
+    {
+        cout << "Added a partial solution\n";
+        // cout << "Number of partial solutions: "
+        // << SCIPgetNPartialSols(scip) << "\n";
+    }
+    return SCIP_OKAY;
+}
+
 std::map<string, double> Solution::GetVarValue()
 {
     return varvalues_;
@@ -120,6 +147,25 @@ SCIP_RETCODE SolutionPool::AddNextSolutionToModel(SCIP *scip)
     }
     cout << "Adding solution " << index << " to model\n";
     SCIP_CALL(solutions_[index].AddToModel(scip, *current_scip_variables_));
+    last_added_solution_index_ = index;
+    return SCIP_OKAY;
+}
+
+SCIP_RETCODE SolutionPool::AddNextSolutionToModelTransformed(SCIP *scip)
+{
+    int index = last_added_solution_index_ - 1;
+    if (last_added_solution_index_ == -1)
+    {
+        index = solutions_.size() - 1;
+    }
+    if (index < 0 || index > solutions_.size())
+    {
+        return SCIP_OKAY;
+    }
+    cout << "Adding solution " << index << " to model\n";
+    SCIP_CALL(solutions_[index].AddToModelTransformed(
+        scip,
+        *current_scip_variables_));
     last_added_solution_index_ = index;
     return SCIP_OKAY;
 }
