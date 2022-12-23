@@ -70,6 +70,8 @@ void SolutionPool::AddSolution(Solution solution)
     if (solutions_.size() == 1)
     {
         common_sol_ = solution;
+        cout << common_sol_.GetVarValue().size() << endl;
+        cout << "Common solution set\n";
     }
     std::map<string, double> varvalues = solution.GetVarValue();
     for (auto var_val : varvalues)
