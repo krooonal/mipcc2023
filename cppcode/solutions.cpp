@@ -38,8 +38,8 @@ SCIP_RETCODE Solution::AddToModel(SCIP *scip,
     {
         const string name = SCIPvarGetName(var);
         double val = varvalues_.at(name);
-        double var_lb = var->locdom.lb;
-        double var_ub = var->locdom.ub;
+        double var_lb = SCIPvarGetLbGlobal(var);
+        double var_ub = SCIPvarGetUbGlobal(var);
         if (SCIPvarGetType(var) == SCIP_VARTYPE_CONTINUOUS)
             continue;
         if (val < var_lb)
@@ -122,8 +122,8 @@ SCIP_RETCODE SolutionPool::AddToModel(SCIP *scip,
         if (varvaluefreq_[var_name][value] >= num_solutions * 0.8)
         {
             num_var_hinted++;
-            double var_lb = var->locdom.lb;
-            double var_ub = var->locdom.ub;
+            double var_lb = SCIPvarGetLbGlobal(var);
+            double var_ub = SCIPvarGetUbGlobal(var);
             if (value < var_lb)
                 value = var_lb;
             if (value > var_ub)
@@ -132,7 +132,7 @@ SCIP_RETCODE SolutionPool::AddToModel(SCIP *scip,
         }
         else
         {
-            cout << varvaluefreq_[var_name][value] << " did not qualify\n";
+            // cout << varvaluefreq_[var_name][value] << " did not qualify\n";
         }
     }
     cout << "Number of vars hinted = " << num_var_hinted << endl;
