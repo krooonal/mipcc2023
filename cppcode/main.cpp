@@ -79,7 +79,7 @@ SCIP_RETCODE execmain(int argc, const char **argv)
     SCIP_CALL(SCIPcreateProbBasic(scip, "Reoptimization"));
 
     // disable scip output to stdout
-    SCIPmessagehdlrSetQuiet(SCIPgetMessagehdlr(scip), TRUE);
+    // SCIPmessagehdlrSetQuiet(SCIPgetMessagehdlr(scip), TRUE);
     SCIP_RESULT *result;
     result = new SCIP_RESULT[3];
 
@@ -122,10 +122,10 @@ SCIP_RETCODE execmain(int argc, const char **argv)
         {
             // solution_pool.AddToModel(scip, scip_variables);
             solution_pool.SetCurrentScipVars(&scip_variables);
-            for (int i = 0; i < 5; ++i)
-            {
-                solution_pool.AddNextSolutionToModel(scip);
-            }
+            // for (int i = 0; i < 5; ++i)
+            // {
+            //     solution_pool.AddNextSolutionToModel(scip);
+            // }
             var_histories.AddToModel(scip, scip_variables);
         }
 
