@@ -79,7 +79,7 @@ SCIP_RETCODE execmain(int argc, const char **argv)
     SCIP_CALL(SCIPcreateProbBasic(scip, "Reoptimization"));
 
     // disable scip output to stdout
-    // SCIPmessagehdlrSetQuiet(SCIPgetMessagehdlr(scip), TRUE);
+    SCIPmessagehdlrSetQuiet(SCIPgetMessagehdlr(scip), TRUE);
     SCIP_RESULT *result;
     result = new SCIP_RESULT[3];
 
