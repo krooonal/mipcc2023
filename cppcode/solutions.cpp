@@ -122,14 +122,14 @@ SCIP_RETCODE SolutionPool::AddToModel(SCIP *scip,
                 value = var_ub;
             SCIP_CALL(SCIPsetSolVal(scip, common_solution, var, value));
         }
-        SCIP_Bool is_stored;
-        SCIP_CALL(SCIPaddSolFree(scip, &common_solution, &is_stored));
-        if (is_stored)
-        {
-            cout << "Added a common partial solution\n";
-            // cout << "Number of partial solutions: "
-            // << SCIPgetNPartialSols(scip) << "\n";
-        }
+    }
+    SCIP_Bool is_stored;
+    SCIP_CALL(SCIPaddSolFree(scip, &common_solution, &is_stored));
+    if (is_stored)
+    {
+        cout << "Added a common partial solution\n";
+        // cout << "Number of partial solutions: "
+        // << SCIPgetNPartialSols(scip) << "\n";
     }
     return SCIP_OKAY;
 }
