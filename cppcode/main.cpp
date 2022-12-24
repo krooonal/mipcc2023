@@ -178,9 +178,14 @@ SCIP_RETCODE execmain(int argc, const char **argv)
              << " Solns " << comp_sol_solns
              << " Time " << comp_soln_time
              << endl;
-        if (comp_sol_solns <= 0)
+        if (comp_sol_solns > 0)
         {
-            solution_pool.ReduceCommonSolFac();
+            // It automatically provides less hints due to added solutions.
+            // solution_pool.ReduceCommonSolFac();
+        }
+        else
+        {
+            // TODO.
         }
     }
 
