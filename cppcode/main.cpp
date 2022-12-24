@@ -86,7 +86,8 @@ SCIP_RETCODE execmain(int argc, const char **argv)
     SolutionPool solution_pool;
     VarHistories var_histories;
 
-    SCIP_CALL(SCIPincludeEventHdlrSolFeedback(scip, &solution_pool));
+    // Event handler.
+    // SCIP_CALL(SCIPincludeEventHdlrSolFeedback(scip, &solution_pool));
 
     for (int index = 0; index < instances.size(); ++index)
     {
@@ -166,6 +167,17 @@ SCIP_RETCODE execmain(int argc, const char **argv)
         // system("echo -n \"[END] \";date -Iseconds");
         cout << "[END] " << CurrentDateTime() << "\n"
              << std::flush;
+
+        // Solution feedback
+        SCIP_HEUR *comp_sol_heur = SCIPfindHeur(scip, "completesol");
+        assert(comp_sol_heur != NULL);
+        SCIP_Longint comp_sol_calls = SCIPheurGetNCalls(comp_sol_heur);
+        SCIP_Longint comp_sol_solns = SCIPheurGetNSolsFound(comp_sol_heur);
+        SCIP_Real comp_soln_time = SCIPheurGetTime(comp_sol_heur);
+        cout << "Calls " << comp_sol_calls
+             << " Solns " << comp_sol_solns
+             << " Time " << comp_soln_time
+             << endl;
     }
 
     return SCIP_OKAY;
