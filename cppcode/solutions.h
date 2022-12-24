@@ -53,9 +53,16 @@ public:
         last_added_solution_index_ = -1;
     }
 
+    void ReduceCommonSolFac()
+    {
+        common_sol_factor_ *= decrese_factor_;
+    }
+
 private:
     std::vector<Solution> solutions_;
     Solution common_sol_;
+    double common_sol_factor_ = 0.9;
+    double decrese_factor_ = 0.99;
     std::map<string, std::map<double, int>> varvaluefreq_;
     std::vector<SCIP_VAR *> *current_scip_variables_;
     int last_added_solution_index_ = -1;

@@ -100,12 +100,14 @@ SCIP_RETCODE SolutionPool::AddToModel(SCIP *scip,
 {
     if (solutions_.empty())
         return SCIP_OKAY;
-    for (Solution solution : solutions_)
+    int num_solutions = solutions_.size();
+    int num_solutions_to_add = min(num_solutions, 5);
+    for (int i = 0; i < num_solutions_to_add; ++i)
     {
+        Solution &solution = solutions_[num_solutions - 1 - i];
         SCIP_CALL(solution.AddToModel(scip, scip_variables));
     }
 
-    int num_solutions = solutions_.size();
     if (num_solutions <= 1)
         return SCIP_OKAY;
     SCIP_SOL *common_solution;
@@ -119,7 +121,7 @@ SCIP_RETCODE SolutionPool::AddToModel(SCIP *scip,
         if (SCIPvarGetType(var) == SCIP_VARTYPE_CONTINUOUS)
             continue;
 
-        if (varvaluefreq_[var_name][value] >= num_solutions * 0.8)
+        if (varvaluefreq_[var_name][value] >= num_solutions * common_sol_factor_)
         {
             num_var_hinted++;
             double var_lb = SCIPvarGetLbGlobal(var);

@@ -178,6 +178,10 @@ SCIP_RETCODE execmain(int argc, const char **argv)
              << " Solns " << comp_sol_solns
              << " Time " << comp_soln_time
              << endl;
+        if (comp_sol_solns <= 0)
+        {
+            solution_pool.ReduceCommonSolFac();
+        }
     }
 
     return SCIP_OKAY;
