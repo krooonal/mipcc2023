@@ -158,6 +158,12 @@ static SCIP_DECL_EVENTEXEC(eventExecSolFeedback)
     assert(eventhdlr != NULL);
     // cout << "My event handler was called.\n";
 
+    SCIP_HEUR *comp_sol_heur = SCIPfindHeur(scip, "completesol");
+    assert(comp_sol_heur != NULL);
+    SCIP_Longint comp_sol_calls = SCIPheurGetNCalls(comp_sol_heur);
+    SCIP_Longint comp_sol_solns = SCIPheurGetNSolsFound(comp_sol_heur);
+    cout << "Calls " << comp_sol_calls << " Solns " << comp_sol_solns << endl;
+
     int n_solutions = SCIPgetNSols(scip);
     if (n_solutions > 0)
     {
