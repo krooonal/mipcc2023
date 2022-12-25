@@ -2,6 +2,8 @@
 
 #include "branch_cumpscost.h"
 
+#include "scip/branch_relpscost.h"
+
 #define BRANCHRULE_NAME "Cumpscost"
 #define BRANCHRULE_DESC "branching rule for cumulative pseudocost updates"
 #define BRANCHRULE_PRIORITY 0
@@ -116,14 +118,58 @@ SCIP_DECL_BRANCHEXITSOL(branchExitsolCumpscost)
 #endif
 
 /** branching execution method for fractional LP solutions */
-#if 0
-static
-SCIP_DECL_BRANCHEXECLP(branchExeclpCumpscost)
-{  /*lint --e{715}*/
-   SCIPerrorMessage("method of Cumpscost branching rule not implemented yet\n");
-   SCIPABORT(); /*lint --e{527}*/
+#if 1
+static SCIP_DECL_BRANCHEXECLP(branchExeclpCumpscost)
+{ /*lint --e{715}*/
+    SCIP_VAR **tmplpcands;
+    SCIP_VAR **lpcands;
+    SCIP_Real *tmplpcandssol;
+    SCIP_Real *lpcandssol;
+    SCIP_Real *tmplpcandsfrac;
+    SCIP_Real *lpcandsfrac;
+    int nlpcands;
 
-   return SCIP_OKAY;
+    assert(branchrule != NULL);
+    assert(strcmp(SCIPbranchruleGetName(branchrule), BRANCHRULE_NAME) == 0);
+    assert(scip != NULL);
+    assert(result != NULL);
+
+    SCIPdebugMsg(scip, "Execlp method of Cumpscost branching in node %llu\n",
+                 SCIPnodeGetNumber(SCIPgetCurrentNode(scip)));
+
+    if (SCIPgetLPSolstat(scip) != SCIP_LPSOLSTAT_OPTIMAL)
+    {
+        *result = SCIP_DIDNOTRUN;
+        SCIPdebugMsg(scip, "Could not apply Cumpscost branching, as the current LP was not solved to optimality.\n");
+
+        return SCIP_OKAY;
+    }
+
+    /* get branching candidates */
+    SCIP_CALL(SCIPgetLPBranchCands(scip, &tmplpcands, &tmplpcandssol, &tmplpcandsfrac, NULL, &nlpcands, NULL));
+    assert(nlpcands > 0);
+
+    /* copy LP banching candidates and solution values, because they will be updated w.r.t. the strong branching LP
+     * solution
+     */
+    SCIP_CALL(SCIPduplicateBufferArray(scip, &lpcands, tmplpcands, nlpcands));
+    SCIP_CALL(SCIPduplicateBufferArray(scip, &lpcandssol, tmplpcandssol, nlpcands));
+    SCIP_CALL(SCIPduplicateBufferArray(scip, &lpcandsfrac, tmplpcandsfrac, nlpcands));
+
+    /* execute branching rule */
+    SCIP_BRANCHRULE *relbranchrule;
+    relbranchrule = SCIPfindBranchrule(scip, "relpscost");
+    // SCIPexecRelpscostBranching(SCIP *scip, SCIP_VAR **branchcands, double *branchcandssol,
+    // double *branchcandsfrac, int nbranchcands, unsigned int executebranching, SCIP_RESULT *result)
+    SCIPexecRelpscostBranching(scip, lpcands, lpcandssol, lpcandsfrac, nlpcands, TRUE, result);
+    // SCIP_CALL(execRelpscost(scip, branchrule, allowaddcons, lpcands,
+    // lpcandssol, lpcandsfrac, nlpcands, TRUE, result));
+
+    SCIPfreeBufferArray(scip, &lpcandsfrac);
+    SCIPfreeBufferArray(scip, &lpcandssol);
+    SCIPfreeBufferArray(scip, &lpcands);
+
+    return SCIP_OKAY;
 }
 #else
 #define branchExeclpCumpscost NULL

@@ -107,7 +107,7 @@ SCIP_RETCODE execmain(int argc, const char **argv)
         cout << "[START] " << CurrentDateTime() << "\n"
              << std::flush;
 
-        SCIP_CALL(SCIPsetRealParam(scip, "limits/time", timeout - 1));
+        SCIP_CALL(SCIPsetRealParam(scip, "limits/time", timeout - 2));
         SCIP_CALL(SCIPsetIntParam(scip, "presolving/maxrestarts", 0));
 
         SCIP_VAR **vars;

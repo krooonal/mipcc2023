@@ -26,6 +26,8 @@ void VarHistories::Populate(SCIP *scip,
         const string name = SCIPvarGetName(var);
         SCIP_VAR *trans_var = SCIPvarGetTransVar(var);
         SCIP_HISTORY var_history = *(trans_var->history);
+        var_history.pscostcount[0] = min(var_history.pscostcount[0], 4.0);
+        var_history.pscostcount[1] = min(var_history.pscostcount[1], 4.0);
         var_histories_[name] = var_history;
     }
 }
