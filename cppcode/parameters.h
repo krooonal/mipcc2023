@@ -78,7 +78,10 @@ T Parameter<T>::GetBestValue()
         }
     }
     current_index_ = best_index;
-    cout << name_ << ": Trying value: " << values_[best_index] << endl;
+    cout << name_ << ": Trying value: " << values_[best_index]
+         << " at index: " << best_index
+         << " Score: " << final_scores_[best_index]
+         << endl;
     return values_[best_index];
 }
 #endif
