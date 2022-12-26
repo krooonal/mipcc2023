@@ -55,7 +55,7 @@ void Parameter<T>::AdjustScore(double score)
     total_counts_ += 1;
     final_scores_[current_index_] = scores_[current_index_] + (c_fac_ / counts_[current_index_]);
     cout << name_ << ": Updated score of " << values_[current_index_]
-         << " by " << score << endl;
+         << " to " << final_scores_[current_index_] << endl;
 }
 
 template <typename T>

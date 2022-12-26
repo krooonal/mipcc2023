@@ -230,7 +230,7 @@ SCIP_RETCODE execmain(int argc, const char **argv)
             double hint_score = -total_score;
             if (comp_sol_calls > 0 && comp_sol_solns == 0)
                 hint_score -= comp_soln_time;
-            provide_hint.AdjustScore(-hint_score);
+            provide_hint.AdjustScore(hint_score);
         }
     }
 
