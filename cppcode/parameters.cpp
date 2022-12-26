@@ -3,7 +3,7 @@
 using namespace std;
 
 template <typename T>
-Parameter<T>::Parameter(double impact_factor, string name = "")
+Parameter<T>::Parameter(double impact_factor, string name)
 {
     name_ = name;
     impact_factor_ = impact_factor;
