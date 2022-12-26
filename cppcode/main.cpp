@@ -4,6 +4,9 @@
 #include <scip/struct_var.h>
 #include <scip/struct_history.h>
 #include "scip/history.h"
+#include "scip/sol.h"
+#include "scip/struct_stat.h"
+#include "scip/struct_scip.h"
 #include <string>
 #include <fstream>
 #include <sstream>
@@ -168,6 +171,11 @@ SCIP_RETCODE execmain(int argc, const char **argv)
         cout << "[END] " << CurrentDateTime() << "\n"
              << std::flush;
 
+        // Statistics
+        double relative_gap = SCIPgetGap(scip);
+        double time = SCIPgetSolvingTime(scip);
+        double first_sol_gap = scip->stat->firstsolgap;
+        double first_sol_time = scip->stat->firstprimaltime;
         // Solution feedback
         SCIP_HEUR *comp_sol_heur = SCIPfindHeur(scip, "completesol");
         assert(comp_sol_heur != NULL);
