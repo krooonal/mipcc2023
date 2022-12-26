@@ -19,6 +19,7 @@
 #include "var_history.h"
 #include "solutions.h"
 #include "event_solfeedback.h"
+#include "parameters.h"
 
 using namespace std;
 
@@ -83,6 +84,12 @@ SCIP_RETCODE execmain(int argc, const char **argv)
 
     // disable scip output to stdout
     SCIPmessagehdlrSetQuiet(SCIPgetMessagehdlr(scip), TRUE);
+
+    // Provide prev solution?
+    Parameter<bool> provide_hint(0.7, "provide_hint");
+    provide_hint.AddValue(true);
+    provide_hint.AddValue(false);
+
     SCIP_RESULT *result;
     result = new SCIP_RESULT[3];
 
@@ -124,7 +131,11 @@ SCIP_RETCODE execmain(int argc, const char **argv)
         }
         if (index > 0)
         {
-            solution_pool.AddToModel(scip, scip_variables);
+            if (provide_hint.GetBestValue())
+            {
+                solution_pool.AddToModel(scip, scip_variables);
+            }
+
             solution_pool.SetCurrentScipVars(&scip_variables);
             // for (int i = 0; i < 5; ++i)
             // {
@@ -212,6 +223,12 @@ SCIP_RETCODE execmain(int argc, const char **argv)
         {
             // TODO.
         }
+
+        // Update parameters
+        double hint_score = -total_score;
+        if (comp_sol_calls > 0 && comp_sol_solns == 0)
+            hint_score -= comp_soln_time;
+        provide_hint.AdjustScore(-hint_score);
     }
 
     return SCIP_OKAY;

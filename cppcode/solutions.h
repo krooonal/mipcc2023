@@ -1,3 +1,5 @@
+#ifndef __KP_SOLUTIONS_H__
+#define __KP_SOLUTIONS_H__
 #include <iostream>
 #include <scip/scip.h>
 #include <scip/scipdefplugins.h>
@@ -12,9 +14,6 @@
 #include <iomanip>
 #include <stdio.h>
 #include <time.h>
-
-#ifndef __KP_SOLUTIONS_H__
-#define __KP_SOLUTIONS_H__
 
 using namespace std;
 
