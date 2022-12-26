@@ -173,7 +173,7 @@ SCIP_RETCODE execmain(int argc, const char **argv)
 
         // Statistics
         double relative_gap = SCIPgetGap(scip);
-        relative_gap = max(relative_gap, 1.0);
+        relative_gap = min(relative_gap, 1.0);
         double time_score = SCIPgetSolvingTime(scip) / timeout;
         if (relative_gap > 1e-6)
         {
