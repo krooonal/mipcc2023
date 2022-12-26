@@ -16,7 +16,7 @@ void Parameter<T>::AdjustScore(double score)
     scores_[current_index_] = (scores_[current_index_] * counts_[current_index_] + score) / (counts_[current_index_] + 1);
     counts_[current_index_] += 1;
     total_counts_ += 1;
-    final_scores[current_index_] = scores_[current_index_] + (c_fac_ / counts_[current_index_]);
+    final_scores_[current_index_] = scores_[current_index_] + (c_fac_ / counts_[current_index_]);
 }
 
 template <typename T>
