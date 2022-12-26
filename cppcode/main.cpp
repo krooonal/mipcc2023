@@ -173,9 +173,14 @@ SCIP_RETCODE execmain(int argc, const char **argv)
 
         // Statistics
         double relative_gap = SCIPgetGap(scip);
-        double time = SCIPgetSolvingTime(scip);
+        double time_score = SCIPgetSolvingTime(scip) / timeout;
         double first_sol_gap = scip->stat->firstsolgap;
         double first_sol_time = scip->stat->firstprimaltime;
+        cout << "Relative gap: " << relative_gap << endl;
+        cout << "time_score: " << time_score << endl;
+        cout << "first_sol_gap: " << first_sol_gap << endl;
+        cout << "first_sol_time: " << first_sol_time << endl;
+
         // Solution feedback
         SCIP_HEUR *comp_sol_heur = SCIPfindHeur(scip, "completesol");
         assert(comp_sol_heur != NULL);
