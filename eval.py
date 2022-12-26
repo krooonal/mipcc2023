@@ -22,7 +22,8 @@ if len(sys.argv) < 4:
 log_path = sys.argv[1]
 solution_folder = sys.argv[2]
 instance_file = sys.argv[3]
-base_path = os.path.join(os.path.dirname(instance_file), "../..")
+#base_path = os.path.join(os.path.dirname(instance_file), "../..")
+base_path = os.getcwd()
 
 with open(instance_file) as f:
     ifile = f.read().splitlines()
@@ -81,9 +82,9 @@ for instance in instances:
     time_modified = os.path.getmtime(sol_file)
     time_modification_solfile = datetime.datetime.fromtimestamp(time_modified)
     # leaving 2sec margin
-    # if (time_modification_solfile - end_time).total_seconds() > 2:
-    #     raise ValueError("Solution file written after the end timestamp: ",
-    #                      (time_modification_solfile - end_time).total_seconds())
+    if (time_modification_solfile - end_time).total_seconds() > 2:
+        raise ValueError("Solution file written after the end timestamp: ",
+                         (time_modification_solfile - end_time).total_seconds())
     m = pyscipopt.Model()
     m.setIntParam("display/verblevel", 0)
     m.readProblem(os.path.join(base_path, instance))

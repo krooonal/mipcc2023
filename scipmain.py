@@ -5,6 +5,67 @@ import math
 from datetime import datetime
 from time import time
 
+
+class Solution:
+    def __init__(self) -> None:
+        self.varvalues = {}
+        self.fscore = 0.0
+
+    def populate(self, model, scip_vars):
+        for v in scip_vars:
+            name = v.name
+            val = model.getVal(v)
+            self.varvalues[name] = val
+
+    def add_to_model(self, model):
+        solution_hint = model.createPartialSol()
+        partial_solution_generated = False
+        scip_vars = model.getVars()
+        for v in scip_vars:
+            # Ignore continuous variables.
+            if v.vtype() == "CONTINUOUS":
+                continue
+            name = v.name
+            if name not in self.varvalues:
+                continue
+
+            model.setSolVal(solution_hint, v, self.varvalues[name])
+        try:
+            print("Trying solution")
+            # stored = model.trySol(solution_hint, printreason=True, free=False)
+            stored = model.addSol(solution_hint, free=True)
+            if stored:
+                print("Solution stored!")
+        except Exception as e:
+            print(e)
+        return
+
+
+class SolutionPool:
+    def __init__(self) -> None:
+        self.nsolutions = 0
+        self.solutions = []
+        self.varvalfreq = {}
+
+    def add_solution(self, solution):
+        self.solutions.append(solution)
+        self.nsolutions += 1
+        for vname in solution.varvalues:
+            val = solution.varvalues[vname]
+            if vname not in self.varvalfreq:
+                self.varvalfreq[vname] = {}
+            if val not in self.varvalfreq[vname]:
+                self.varvalfreq[vname][val] = 1
+            else:
+                self.varvalfreq[vname][val] += 1
+
+    def update_solution_scores(self):
+        for solution in self.solutions:
+            solution.score = 0
+            for vname in solution.varvalues:
+                solution.score += self.varvalfreq[vname]
+
+
 meta_file = sys.argv[-1]
 if not os.path.isfile(meta_file):
     print("Usage: python run.py /path/to/meta/file")
@@ -33,10 +94,13 @@ solution_folder = os.path.join(
 if not os.path.isdir(solution_folder):
     os.mkdir(solution_folder)
 
-base_folder = os.path.join(os.path.dirname(meta_file), "../..")
+# base_folder = os.path.join(os.path.dirname(meta_file), "../..")
+base_folder = os.getcwd()
 
 overall_total_score = 0
 solutions = {}
+solution_pool = SolutionPool()
+
 for index, instance in enumerate(instances):
     instance_base = os.path.basename(instance)
     print("[INSTANCE]", instance_base)
@@ -50,42 +114,20 @@ for index, instance in enumerate(instances):
     # read instance
     instance_path = os.path.join(base_folder, instance)
     model.readProblem(instance_path)
-    scip_vars = []
-    for j in range(model.getNVars()):
-        v = model.getVars()[j]
-        scip_vars.append(v)
+    scip_vars = model.getVars()
 
     # Give hint using previous solutions.
-    solution_hint = model.createPartialSol()
-    partial_solution_generated = False
-    for j in range(model.getNVars()):
-        v = model.getVars()[j]
-        if v.vtype() == "CONTINUOUS":
-            continue
-        name = v.name
-        if name not in solutions:
-            continue
+    for solution in solution_pool.solutions:
+        solution.add_to_model(model)
 
-        best_val = 0
-        best_freq = 0
-        for val in solutions[name]:
-
-            if solutions[name][val] > best_freq:
-                best_freq = solutions[name][val]
-                best_val = val
-        if best_freq > 0:
-            partial_solution_generated = True
-            model.setSolVal(solution_hint, v, best_val)
-            # print(name, best_val)
-    if partial_solution_generated:
-        try:
-            print("Trying solution")
-            # stored = model.trySol(solution_hint, printreason=True, free=False)
-            stored = model.addSol(solution_hint, free=True)
-            if stored:
-                print("Solution stored!")
-        except Exception as e:
-            print(e)
+    # model.enableReoptimization()
+    model.setIntParam('presolving/maxrestarts', 0)
+    if index > 0:
+        # model.setIntParam('branching/fullstrong/priority', 100000)
+        # model.setBoolParam('reoptimization/enable', True)
+        # model.setIntParam('presolving/maxrestarts', 0)
+        # model.enableReoptimization()
+        model.freeReoptSolve()
 
     # optimize
     t_start = time()
@@ -105,20 +147,17 @@ for index, instance in enumerate(instances):
     if model.getNSols() > 0:
         primal_bound = model.getObjVal()
         sol = model.getBestSol()
+        solution = Solution()
         with open(os.path.join(solution_folder, f"{instance_base}.sol"), 'w') as f:
             for v in scip_vars:
                 name = v.name
                 val = model.getVal(v)
+                solution.varvalues[name] = val
                 f.write(name)
                 f.write("    ")
                 f.write(str(val))
                 f.write("\n")
-                if name not in solutions:
-                    solutions[name] = {}
-                if val not in solutions[name]:
-                    solutions[name][val] = 1
-                else:
-                    solutions[name][val] += 1
+        solution_pool.add_solution(solution)
 
     else:
         print("No solution found")
@@ -127,10 +166,6 @@ for index, instance in enumerate(instances):
     time_score = (t_end - t_start)/time_limit
     gap_score = 0
     feasibility_penalty = 0
-    if model.isInfinity(primal_bound) or model.isInfinity(dual_bound):
-        gap_score = 1
-    elif primal_bound * dual_bound < 0:
-        gap_score = 1
 
     is_optimal = (model.getStatus() == "optimal")
 
@@ -138,6 +173,11 @@ for index, instance in enumerate(instances):
         time_score = max(1, time_score)
         gap_score = abs(primal_bound - dual_bound) / \
             max(abs(primal_bound), abs(dual_bound))
+
+    if model.isInfinity(primal_bound) or model.isInfinity(dual_bound):
+        gap_score = 1
+    elif primal_bound * dual_bound < 0:
+        gap_score = 1
 
     total_score_instance = time_score + gap_score + feasibility_penalty
     print("Time score: ", time_score)
