@@ -225,10 +225,13 @@ SCIP_RETCODE execmain(int argc, const char **argv)
         }
 
         // Update parameters
-        double hint_score = -total_score;
-        if (comp_sol_calls > 0 && comp_sol_solns == 0)
-            hint_score -= comp_soln_time;
-        provide_hint.AdjustScore(-hint_score);
+        if (index > 0)
+        {
+            double hint_score = -total_score;
+            if (comp_sol_calls > 0 && comp_sol_solns == 0)
+                hint_score -= comp_soln_time;
+            provide_hint.AdjustScore(-hint_score);
+        }
     }
 
     return SCIP_OKAY;
