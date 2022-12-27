@@ -44,6 +44,7 @@ SCIP_RETCODE execmain(int argc, const char **argv)
 
     SCIP_CALL(SCIPsetRealParam(scip, "limits/time", timeout - 2));
     SCIP_CALL(SCIPsetIntParam(scip, "presolving/maxrestarts", 0));
+    SCIP_CALL(SCIPsetIntParam(scip, "separating/maxcuts", 0));
 
     // Read solution from file.
     if (!solution_file.empty() && solution_file != "-")
