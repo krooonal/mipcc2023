@@ -46,7 +46,7 @@ SCIP_RETCODE execmain(int argc, const char **argv)
     SCIP_CALL(SCIPsetIntParam(scip, "presolving/maxrestarts", 0));
 
     // Read solution from file.
-    if (!solution_file.empty())
+    if (!solution_file.empty() && solution_file != "-")
         SCIPreadSol(scip, solution_file.c_str());
 
     // Solve
