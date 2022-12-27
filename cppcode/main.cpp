@@ -86,7 +86,7 @@ SCIP_RETCODE execmain(int argc, const char **argv)
     SCIPmessagehdlrSetQuiet(SCIPgetMessagehdlr(scip), TRUE);
 
     // Provide prev solution?
-    Parameter<bool> provide_hint(0.7, "provide_hint");
+    Parameter<bool> provide_hint(0.8, "provide_hint");
     provide_hint.AddValue(true);
     provide_hint.AddValue(false);
 
