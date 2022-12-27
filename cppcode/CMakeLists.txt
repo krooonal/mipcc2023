@@ -18,6 +18,10 @@ target_link_libraries(cppex v_history)
 target_link_libraries(cppex event_solfeedback)
 target_link_libraries(cppex parameters)
 target_link_libraries(cppex branch_cumpscost)
+
+add_executable(experiment experiment.cpp)
+target_link_libraries(experiment ${SCIP_LIBRARIES})
+
 if( TARGET examples )
     add_dependencies( examples cppex )
 endif()
