@@ -241,7 +241,10 @@ SCIP_RETCODE execmain(int argc, const char **argv)
                 hint_score -= comp_soln_time;
             provide_hint.AdjustScore(hint_score);
         }
+        max_cuts.AdjustScore(-total_score);
     }
+    provide_hint.PrintStats();
+    max_cuts.PrintStats();
 
     return SCIP_OKAY;
 }
