@@ -26,6 +26,7 @@ public:
     void AddValue(T value);
     void AdjustScore(double score);
     T GetBestValue();
+    void PrintStats();
 
 private:
     double impact_factor_ = 1.0;
@@ -85,5 +86,18 @@ T Parameter<T>::GetBestValue()
          << " Score: " << final_scores_[best_index]
          << endl;
     return values_[best_index];
+}
+
+template <typename T>
+void Parameter<T>::PrintStats()
+{
+    cout << name_ << endl;
+    for (int i = 0; i < values_.size(); ++i)
+    {
+        cout << "Value " << values_[i]
+             << " count " << counts_[i]
+             << " Qscore " << scores_[i]
+             << " Final score " << final_scores_[i] << endl;
+    }
 }
 #endif

@@ -86,9 +86,17 @@ SCIP_RETCODE execmain(int argc, const char **argv)
     SCIPmessagehdlrSetQuiet(SCIPgetMessagehdlr(scip), TRUE);
 
     // Provide prev solution?
-    Parameter<bool> provide_hint(0.8, "provide_hint");
+    Parameter<bool> provide_hint(0.7, "provide_hint");
     provide_hint.AddValue(true);
     provide_hint.AddValue(false);
+
+    Parameter<int> max_cuts(0.7, "max_cuts");
+    max_cuts.AddValue(100);
+    max_cuts.AddValue(0);
+
+    // Parameter<int> bfs_priority(0.7, "bfs_priority");
+    // bfs_priority.AddValue(100000);
+    // bfs_priority.AddValue(300000);
 
     SCIP_RESULT *result;
     result = new SCIP_RESULT[3];
@@ -119,6 +127,7 @@ SCIP_RETCODE execmain(int argc, const char **argv)
 
         SCIP_CALL(SCIPsetRealParam(scip, "limits/time", timeout - 2));
         SCIP_CALL(SCIPsetIntParam(scip, "presolving/maxrestarts", 0));
+        SCIP_CALL(SCIPsetIntParam(scip, "separating/maxcuts", max_cuts.GetBestValue()));
 
         SCIP_VAR **vars;
         vars = SCIPgetOrigVars(scip);
