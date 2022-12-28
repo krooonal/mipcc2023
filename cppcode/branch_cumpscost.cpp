@@ -222,7 +222,7 @@ static SCIP_DECL_BRANCHEXECLP(branchExeclpCumpscost)
                //      << bnd << branchbounds[i]
                //      << endl;
                double cost_update = lp_gain * current_update_fac;
-               branchruledata->var_histories->UpdateCumpscost(var_name, 0.0);
+               branchruledata->var_histories->UpdateCumpscost(var_name, cost_update);
             }
             level++;
             current_update_fac *= branchruledata->cost_update_factor;
