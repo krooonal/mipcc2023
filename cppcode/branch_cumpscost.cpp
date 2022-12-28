@@ -158,7 +158,6 @@ static SCIP_DECL_BRANCHEXECLP(branchExeclpCumpscost)
 
       return SCIP_OKAY;
    }
-   cout << "Here 3\n";
 
    SCIP_NODE *current_node = SCIPgetCurrentNode(scip);
    {
@@ -169,7 +168,6 @@ static SCIP_DECL_BRANCHEXECLP(branchExeclpCumpscost)
       int nbranchvars;
       int branchvarssize;
       int nnodes;
-      cout << "Here 4\n";
 
       // Store current node variable LP values. This can slow us down?
       // Store current node LP objective value.
@@ -193,7 +191,6 @@ static SCIP_DECL_BRANCHEXECLP(branchExeclpCumpscost)
          SCIP_CALL(SCIPallocBufferArray(scip, &boundtypes, branchvarssize));
          int level = 0;
          double current_update_fac = 1;
-         cout << "Here 5\n";
          while (SCIPnodeGetDepth(node) != 0)
          {
 
@@ -219,9 +216,9 @@ static SCIP_DECL_BRANCHEXECLP(branchExeclpCumpscost)
                   var_name = parent_vars[0]->name;
                }
 
-               cout << "Previous branch: " << var_name
-                    << bnd << branchbounds[i]
-                    << endl;
+               // cout << "Previous branch: " << var_name
+               //      << bnd << branchbounds[i]
+               //      << endl;
                double cost_update = lp_gain * current_update_fac;
                branchruledata->var_histories->UpdateCumpscost(var_name, 0.0);
             }
@@ -291,6 +288,7 @@ static SCIP_DECL_BRANCHEXECLP(branchExeclpCumpscost)
    }
    else
    {
+      cout << "Branching on cumpscost rule. Best cost: " << best_cost << endl;
       SCIP_NODE *downchild;
       SCIP_NODE *upchild;
       SCIP_VAR *var = lpcands[best_lp_candidate_index];
@@ -354,7 +352,6 @@ SCIP_RETCODE SCIPincludeBranchruleCumpscost(
    SCIP_BRANCHRULEDATA *branchruledata;
    SCIP_BRANCHRULE *branchrule;
    srand(42);
-   cout << "Here 0\n";
 
    /* create Cumpscost branching rule data */
    branchruledata = NULL;
@@ -362,7 +359,6 @@ SCIP_RETCODE SCIPincludeBranchruleCumpscost(
    SCIP_CALL(SCIPallocBlockMemory(scip, &branchruledata));
    branchruledata->var_histories = var_histories;
    branchruledata->cost_update_factor = cost_update_factor;
-   cout << "Here 1\n";
 
    branchrule = NULL;
 
@@ -389,7 +385,6 @@ SCIP_RETCODE SCIPincludeBranchruleCumpscost(
    SCIP_CALL(SCIPsetBranchruleExecLp(scip, branchrule, branchExeclpCumpscost));
    SCIP_CALL(SCIPsetBranchruleExecExt(scip, branchrule, branchExecextCumpscost));
    SCIP_CALL(SCIPsetBranchruleExecPs(scip, branchrule, branchExecpsCumpscost));
-   cout << "Here 2\n";
 
    /* add Cumpscost branching rule parameters */
    /* TODO: (optional) add branching rule specific parameters with SCIPaddTypeParam() here */
