@@ -261,10 +261,10 @@ static SCIP_DECL_BRANCHEXECLP(branchExeclpCumpscost)
          var_name = parent_vars[0]->name;
       }
       long long cumpscount = branchruledata->var_histories->GetCumpscostCount(var_name);
-      if (cumpscount < 5)
+      if (cumpscount < 10)
          continue;
       double cumpscost = branchruledata->var_histories->GetCumpscost(var_name);
-      if (best_lp_candidate_index == -1 || cumpscost > best_cost)
+      if (cumpscost > best_cost)
       {
          best_lp_candidate_index = i;
          best_cost = cumpscost;
