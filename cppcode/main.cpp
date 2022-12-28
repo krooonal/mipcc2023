@@ -109,7 +109,8 @@ SCIP_RETCODE execmain(int argc, const char **argv)
     // SCIP_CALL(SCIPincludeEventHdlrSolFeedback(scip, &solution_pool));
 
     // Branching rule.
-    SCIP_CALL(SCIPincludeBranchruleCumpscost(scip));
+    SCIP_CALL(SCIPincludeBranchruleCumpscost(scip, &var_histories,
+                                             /*cost_update_factor=*/0.5));
 
     for (int index = 0; index < instances.size(); ++index)
     {

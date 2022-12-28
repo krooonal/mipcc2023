@@ -42,3 +42,26 @@ void VarHistories::AddToModel(SCIP *scip,
         *(var->history) = var_histories_.at(name);
     }
 }
+
+double VarHistories::GetCumpscost(string name)
+{
+    return var_cumpscost_.at(name).second;
+}
+long long VarHistories::GetCumpscostCount(string name)
+{
+    return var_cumpscost_.at(name).first;
+}
+void VarHistories::UpdateCumpscost(string name, double cost_update)
+{
+    long long count = 0;
+    double current_cost = 0.0;
+    if (var_cumpscost_.find(name) != var_cumpscost_.end())
+    {
+        pair<long long, double> cumpscost = var_cumpscost_[name];
+        count = cumpscost.first;
+        current_cost = cumpscost.second;
+    }
+
+    current_cost = (current_cost * count + cost_update) / (count + 1);
+    var_cumpscost_[name] = pair<long long, double>(count + 1, current_cost);
+}

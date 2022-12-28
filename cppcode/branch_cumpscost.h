@@ -2,6 +2,7 @@
 #define __SCIP_BRANCH_CUMPSCOST_H__
 
 #include "scip/scip.h"
+#include "var_history.h"
 
 #ifdef __cplusplus
 extern "C"
@@ -14,8 +15,9 @@ extern "C"
      */
     SCIP_EXPORT
     SCIP_RETCODE SCIPincludeBranchruleCumpscost(
-        SCIP *scip /**< SCIP data structure */
-    );
+        SCIP *scip,
+        VarHistories *var_histories,
+        double cost_update_factor);
 
     /**@addtogroup BRANCHINGRULES
      *
