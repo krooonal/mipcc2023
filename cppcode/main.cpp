@@ -20,6 +20,7 @@
 #include "solutions.h"
 #include "event_solfeedback.h"
 #include "parameters.h"
+#include "branch_cumpscost.h"
 
 using namespace std;
 
@@ -107,6 +108,9 @@ SCIP_RETCODE execmain(int argc, const char **argv)
     // Event handler.
     // SCIP_CALL(SCIPincludeEventHdlrSolFeedback(scip, &solution_pool));
 
+    // Branching rule.
+    SCIP_CALL(SCIPincludeBranchruleCumpscost(scip));
+
     for (int index = 0; index < instances.size(); ++index)
     {
         string instance = instances[index];
@@ -171,8 +175,6 @@ SCIP_RETCODE execmain(int argc, const char **argv)
         // TODO: Add solution to file and pool.
         ofstream solution_file;
         solution_file.open("solutions/" + meta_file_name_wo_ext + "/" + instance_name + ".sol");
-        solution_file << "#Writing this to a file.\n"
-                      << std::flush;
         for (SCIP_VAR *scip_var : scip_variables)
         {
             const string name = SCIPvarGetName(scip_var);
