@@ -67,5 +67,7 @@ void VarHistories::UpdateCumpscost(string name, double cost_update)
     }
 
     current_cost = (current_cost * count + cost_update) / (count + 1);
+    cout << "Update count and cost of "
+         << name << " " << count + 1 << " " << current_cost << endl;
     var_cumpscost_[name] = pair<long long, double>(count + 1, current_cost);
 }
