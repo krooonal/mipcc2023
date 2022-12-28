@@ -45,11 +45,15 @@ void VarHistories::AddToModel(SCIP *scip,
 
 double VarHistories::GetCumpscost(string name)
 {
-    return var_cumpscost_.at(name).second;
+    if (var_cumpscost_.find(name) != var_cumpscost_.end())
+        return var_cumpscost_.at(name).second;
+    return 0.0;
 }
 long long VarHistories::GetCumpscostCount(string name)
 {
-    return var_cumpscost_.at(name).first;
+    if (var_cumpscost_.find(name) != var_cumpscost_.end())
+        return var_cumpscost_.at(name).first;
+    return 0;
 }
 void VarHistories::UpdateCumpscost(string name, double cost_update)
 {
