@@ -25,7 +25,7 @@ using namespace std;
 struct SCIP_BranchruleData
 {
    VarHistories *var_histories = NULL;
-   std::map<long long, double> node_lp_values;
+   // std::map<long long, double> node_lp_values;
    double cost_update_factor = 0.0;
 };
 
@@ -175,13 +175,14 @@ static SCIP_DECL_BRANCHEXECLP(branchExeclpCumpscost)
       // Store current node LP objective value.
       long long current_node_num = current_node->number;
       double current_lp_obj = SCIPgetLPObjval(scip);
-      branchruledata->node_lp_values[current_node_num] = current_lp_obj;
+      // branchruledata->node_lp_values[current_node_num] = current_lp_obj;
 
       int node_depth = SCIPnodeGetDepth(current_node);
       if (node_depth > 0)
       {
          long long parent_node_num = current_node->parent->number;
-         double parent_lp_obj = branchruledata->node_lp_values[parent_node_num];
+         // double parent_lp_obj = branchruledata->node_lp_values[parent_node_num];
+         double parent_lp_obj = SCIPnodeGetLowerbound(current_node->parent);
          double lp_gain = current_lp_obj - parent_lp_obj;
 
          branchvarssize = node_depth;
