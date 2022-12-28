@@ -182,6 +182,7 @@ static SCIP_DECL_BRANCHEXECLP(branchExeclpCumpscost)
          // double parent_lp_obj = branchruledata->node_lp_values[parent_node_num];
          double parent_lp_obj = SCIPnodeGetLowerbound(current_node->parent);
          double lp_gain = current_lp_obj - parent_lp_obj;
+         cout << "LP gain: " << lp_gain << endl;
 
          branchvarssize = node_depth;
          SCIP_NODE *node = current_node;
