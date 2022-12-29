@@ -31,7 +31,8 @@ public:
 
 private:
     std::map<string, SCIP_HISTORY> var_histories_;
-    std::map<string, pair<long long, double>> var_cumpscost_;
+    std::map<string, double> var_cumpscost_;
+    std::map<string, long long> var_cumpscost_count_;
 };
 
 #endif

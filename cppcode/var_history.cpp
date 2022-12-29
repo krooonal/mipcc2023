@@ -29,6 +29,9 @@ void VarHistories::Populate(SCIP *scip,
         var_history.pscostcount[0] = min(var_history.pscostcount[0], 4.0);
         var_history.pscostcount[1] = min(var_history.pscostcount[1], 4.0);
         var_histories_[name] = var_history;
+
+        // Reduce counts of cumpscost
+        var_cumpscost_count_[name] = min(var_cumpscost_count_[name], 4ll);
     }
 }
 
@@ -46,13 +49,13 @@ void VarHistories::AddToModel(SCIP *scip,
 double VarHistories::GetCumpscost(string name)
 {
     if (var_cumpscost_.find(name) != var_cumpscost_.end())
-        return var_cumpscost_.at(name).second;
+        return var_cumpscost_.at(name);
     return 0.0;
 }
 long long VarHistories::GetCumpscostCount(string name)
 {
     if (var_cumpscost_.find(name) != var_cumpscost_.end())
-        return var_cumpscost_.at(name).first;
+        return var_cumpscost_count_.at(name);
     return 0;
 }
 void VarHistories::UpdateCumpscost(string name, double cost_update)
@@ -61,13 +64,13 @@ void VarHistories::UpdateCumpscost(string name, double cost_update)
     double current_cost = 0.0;
     if (var_cumpscost_.find(name) != var_cumpscost_.end())
     {
-        pair<long long, double> cumpscost = var_cumpscost_[name];
-        count = cumpscost.first;
-        current_cost = cumpscost.second;
+        count = var_cumpscost_count_[name];
+        current_cost = var_cumpscost_[name];
     }
 
     current_cost = (current_cost * count + cost_update) / (count + 1);
     // cout << "Update count and cost of "
     //      << name << " " << count + 1 << " " << current_cost << endl;
-    var_cumpscost_[name] = pair<long long, double>(count + 1, current_cost);
+    var_cumpscost_[name] = current_cost;
+    var_cumpscost_count_[name] = count + 1;
 }
