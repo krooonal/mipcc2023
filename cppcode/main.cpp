@@ -109,8 +109,8 @@ SCIP_RETCODE execmain(int argc, const char **argv)
     // SCIP_CALL(SCIPincludeEventHdlrSolFeedback(scip, &solution_pool));
 
     // Branching rule.
-    SCIP_CALL(SCIPincludeBranchruleCumpscost(scip, &var_histories,
-                                             /*cost_update_factor=*/0.5));
+    // SCIP_CALL(SCIPincludeBranchruleCumpscost(scip, &var_histories,
+    //                                          /*cost_update_factor=*/0.5));
 
     for (int index = 0; index < instances.size(); ++index)
     {
@@ -245,7 +245,7 @@ SCIP_RETCODE execmain(int argc, const char **argv)
             provide_hint.AdjustScore(hint_score);
             max_cuts.AdjustScore(-total_score);
         }
-        }
+    }
     provide_hint.PrintStats();
     max_cuts.PrintStats();
 

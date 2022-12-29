@@ -72,13 +72,29 @@ void Parameter<T>::AddValue(T value)
 template <typename T>
 T Parameter<T>::GetBestValue()
 {
-    int best_index = 0;
+    vector<int> bucket;
     for (int i = 0; i < values_.size(); ++i)
     {
-        if (final_scores_[i] > final_scores_[best_index])
+        if (counts_[i] < 5)
+            bucket.push_back(i);
+    }
+    int best_index = 0;
+    if (bucket.empty())
+    {
+        for (int i = 0; i < values_.size(); ++i)
         {
-            best_index = i;
+            if (final_scores_[i] > final_scores_[best_index])
+            {
+                best_index = i;
+            }
         }
+    }
+    else
+    {
+        if (bucket.size() > 1)
+            best_index = bucket[rand() % bucket.size()];
+        else
+            best_index = bucket[0];
     }
     current_index_ = best_index;
     cout << name_ << ": Trying value: " << values_[best_index]
