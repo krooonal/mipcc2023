@@ -132,7 +132,7 @@ SCIP_RETCODE execmain(int argc, const char **argv)
 
         SCIP_CALL(SCIPsetRealParam(scip, "limits/time", timeout - 2));
         SCIP_CALL(SCIPsetIntParam(scip, "presolving/maxrestarts", 0));
-        SCIP_CALL(SCIPsetIntParam(scip, "separating/maxcuts", max_cuts.GetBestValue()));
+        // SCIP_CALL(SCIPsetIntParam(scip, "separating/maxcuts", max_cuts.GetBestValue()));
 
         SCIP_VAR **vars;
         vars = SCIPgetOrigVars(scip);
@@ -145,10 +145,11 @@ SCIP_RETCODE execmain(int argc, const char **argv)
         }
         if (index > 0)
         {
-            if (provide_hint.GetBestValue())
-            {
-                solution_pool.AddToModel(scip, scip_variables);
-            }
+            // if (provide_hint.GetBestValue())
+            // {
+            //     solution_pool.AddToModel(scip, scip_variables);
+            // }
+            solution_pool.AddToModel(scip, scip_variables);
 
             solution_pool.SetCurrentScipVars(&scip_variables);
             // for (int i = 0; i < 5; ++i)
