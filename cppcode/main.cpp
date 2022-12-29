@@ -110,7 +110,7 @@ SCIP_RETCODE execmain(int argc, const char **argv)
 
     // Branching rule.
     SCIP_CALL(SCIPincludeBranchruleCumpscost(scip, &var_histories,
-                                             /*cost_update_factor=*/0.9));
+                                             /*cost_update_factor=*/0.5));
 
     for (int index = 0; index < instances.size(); ++index)
     {
