@@ -290,7 +290,7 @@ static SCIP_DECL_BRANCHEXECLP(branchExeclpCumpscost)
    }
    else
    {
-      cout << "Branching on cumpscost rule. Best cost: " << best_cost << endl;
+      // cout << "Branching on cumpscost rule. Best cost: " << best_cost << endl;
       SCIP_NODE *downchild;
       SCIP_NODE *upchild;
       SCIP_VAR *var = lpcands[best_lp_candidate_index];
