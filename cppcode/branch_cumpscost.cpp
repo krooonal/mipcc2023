@@ -276,7 +276,7 @@ static SCIP_DECL_BRANCHEXECLP(branchExeclpCumpscost)
    if (best_lp_candidate_index == -1)
       use_relpscost = true;
 
-   if (rand() % 10 >= 5)
+   if (rand() % 10 >= 3)
       use_relpscost = true;
 
    if (use_relpscost)
