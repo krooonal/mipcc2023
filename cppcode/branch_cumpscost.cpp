@@ -238,7 +238,7 @@ static SCIP_DECL_BRANCHEXECLP(branchExeclpCumpscost)
       }
    }
    bool use_relpscost = false;
-   if (rand() % 10 >= 0)
+   if (rand() % 10 >= 2)
    {
       use_relpscost = true;
       *result = SCIP_DIDNOTRUN;
@@ -279,7 +279,7 @@ static SCIP_DECL_BRANCHEXECLP(branchExeclpCumpscost)
          var_name = parent_vars[0]->name;
       }
       long long cumpscount = branchruledata->var_histories->GetCumpscostCount(var_name);
-      if (cumpscount < 10ll)
+      if (cumpscount < 40ll)
          continue;
       double cumpscost = branchruledata->var_histories->GetCumpscost(var_name);
       if (cumpscost > best_cost)
