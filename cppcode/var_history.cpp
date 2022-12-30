@@ -31,6 +31,8 @@ void VarHistories::Populate(SCIP *scip,
         var_histories_[name] = var_history;
 
         // Reduce counts of cumpscost
+        cout << "Current counts " << var_cumpscost_count_[name] << " "
+             << var_cumpscost_down_count_[name] << endl;
         var_cumpscost_count_[name] = min(var_cumpscost_count_[name], 4ll);
         var_cumpscost_down_count_[name] = min(var_cumpscost_down_count_[name], 4ll);
     }

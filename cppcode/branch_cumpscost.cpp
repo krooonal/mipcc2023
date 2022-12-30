@@ -272,7 +272,7 @@ static SCIP_DECL_BRANCHEXECLP(branchExeclpCumpscost)
          var_name = parent_vars[0]->name;
       }
       long long cumpscount = branchruledata->var_histories->GetCumpscostCount(var_name);
-      if (cumpscount < 10ll)
+      if (cumpscount < 20ll)
          continue;
       double cumpscost = branchruledata->var_histories->GetCumpscost(var_name);
       if (cumpscost > best_cost)
