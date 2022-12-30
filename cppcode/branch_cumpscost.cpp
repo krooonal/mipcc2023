@@ -223,8 +223,14 @@ static SCIP_DECL_BRANCHEXECLP(branchExeclpCumpscost)
                //      << bnd << branchbounds[i]
                //      << endl;
                double cost_update = lp_gain * current_update_fac;
-
-               branchruledata->var_histories->UpdateCumpscost(var_name, cost_update, update_count);
+               if (boundtypes[i] == SCIP_BOUNDTYPE_LOWER)
+               {
+                  branchruledata->var_histories->UpdateCumpscost(var_name, cost_update, update_count);
+               }
+               else
+               {
+                  branchruledata->var_histories->UpdateCumpscostDown(var_name, cost_update, update_count);
+               }
             }
             level++;
             update_count = false; // Only update the count of last level var.
@@ -266,7 +272,7 @@ static SCIP_DECL_BRANCHEXECLP(branchExeclpCumpscost)
          var_name = parent_vars[0]->name;
       }
       long long cumpscount = branchruledata->var_histories->GetCumpscostCount(var_name);
-      if (cumpscount < 10)
+      if (cumpscount < 10ll)
          continue;
       double cumpscost = branchruledata->var_histories->GetCumpscost(var_name);
       if (cumpscost > best_cost)

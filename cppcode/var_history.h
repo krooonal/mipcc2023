@@ -28,11 +28,14 @@ public:
     double GetCumpscost(string name);
     long long GetCumpscostCount(string name);
     void UpdateCumpscost(string name, double cost_update, bool update_count);
+    void UpdateCumpscostDown(string name, double cost_update, bool update_count);
 
 private:
     std::map<string, SCIP_HISTORY> var_histories_;
     std::map<string, double> var_cumpscost_;
+    std::map<string, double> var_cumpscost_down_;
     std::map<string, long long> var_cumpscost_count_;
+    std::map<string, long long> var_cumpscost_down_count_;
 };
 
 #endif

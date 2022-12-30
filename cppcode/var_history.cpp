@@ -48,16 +48,27 @@ void VarHistories::AddToModel(SCIP *scip,
 
 double VarHistories::GetCumpscost(string name)
 {
+    double threshold = 1e-6;
+    double upcost = threshold;
+    double downcost = threshold;
     if (var_cumpscost_.find(name) != var_cumpscost_.end())
-        return var_cumpscost_.at(name);
-    return 0.0;
+        upcost = max(threshold, var_cumpscost_[name]);
+    if (var_cumpscost_down_.find(name) != var_cumpscost_down_.end())
+        downcost = max(threshold, var_cumpscost_down_[name]);
+    return upcost * downcost;
 }
+
 long long VarHistories::GetCumpscostCount(string name)
 {
-    if (var_cumpscost_.find(name) != var_cumpscost_.end())
-        return var_cumpscost_count_.at(name);
-    return 0;
+    long long upcount = 0;
+    long long downcount = 0;
+    if (var_cumpscost_count_.find(name) != var_cumpscost_count_.end())
+        upcount = var_cumpscost_count_.at(name);
+    if (var_cumpscost_down_count_.find(name) != var_cumpscost_down_count_.end())
+        downcount = var_cumpscost_down_count_.at(name);
+    return upcount + downcount;
 }
+
 void VarHistories::UpdateCumpscost(string name, double cost_update, bool update_count)
 {
     long long count = 0;
@@ -75,4 +86,23 @@ void VarHistories::UpdateCumpscost(string name, double cost_update, bool update_
     //      << name << " " << count << " " << current_cost << endl;
     var_cumpscost_[name] = current_cost;
     var_cumpscost_count_[name] = count;
+}
+
+void VarHistories::UpdateCumpscostDown(string name, double cost_update, bool update_count)
+{
+    long long count = 0;
+    double current_cost = 0.0;
+    if (var_cumpscost_down_.find(name) != var_cumpscost_down_.end())
+    {
+        count = var_cumpscost_down_count_[name];
+        current_cost = var_cumpscost_down_[name];
+    }
+    if (update_count)
+        count++;
+
+    current_cost = (current_cost * count + cost_update) / (count);
+    // cout << "Update count and cost of "
+    //      << name << " " << count << " " << current_cost << endl;
+    var_cumpscost_down_[name] = current_cost;
+    var_cumpscost_down_count_[name] = count;
 }

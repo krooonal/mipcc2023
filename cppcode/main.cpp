@@ -135,7 +135,7 @@ SCIP_RETCODE execmain(int argc, const char **argv)
         SCIP_CALL(SCIPsetRealParam(scip, "limits/time", timeout - 2));
         SCIP_CALL(SCIPsetIntParam(scip, "presolving/maxrestarts", 0));
         // SCIP_CALL(SCIPsetIntParam(scip, "separating/maxcuts", max_cuts.GetBestValue()));
-        SCIP_CALL(SCIPsetIntParam(scip, "branching/pscost/priority", 40000)); // default 2000
+        // SCIP_CALL(SCIPsetIntParam(scip, "branching/pscost/priority", 40000)); // default 2000
 
         SCIP_VAR **vars;
         vars = SCIPgetOrigVars(scip);
