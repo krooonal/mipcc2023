@@ -132,13 +132,6 @@ SCIP_DECL_BRANCHEXITSOL(branchExitsolCumpscost)
 #if 1
 static SCIP_DECL_BRANCHEXECLP(branchExeclpCumpscost)
 { /*lint --e{715}*/
-   SCIP_VAR **tmplpcands;
-   SCIP_VAR **lpcands;
-   SCIP_Real *tmplpcandssol;
-   SCIP_Real *lpcandssol;
-   SCIP_Real *tmplpcandsfrac;
-   SCIP_Real *lpcandsfrac;
-   int nlpcands;
 
    assert(branchrule != NULL);
    SCIP_BRANCHRULEDATA *branchruledata;
@@ -244,19 +237,23 @@ static SCIP_DECL_BRANCHEXECLP(branchExeclpCumpscost)
          SCIPfreeBufferArray(scip, &branchvars);
       }
    }
+   bool use_relpscost = false;
+   if (rand() % 10 >= 2)
+   {
+      use_relpscost = true;
+      *result = SCIP_DIDNOTRUN;
+      return SCIP_OKAY;
+   }
+
+   SCIP_VAR **lpcands;
+   SCIP_Real *lpcandssol;
+   SCIP_Real *lpcandsfrac;
+   int nlpcands;
 
    /* get branching candidates */
-   SCIP_CALL(SCIPgetLPBranchCands(scip, &tmplpcands, &tmplpcandssol,
-                                  &tmplpcandsfrac, NULL, &nlpcands, NULL));
+   SCIP_CALL(SCIPgetLPBranchCands(scip, &lpcands, &lpcandssol,
+                                  &lpcandsfrac, NULL, &nlpcands, NULL));
    assert(nlpcands > 0);
-
-   /* copy LP banching candidates and solution values, because they
-    * will be updated w.r.t. the strong branching LP
-    * solution
-    */
-   SCIP_CALL(SCIPduplicateBufferArray(scip, &lpcands, tmplpcands, nlpcands));
-   SCIP_CALL(SCIPduplicateBufferArray(scip, &lpcandssol, tmplpcandssol, nlpcands));
-   SCIP_CALL(SCIPduplicateBufferArray(scip, &lpcandsfrac, tmplpcandsfrac, nlpcands));
 
    /* execute branching rule */
    int best_lp_candidate_index = -1;
@@ -281,11 +278,8 @@ static SCIP_DECL_BRANCHEXECLP(branchExeclpCumpscost)
          best_cost = cumpscost;
       }
    }
-   bool use_relpscost = false;
-   if (best_lp_candidate_index == -1)
-      use_relpscost = true;
 
-   if (rand() % 10 >= 10)
+   if (best_lp_candidate_index == -1)
       use_relpscost = true;
 
    if (use_relpscost)
