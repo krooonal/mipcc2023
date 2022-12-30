@@ -42,6 +42,8 @@ SCIP_RETCODE Solution::AddToModel(SCIP *scip,
         double var_ub = SCIPvarGetUbGlobal(var);
         if (SCIPvarGetType(var) == SCIP_VARTYPE_CONTINUOUS)
             continue;
+        if (val < var_lb || val > var_ub)
+            continue;
         if (val < var_lb)
             val = var_lb;
         if (val > var_ub)
@@ -123,14 +125,16 @@ SCIP_RETCODE SolutionPool::AddToModel(SCIP *scip,
 
         if (varvaluefreq_[var_name][value] >= num_solutions * common_sol_factor_)
         {
-            num_var_hinted++;
             double var_lb = SCIPvarGetLbGlobal(var);
             double var_ub = SCIPvarGetUbGlobal(var);
+            if (value < var_lb || value > var_ub)
+                continue;
             if (value < var_lb)
                 value = var_lb;
             if (value > var_ub)
                 value = var_ub;
             SCIP_CALL(SCIPsetSolVal(scip, common_solution, var, value));
+            num_var_hinted++;
         }
         else
         {

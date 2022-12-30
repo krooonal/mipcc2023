@@ -17,6 +17,10 @@ Don't update scores for the first instance.
 Force attempt all values till count 5 in parameters
 --- 28 dec full ---
 New branching rule. 20% with 0.9 cost_update_factor
-Fix penalty on unsuccessfull hint.
+Fix penalty on unsuccessful hint. (remove heuristic time from penalty)
 hint success stats
+--- 29 dec full ---
+Remove variable from hint if value is out of bounds.
+New rule: Only update count of last level branching var when updating costs.
+Hinting: Update true score only if the hint was successful. Update the other score otherwise.
 

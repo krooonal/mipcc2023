@@ -58,7 +58,7 @@ long long VarHistories::GetCumpscostCount(string name)
         return var_cumpscost_count_.at(name);
     return 0;
 }
-void VarHistories::UpdateCumpscost(string name, double cost_update)
+void VarHistories::UpdateCumpscost(string name, double cost_update, bool update_count)
 {
     long long count = 0;
     double current_cost = 0.0;
@@ -67,10 +67,12 @@ void VarHistories::UpdateCumpscost(string name, double cost_update)
         count = var_cumpscost_count_[name];
         current_cost = var_cumpscost_[name];
     }
+    if (update_count)
+        count++;
 
-    current_cost = (current_cost * count + cost_update) / (count + 1);
+    current_cost = (current_cost * count + cost_update) / (count);
     // cout << "Update count and cost of "
-    //      << name << " " << count + 1 << " " << current_cost << endl;
+    //      << name << " " << count << " " << current_cost << endl;
     var_cumpscost_[name] = current_cost;
-    var_cumpscost_count_[name] = count + 1;
+    var_cumpscost_count_[name] = count;
 }

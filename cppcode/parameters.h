@@ -25,7 +25,12 @@ public:
     Parameter(double impact_factor, string name);
     void AddValue(T value);
     void AdjustScore(double score);
+    void AdjustScore(double score, int index);
     T GetBestValue();
+    int GetCurrentIndex()
+    {
+        return current_index_;
+    }
     void PrintStats();
 
 private:
@@ -51,12 +56,18 @@ Parameter<T>::Parameter(double impact_factor, string name)
 template <typename T>
 void Parameter<T>::AdjustScore(double score)
 {
-    scores_[current_index_] = (scores_[current_index_] * counts_[current_index_] + score) / (counts_[current_index_] + 1);
-    counts_[current_index_] += 1;
+    AdjustScore(score, current_index_);
+}
+
+template <typename T>
+void Parameter<T>::AdjustScore(double score, int index)
+{
+    scores_[index] = (scores_[index] * counts_[index] + score) / (counts_[index] + 1);
+    counts_[index] += 1;
     total_counts_ += 1;
-    final_scores_[current_index_] = scores_[current_index_] + (c_fac_ / counts_[current_index_]);
-    cout << name_ << ": Updated score of " << values_[current_index_]
-         << " to " << final_scores_[current_index_] << endl;
+    final_scores_[index] = scores_[index] + (c_fac_ / counts_[index]);
+    cout << name_ << ": Updated score of " << values_[index]
+         << " to " << final_scores_[index] << endl;
 }
 
 template <typename T>

@@ -241,14 +241,30 @@ SCIP_RETCODE execmain(int argc, const char **argv)
         // Update parameters
         if (index > 0)
         {
-            provide_hint.AdjustScore(-total_score);
+            if (provide_hint.GetCurrentIndex() == 0) // True value for hint.
+            {
+                if (comp_sol_solns > 0)
+                {
+                    provide_hint.AdjustScore(-total_score);
+                }
+                else
+                {
+                    // Update the false value of hint if hint is not successful.
+                    provide_hint.AdjustScore(-total_score, 1);
+                }
+            }
+            else
+            {
+                provide_hint.AdjustScore(-total_score);
+            }
+
             max_cuts.AdjustScore(-total_score);
         }
     }
     provide_hint.PrintStats();
     max_cuts.PrintStats();
     cout << "Provided hints: " << hint_total
-         << " successfull hints: " << hint_success << endl;
+         << " successful hints: " << hint_success << endl;
 
     return SCIP_OKAY;
 }

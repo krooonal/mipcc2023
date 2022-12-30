@@ -27,7 +27,7 @@ public:
 
     double GetCumpscost(string name);
     long long GetCumpscostCount(string name);
-    void UpdateCumpscost(string name, double cost_update);
+    void UpdateCumpscost(string name, double cost_update, bool update_count);
 
 private:
     std::map<string, SCIP_HISTORY> var_histories_;

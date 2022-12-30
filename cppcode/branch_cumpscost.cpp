@@ -193,6 +193,7 @@ static SCIP_DECL_BRANCHEXECLP(branchExeclpCumpscost)
          SCIP_CALL(SCIPallocBufferArray(scip, &boundtypes, branchvarssize));
          int level = 0;
          double current_update_fac = 1;
+         bool update_count = true;
          while (SCIPnodeGetDepth(node) != 0)
          {
 
@@ -222,9 +223,11 @@ static SCIP_DECL_BRANCHEXECLP(branchExeclpCumpscost)
                //      << bnd << branchbounds[i]
                //      << endl;
                double cost_update = lp_gain * current_update_fac;
-               branchruledata->var_histories->UpdateCumpscost(var_name, cost_update);
+
+               branchruledata->var_histories->UpdateCumpscost(var_name, cost_update, update_count);
             }
             level++;
+            update_count = false; // Only update the count of last level var.
             current_update_fac *= branchruledata->cost_update_factor;
 
             node = node->parent;
