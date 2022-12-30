@@ -220,6 +220,20 @@ SCIP_RETCODE execmain(int argc, const char **argv)
         cout << "total_score: " << total_score << endl;
         cout << "adjusted_score: " << adjusted_score << endl;
 
+        // Print branching stats
+        SCIP_BRANCHRULE **branch_rules = SCIPgetBranchrules(scip);
+        int n_branch_rules = SCIPgetNBranchrules(scip);
+        cout << "Branching stats\n";
+        for (int i = 0; i < n_branch_rules; ++i)
+        {
+            int n_calls = SCIPbranchruleGetNLPCalls(branch_rules[i]);
+            if (n_calls > 0)
+            {
+                cout << SCIPbranchruleGetName(branch_rules[i])
+                     << " " << n_calls << endl;
+            }
+        }
+
         // Solution feedback
         SCIP_HEUR *comp_sol_heur = SCIPfindHeur(scip, "completesol");
         assert(comp_sol_heur != NULL);
