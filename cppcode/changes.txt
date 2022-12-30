@@ -16,6 +16,7 @@ maxcuts impact factor 0.7
 Don't update scores for the first instance.
 Force attempt all values till count 5 in parameters
 --- 28 dec full ---
-New branching rule. 
-EXP: always provide solution.
-EXP: Keep cuts.
+New branching rule. 20% with 0.9 cost_update_factor
+Fix penalty on unsuccessfull hint.
+hint success stats
+

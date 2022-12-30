@@ -90,6 +90,8 @@ SCIP_RETCODE execmain(int argc, const char **argv)
     Parameter<bool> provide_hint(0.7, "provide_hint");
     provide_hint.AddValue(true);
     provide_hint.AddValue(false);
+    int hint_success = 0;
+    int hint_total = 0;
 
     Parameter<int> max_cuts(0.7, "max_cuts");
     max_cuts.AddValue(100);
@@ -109,8 +111,8 @@ SCIP_RETCODE execmain(int argc, const char **argv)
     // SCIP_CALL(SCIPincludeEventHdlrSolFeedback(scip, &solution_pool));
 
     // Branching rule.
-    // SCIP_CALL(SCIPincludeBranchruleCumpscost(scip, &var_histories,
-    //                                          /*cost_update_factor=*/0.9));
+    SCIP_CALL(SCIPincludeBranchruleCumpscost(scip, &var_histories,
+                                             /*cost_update_factor=*/0.9));
 
     for (int index = 0; index < instances.size(); ++index)
     {
@@ -132,7 +134,7 @@ SCIP_RETCODE execmain(int argc, const char **argv)
 
         SCIP_CALL(SCIPsetRealParam(scip, "limits/time", timeout - 2));
         SCIP_CALL(SCIPsetIntParam(scip, "presolving/maxrestarts", 0));
-        // SCIP_CALL(SCIPsetIntParam(scip, "separating/maxcuts", max_cuts.GetBestValue()));
+        SCIP_CALL(SCIPsetIntParam(scip, "separating/maxcuts", max_cuts.GetBestValue()));
 
         SCIP_VAR **vars;
         vars = SCIPgetOrigVars(scip);
@@ -145,11 +147,11 @@ SCIP_RETCODE execmain(int argc, const char **argv)
         }
         if (index > 0)
         {
-            // if (provide_hint.GetBestValue())
-            // {
-            //     solution_pool.AddToModel(scip, scip_variables);
-            // }
-            solution_pool.AddToModel(scip, scip_variables);
+            if (provide_hint.GetBestValue())
+            {
+                solution_pool.AddToModel(scip, scip_variables);
+            }
+            // solution_pool.AddToModel(scip, scip_variables);
 
             solution_pool.SetCurrentScipVars(&scip_variables);
             // for (int i = 0; i < 5; ++i)
@@ -227,28 +229,26 @@ SCIP_RETCODE execmain(int argc, const char **argv)
              << " Solns " << comp_sol_solns
              << " Time " << comp_soln_time
              << endl;
-        if (comp_sol_solns > 0)
+        if (comp_sol_calls > 0)
         {
-            // It automatically provides less hints due to added solutions.
-            // solution_pool.ReduceCommonSolFac();
-        }
-        else
-        {
-            // TODO.
+            hint_total++;
+            if (comp_sol_solns > 0)
+            {
+                hint_success++;
+            }
         }
 
         // Update parameters
         if (index > 0)
         {
-            double hint_score = -total_score;
-            if (comp_sol_calls > 0 && comp_sol_solns == 0)
-                hint_score -= comp_soln_time;
-            provide_hint.AdjustScore(hint_score);
+            provide_hint.AdjustScore(-total_score);
             max_cuts.AdjustScore(-total_score);
         }
     }
     provide_hint.PrintStats();
     max_cuts.PrintStats();
+    cout << "Provided hints: " << hint_total
+         << " successfull hints: " << hint_success << endl;
 
     return SCIP_OKAY;
 }
