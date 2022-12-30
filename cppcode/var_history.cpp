@@ -26,9 +26,9 @@ void VarHistories::Populate(SCIP *scip,
         const string name = SCIPvarGetName(var);
         SCIP_VAR *trans_var = SCIPvarGetTransVar(var);
         SCIP_HISTORY var_history = *(trans_var->history);
-        cout << "pseudocost counts: "
-             << var_history.pscostcount[0] << " "
-             << var_history.pscostcount[1] << endl;
+        // cout << "pseudocost counts: "
+        //      << var_history.pscostcount[0] << " "
+        //      << var_history.pscostcount[1] << endl;
         var_history.pscostcount[0] = min(var_history.pscostcount[0], 4.0);
         var_history.pscostcount[1] = min(var_history.pscostcount[1], 4.0);
         var_histories_[name] = var_history;
@@ -39,12 +39,12 @@ void VarHistories::Populate(SCIP *scip,
         var_cumpscost_count_[name] = min(var_cumpscost_count_[name], 4ll);
         var_cumpscost_down_count_[name] = min(var_cumpscost_down_count_[name], 4ll);
         // If they didn't get any updates, set their cumpscost to pscost.
-        if (var_cumpscost_count_[name] == 0)
+        if (var_cumpscost_count_[name] == 0 && var_history.pscostcount[0] > 0)
         {
             var_cumpscost_[name] = var_history.pscostweightedmean[0];
             var_cumpscost_count_[name] = 1;
         }
-        if (var_cumpscost_down_count_[name] == 0)
+        if (var_cumpscost_down_count_[name] == 0 && var_history.pscostcount[1] > 0)
         {
             var_cumpscost_down_count_[name] = var_history.pscostweightedmean[1];
             var_cumpscost_down_count_[name] = 1;
