@@ -22,8 +22,9 @@ hint success stats
 --- 29 dec full ---
 Remove variable from hint if value is out of bounds.
 New rule: Only update count of last level branching var when updating costs.
+New rule: Two way pscost updates. 
+New rule: No history reset. Threshold for reliability is 40.
 Hinting: Update true score only if the hint was successful. Update the other score otherwise.
-EXP: branching rule 100%
-EXP: Always provide Solns
-EXP: Always add cuts
+New branching rule. 20% with 0.9 cost_update_factor
+--- 30 dec full ---
 
