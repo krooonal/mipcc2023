@@ -279,17 +279,20 @@ static SCIP_DECL_BRANCHEXECLP(branchExeclpCumpscost)
    if (best_lp_candidate_index == -1)
       use_relpscost = true;
 
-   if (rand() % 10 >= 2)
+   if (rand() % 10 >= 10)
       use_relpscost = true;
 
    if (use_relpscost)
    {
+      *result = SCIP_DIDNOTRUN;
+      /*
       SCIP_BRANCHRULE *relbranchrule;
       relbranchrule = SCIPfindBranchrule(scip, "relpscost");
       // SCIPexecRelpscostBranching(SCIP *scip, SCIP_VAR **branchcands, double *branchcandssol,
       // double *branchcandsfrac, int nbranchcands, unsigned int executebranching, SCIP_RESULT *result)
       SCIPexecRelpscostBranching(scip, lpcands, lpcandssol, lpcandsfrac,
                                  nlpcands, TRUE, result);
+                                 */
    }
    else
    {
@@ -302,10 +305,10 @@ static SCIP_DECL_BRANCHEXECLP(branchExeclpCumpscost)
       *result = SCIP_BRANCHED;
    }
 
-   if (*result == SCIP_BRANCHED)
-   {
-      // cout << "Branched on current node\n";
-   }
+   // if (*result == SCIP_BRANCHED)
+   // {
+   //    // cout << "Branched on current node\n";
+   // }
 
    SCIPfreeBufferArray(scip, &lpcandsfrac);
    SCIPfreeBufferArray(scip, &lpcandssol);
