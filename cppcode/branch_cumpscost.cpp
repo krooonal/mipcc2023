@@ -238,7 +238,7 @@ static SCIP_DECL_BRANCHEXECLP(branchExeclpCumpscost)
       }
    }
    bool use_relpscost = false;
-   if (rand() % 10 >= 2)
+   if (rand() % 10 >= 0)
    {
       use_relpscost = true;
       *result = SCIP_DIDNOTRUN;
