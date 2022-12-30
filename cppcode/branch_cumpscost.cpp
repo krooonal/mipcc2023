@@ -244,16 +244,26 @@ static SCIP_DECL_BRANCHEXECLP(branchExeclpCumpscost)
       *result = SCIP_DIDNOTRUN;
       return SCIP_OKAY;
    }
-
+   SCIP_VAR **tmplpcands;
    SCIP_VAR **lpcands;
+   SCIP_Real *tmplpcandssol;
    SCIP_Real *lpcandssol;
+   SCIP_Real *tmplpcandsfrac;
    SCIP_Real *lpcandsfrac;
    int nlpcands;
 
    /* get branching candidates */
-   SCIP_CALL(SCIPgetLPBranchCands(scip, &lpcands, &lpcandssol,
-                                  &lpcandsfrac, NULL, &nlpcands, NULL));
+   SCIP_CALL(SCIPgetLPBranchCands(scip, &tmplpcands, &tmplpcandssol,
+                                  &tmplpcandsfrac, NULL, &nlpcands, NULL));
    assert(nlpcands > 0);
+
+   /* copy LP banching candidates and solution values, because they
+    * will be updated w.r.t. the strong branching LP
+    * solution
+    */
+   SCIP_CALL(SCIPduplicateBufferArray(scip, &lpcands, tmplpcands, nlpcands));
+   SCIP_CALL(SCIPduplicateBufferArray(scip, &lpcandssol, tmplpcandssol, nlpcands));
+   SCIP_CALL(SCIPduplicateBufferArray(scip, &lpcandsfrac, tmplpcandsfrac, nlpcands));
 
    /* execute branching rule */
    int best_lp_candidate_index = -1;
