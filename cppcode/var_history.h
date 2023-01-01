@@ -30,12 +30,24 @@ public:
     void UpdateCumpscost(string name, double cost_update, bool update_count);
     void UpdateCumpscostDown(string name, double cost_update, bool update_count);
 
+    double GetLevelpscost(string name, int level);
+    long long GetLevelpscostCount(string name, int level);
+    void UpdateLevelpscost(string name, int level, double cost_update,
+                           bool update_count);
+    void UpdateLevelpscostDown(string name, int level, double cost_update,
+                               bool update_count);
+
 private:
     std::map<string, SCIP_HISTORY> var_histories_;
     std::map<string, double> var_cumpscost_;
     std::map<string, double> var_cumpscost_down_;
     std::map<string, long long> var_cumpscost_count_;
     std::map<string, long long> var_cumpscost_down_count_;
+
+    std::map<string, vector<double>> var_levelpscost_;
+    std::map<string, vector<double>> var_levelpscost_down_;
+    std::map<string, vector<long long>> var_levelpscost_count_;
+    std::map<string, vector<long long>> var_levelpscost_down_count_;
 };
 
 #endif

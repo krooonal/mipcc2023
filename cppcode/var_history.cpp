@@ -95,10 +95,11 @@ void VarHistories::UpdateCumpscost(string name, double cost_update, bool update_
         count = var_cumpscost_count_[name];
         current_cost = var_cumpscost_[name];
     }
+    long long oldcount = count;
     if (update_count)
         count++;
 
-    current_cost = (current_cost * count + cost_update) / (count);
+    current_cost = (current_cost * oldcount + cost_update) / (count);
     // cout << "Update count and cost of "
     //      << name << " " << count << " " << current_cost << endl;
     var_cumpscost_[name] = current_cost;
@@ -114,12 +115,162 @@ void VarHistories::UpdateCumpscostDown(string name, double cost_update, bool upd
         count = var_cumpscost_down_count_[name];
         current_cost = var_cumpscost_down_[name];
     }
+    long long oldcount = count;
     if (update_count)
         count++;
 
-    current_cost = (current_cost * count + cost_update) / (count);
+    current_cost = (current_cost * oldcount + cost_update) / (count);
     // cout << "Update count and cost of "
     //      << name << " " << count << " " << current_cost << endl;
     var_cumpscost_down_[name] = current_cost;
     var_cumpscost_down_count_[name] = count;
+}
+
+double VarHistories::GetLevelpscost(string name, int level)
+{
+    double threshold = 1e-6;
+    double upcost = threshold;
+    double downcost = threshold;
+    if (var_levelpscost_.find(name) != var_levelpscost_.end())
+    {
+        vector<double> &level_pscosts = var_levelpscost_[name];
+        if (level < level_pscosts.size())
+        {
+            upcost = max(threshold, level_pscosts[level]);
+        }
+    }
+    if (var_levelpscost_down_.find(name) != var_levelpscost_down_.end())
+    {
+        vector<double> &level_pscosts = var_levelpscost_down_[name];
+        if (level < level_pscosts.size())
+        {
+            downcost = max(threshold, level_pscosts[level]);
+        }
+    }
+    return upcost * downcost;
+}
+
+long long VarHistories::GetLevelpscostCount(string name, int level)
+{
+    long long upcount = 0;
+    long long downcount = 0;
+    if (var_levelpscost_count_.find(name) != var_levelpscost_count_.end())
+    {
+        vector<long long> &level_pscosts_count = var_levelpscost_count_[name];
+        if (level < level_pscosts_count.size())
+        {
+            upcount = level_pscosts_count[level];
+        }
+    }
+    if (var_levelpscost_down_count_.find(name) != var_levelpscost_down_count_.end())
+    {
+        vector<long long> &level_pscosts_count = var_levelpscost_down_count_[name];
+        if (level < level_pscosts_count.size())
+        {
+            downcount = level_pscosts_count[level];
+        }
+    }
+    return upcount + downcount;
+}
+
+void VarHistories::UpdateLevelpscost(string name, int level, double cost_update,
+                                     bool update_count)
+{
+    long long count = 0;
+    double current_cost = 0.0;
+    if (var_levelpscost_.find(name) != var_levelpscost_.end())
+    {
+        vector<double> &level_pscosts = var_levelpscost_[name];
+        vector<long long> &level_pscosts_count = var_levelpscost_count_[name];
+        int current_size = level_pscosts.size();
+        if (level < current_size)
+        {
+            count = level_pscosts_count[level];
+            current_cost = level_pscosts[level];
+        }
+        else
+        {
+            for (; current_size <= level + 1; ++current_size)
+            {
+                level_pscosts.push_back(0.0);
+                level_pscosts_count.push_back(0ll);
+            }
+        }
+    }
+    else
+    {
+        vector<double> level_pscosts;
+        vector<long long> level_pscosts_count;
+        int current_size = level_pscosts.size();
+        for (; current_size <= level + 1; ++current_size)
+        {
+            level_pscosts.push_back(0.0);
+            level_pscosts_count.push_back(0ll);
+        }
+        var_levelpscost_[name] = level_pscosts;
+        var_levelpscost_count_[name] = level_pscosts_count;
+    }
+    long long oldcount = count;
+    if (update_count)
+        count++;
+
+    vector<double> &level_pscosts = var_levelpscost_[name];
+    vector<long long> &level_pscosts_count = var_levelpscost_count_[name];
+
+    current_cost = (current_cost * oldcount + cost_update) / (count);
+    // cout << "Update count and cost of "
+    //      << name << " " << count << " " << current_cost << endl;
+    level_pscosts[level] = current_cost;
+    level_pscosts_count[level] = count;
+}
+
+void VarHistories::UpdateLevelpscostDown(string name, int level, double cost_update,
+                                         bool update_count)
+{
+    long long count = 0;
+    double current_cost = 0.0;
+    if (var_levelpscost_down_.find(name) != var_levelpscost_down_.end())
+    {
+        vector<double> &level_pscosts = var_levelpscost_down_[name];
+        vector<long long> &level_pscosts_count = var_levelpscost_down_count_[name];
+        int current_size = level_pscosts.size();
+        if (level < current_size)
+        {
+            count = level_pscosts_count[level];
+            current_cost = level_pscosts[level];
+        }
+        else
+        {
+            for (; current_size <= level + 1; ++current_size)
+            {
+                level_pscosts.push_back(0.0);
+                level_pscosts_count.push_back(0ll);
+            }
+        }
+    }
+    else
+    {
+        vector<double> level_pscosts;
+        vector<long long> level_pscosts_count;
+        int current_size = level_pscosts.size();
+        for (; current_size <= level + 1; ++current_size)
+        {
+            level_pscosts.push_back(0.0);
+            level_pscosts_count.push_back(0ll);
+        }
+        var_levelpscost_down_[name] = level_pscosts;
+        var_levelpscost_down_count_[name] = level_pscosts_count;
+    }
+    long long oldcount = count;
+    if (update_count)
+        count++;
+
+    vector<double> &level_pscosts = var_levelpscost_down_[name];
+    vector<long long> &level_pscosts_count = var_levelpscost_down_count_[name];
+
+    current_cost = (current_cost * oldcount + cost_update) / (count);
+    // cout << "Update count and cost of "
+    //      << name << " " << count << " " << current_cost << endl;
+    level_pscosts[level] = current_cost;
+    level_pscosts_count[level] = count;
 }
