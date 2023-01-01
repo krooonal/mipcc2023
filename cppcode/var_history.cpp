@@ -29,8 +29,8 @@ void VarHistories::Populate(SCIP *scip,
         // cout << "pseudocost counts: "
         //      << var_history.pscostcount[0] << " "
         //      << var_history.pscostcount[1] << endl;
-        var_history.pscostcount[0] = min(var_history.pscostcount[0], 4.0);
-        var_history.pscostcount[1] = min(var_history.pscostcount[1], 4.0);
+        var_history.pscostcount[0] = min(var_history.pscostcount[0], 3.0);
+        var_history.pscostcount[1] = min(var_history.pscostcount[1], 3.0);
         var_histories_[name] = var_history;
 
         // Reduce counts of cumpscost
