@@ -148,11 +148,11 @@ SCIP_RETCODE execmain(int argc, const char **argv)
         }
         if (index > 0)
         {
-            if (provide_hint.GetBestValue())
-            {
-                solution_pool.AddToModel(scip, scip_variables);
-            }
-            // solution_pool.AddToModel(scip, scip_variables);
+            // if (provide_hint.GetBestValue())
+            // {
+            //     solution_pool.AddToModel(scip, scip_variables);
+            // }
+            solution_pool.AddToModel(scip, scip_variables);
 
             solution_pool.SetCurrentScipVars(&scip_variables);
             // for (int i = 0; i < 5; ++i)
