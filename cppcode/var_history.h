@@ -25,6 +25,11 @@ public:
 
     void AddToModel(SCIP *scip, std::vector<SCIP_VAR *> &scip_variables);
 
+    void SetHistoryResetCount(double count_val)
+    {
+        history_count_reset_ = count_val;
+    }
+
     double GetCumpscost(string name);
     long long GetCumpscostCount(string name);
     void UpdateCumpscost(string name, double cost_update, bool update_count);
@@ -38,7 +43,10 @@ public:
                                bool update_count);
 
 private:
+    double history_count_reset_ = 4.0;
+    SCIP_HISTORY global_history_;
     std::map<string, SCIP_HISTORY> var_histories_;
+
     std::map<string, double> var_cumpscost_;
     std::map<string, double> var_cumpscost_down_;
     std::map<string, long long> var_cumpscost_count_;

@@ -97,6 +97,10 @@ SCIP_RETCODE execmain(int argc, const char **argv)
     max_cuts.AddValue(100);
     max_cuts.AddValue(0);
 
+    Parameter<double> history_reset(0.7, "history_reset");
+    history_reset.AddValue(4.0);
+    history_reset.AddValue(3.0);
+
     // Parameter<int> bfs_priority(0.7, "bfs_priority");
     // bfs_priority.AddValue(100000);
     // bfs_priority.AddValue(300000);
@@ -159,6 +163,7 @@ SCIP_RETCODE execmain(int argc, const char **argv)
             // {
             //     solution_pool.AddNextSolutionToModel(scip);
             // }
+            var_histories.SetHistoryResetCount(history_reset.GetBestValue());
             var_histories.AddToModel(scip, scip_variables);
         }
 
@@ -274,6 +279,7 @@ SCIP_RETCODE execmain(int argc, const char **argv)
             }
 
             max_cuts.AdjustScore(-total_score);
+            history_reset.AdjustScore(-total_score);
         }
     }
     provide_hint.PrintStats();

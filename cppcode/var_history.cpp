@@ -2,6 +2,8 @@
 #include <scip/scip.h>
 #include <scip/scipdefplugins.h>
 #include <scip/struct_var.h>
+#include <scip/struct_scip.h>
+#include <scip/struct_stat.h>
 #include <scip/struct_history.h>
 #include "scip/history.h"
 #include <string>
@@ -20,7 +22,11 @@ using namespace std;
 void VarHistories::Populate(SCIP *scip,
                             std::vector<SCIP_VAR *> &scip_variables)
 {
-    var_histories_.clear();
+    global_history_ = *(scip->stat->glbhistory);
+    global_history_.pscostcount[0] = min(global_history_.pscostcount[0], history_count_reset_);
+    global_history_.pscostcount[1] = min(global_history_.pscostcount[1], history_count_reset_);
+
+    // var_histories_.clear();
     for (SCIP_VAR *var : scip_variables)
     {
         const string name = SCIPvarGetName(var);
@@ -29,8 +35,8 @@ void VarHistories::Populate(SCIP *scip,
         // cout << "pseudocost counts: "
         //      << var_history.pscostcount[0] << " "
         //      << var_history.pscostcount[1] << endl;
-        var_history.pscostcount[0] = min(var_history.pscostcount[0], 5.0);
-        var_history.pscostcount[1] = min(var_history.pscostcount[1], 5.0);
+        var_history.pscostcount[0] = min(var_history.pscostcount[0], history_count_reset_);
+        var_history.pscostcount[1] = min(var_history.pscostcount[1], history_count_reset_);
         var_histories_[name] = var_history;
 
         // Reduce counts of cumpscost
@@ -55,6 +61,7 @@ void VarHistories::Populate(SCIP *scip,
 void VarHistories::AddToModel(SCIP *scip,
                               std::vector<SCIP_VAR *> &scip_variables)
 {
+    *(scip->stat->glbhistory) = global_history_;
     for (SCIP_VAR *var : scip_variables)
     {
         const string name = SCIPvarGetName(var);
