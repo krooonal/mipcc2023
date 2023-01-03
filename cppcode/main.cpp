@@ -98,8 +98,8 @@ SCIP_RETCODE execmain(int argc, const char **argv)
     max_cuts.AddValue(0);
 
     Parameter<int> max_cuts_root(0.7, "max_cuts_root");
-    max_cuts.AddValue(2000);
-    max_cuts.AddValue(0);
+    max_cuts_root.AddValue(2000);
+    max_cuts_root.AddValue(0);
 
     Parameter<double> history_reset(0.7, "history_reset");
     history_reset.AddValue(4.0);
