@@ -97,6 +97,10 @@ SCIP_RETCODE execmain(int argc, const char **argv)
     max_cuts.AddValue(100);
     max_cuts.AddValue(0);
 
+    Parameter<int> max_cuts_root(0.7, "max_cuts_root");
+    max_cuts.AddValue(2000);
+    max_cuts.AddValue(0);
+
     Parameter<double> history_reset(0.7, "history_reset");
     history_reset.AddValue(4.0);
     history_reset.AddValue(3.0);
@@ -139,6 +143,7 @@ SCIP_RETCODE execmain(int argc, const char **argv)
         SCIP_CALL(SCIPsetRealParam(scip, "limits/time", timeout - 2));
         SCIP_CALL(SCIPsetIntParam(scip, "presolving/maxrestarts", 0));
         SCIP_CALL(SCIPsetIntParam(scip, "separating/maxcuts", max_cuts.GetBestValue()));
+        SCIP_CALL(SCIPsetIntParam(scip, "separating/maxcutsroot", max_cuts_root.GetBestValue()));
         // SCIP_CALL(SCIPsetIntParam(scip, "branching/pscost/priority", 40000)); // default 2000
 
         SCIP_VAR **vars;
@@ -158,11 +163,7 @@ SCIP_RETCODE execmain(int argc, const char **argv)
             }
             // solution_pool.AddToModel(scip, scip_variables);
 
-            solution_pool.SetCurrentScipVars(&scip_variables);
-            // for (int i = 0; i < 5; ++i)
-            // {
-            //     solution_pool.AddNextSolutionToModel(scip);
-            // }
+            // solution_pool.SetCurrentScipVars(&scip_variables);
             // var_histories.SetHistoryResetCount(history_reset.GetBestValue());
             var_histories.AddToModel(scip, scip_variables);
         }
@@ -279,12 +280,14 @@ SCIP_RETCODE execmain(int argc, const char **argv)
             }
 
             max_cuts.AdjustScore(-total_score);
+            max_cuts_root.AdjustScore(-total_score);
             history_reset.AdjustScore(-total_score);
         }
     }
     provide_hint.PrintStats();
     max_cuts.PrintStats();
-    history_reset.PrintStats();
+    max_cuts_root.PrintStats();
+    // history_reset.PrintStats();
     cout << "Provided hints: " << hint_total
          << " successful hints: " << hint_success << endl;
 
