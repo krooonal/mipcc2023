@@ -140,6 +140,8 @@ static SCIP_DECL_BRANCHEXECLP(branchExeclpLevelpscost)
    assert(strcmp(SCIPbranchruleGetName(branchrule), BRANCHRULE_NAME) == 0);
    assert(scip != NULL);
    assert(result != NULL);
+   VarHistories *var_histories = branchruledata->var_histories;
+   assert(var_histories != NULL);
 
    SCIPdebugMsg(scip, "Execlp method of Levelpscost branching in node %llu\n",
                 SCIPnodeGetNumber(SCIPgetCurrentNode(scip)));
@@ -154,87 +156,59 @@ static SCIP_DECL_BRANCHEXECLP(branchExeclpLevelpscost)
 
    SCIP_NODE *current_node = SCIPgetCurrentNode(scip);
    int node_depth = SCIPnodeGetDepth(current_node);
+   int level = node_depth / 10;
+
+   // Store current node variable LP values. This can slow us down?
+   // Store current node LP objective value.
+   // long long current_node_num = current_node->number;
+   // double current_lp_obj = SCIPgetLPObjval(scip);
+   // branchruledata->node_lp_values[current_node_num] = current_lp_obj;
+
+   // Iterate through all variables to find current pseudocosts
+   SCIP_VAR **scip_vars = SCIPgetVars(scip);
+   int n_vars = SCIPgetNVars(scip);
+   for (int i = 0; i < n_vars; ++i)
    {
-      SCIP_VAR **branchvars;
-      SCIP_Real *branchbounds;
-      SCIP_BOUNDTYPE *boundtypes;
-      int nbranchvars;
-      int branchvarssize;
-      int nnodes;
-
-      // Store current node variable LP values. This can slow us down?
-      // Store current node LP objective value.
-      long long current_node_num = current_node->number;
-      double current_lp_obj = SCIPgetLPObjval(scip);
-      // branchruledata->node_lp_values[current_node_num] = current_lp_obj;
-
-      if (node_depth > 0)
+      SCIP_VAR *var = scip_vars[i];
+      SCIP_VAR **parent_vars = var->parentvars;
+      int n_parents = var->nparentvars;
+      string var_name = var->name;
+      if (n_parents > 0)
       {
-         long long parent_node_num = current_node->parent->number;
-         // double parent_lp_obj = branchruledata->node_lp_values[parent_node_num];
-         double parent_lp_obj = SCIPnodeGetLowerbound(current_node->parent);
-         double lp_gain = current_lp_obj - parent_lp_obj;
-         // cout << "LP gain: " << lp_gain << endl;
-         lp_gain = max(lp_gain, 0.0);
-
-         branchvarssize = node_depth;
-         SCIP_NODE *node = current_node;
-         /* memory allocation */
-         SCIP_CALL(SCIPallocBufferArray(scip, &branchvars, branchvarssize));
-         SCIP_CALL(SCIPallocBufferArray(scip, &branchbounds, branchvarssize));
-         SCIP_CALL(SCIPallocBufferArray(scip, &boundtypes, branchvarssize));
-         int level = 0;
-         double current_update_fac = 1;
-         bool update_count = true;
-
-         SCIPnodeGetParentBranchings(node, branchvars,
-                                     branchbounds, boundtypes,
-                                     &nbranchvars, branchvarssize);
-
-         for (int i = 0; i < nbranchvars; ++i)
-         {
-            // SCIPvarGetLPSol(var);
-            SCIP_VAR *branched_var = branchvars[i];
-            double lp_val = SCIPvarGetLPSol(branched_var);
-            SCIP_VAR **parent_vars = branched_var->parentvars;
-            int n_parents = branched_var->nparentvars;
-            string bnd = " <= ";
-            string var_name = branched_var->name;
-            if (boundtypes[i] == SCIP_BOUNDTYPE_LOWER)
-            {
-               bnd = " >= ";
-            }
-            if (n_parents > 0)
-            {
-               var_name = parent_vars[0]->name;
-            }
-
-            // cout << "Previous branch: " << var_name
-            //      << bnd << branchbounds[i]
-            //      << endl;
-            int level = node_depth / 10;
-            double cost_update = lp_gain * current_update_fac;
-            if (boundtypes[i] == SCIP_BOUNDTYPE_LOWER)
-            {
-               branchruledata->var_histories->UpdateLevelpscost(var_name, level, cost_update, update_count);
-            }
-            else
-            {
-               branchruledata->var_histories->UpdateLevelpscostDown(var_name, level, cost_update, update_count);
-            }
-         }
-         level++;
-         update_count = false; // Only update the count of last level var.
-         current_update_fac *= branchruledata->cost_update_factor;
-
-         /* free all local memory */
-         SCIPfreeBufferArray(scip, &boundtypes);
-         SCIPfreeBufferArray(scip, &branchbounds);
-         SCIPfreeBufferArray(scip, &branchvars);
+         var_name = parent_vars[0]->name;
       }
+      double pscost_count0 = var->historycrun->pscostcount[0];
+      double pscost_count1 = var->historycrun->pscostcount[1];
+      double pscost0 = var->historycrun->pscostweightedmean[0];
+      double pscost1 = var->historycrun->pscostweightedmean[1];
+
+      double prev_count0 = var_histories->GetOldpscostCount0(var_name);
+      double prev_count1 = var_histories->GetOldpscostCount1(var_name);
+      double prev_pscost0 = var_histories->GetOldpscost0(var_name);
+      double prev_pscost1 = var_histories->GetOldpscost1(var_name);
+
+      double countdiff0 = pscost_count0 - prev_count0;
+      double countdiff1 = pscost_count1 - prev_count1;
+
+      if (countdiff0 > 0)
+      {
+         double update = pscost0 * pscost_count0 - prev_pscost0 * prev_count0;
+         var_histories->UpdateLevelpscost0(var_name, level, update, countdiff0);
+      }
+      if (countdiff1 > 0)
+      {
+         double update = pscost1 * pscost_count1 - prev_pscost1 * prev_count1;
+         var_histories->UpdateLevelpscost1(var_name, level, update, countdiff1);
+      }
+
+      var_histories->SetOldpscost0(var_name, pscost0);
+      var_histories->SetOldpscost1(var_name, pscost1);
+      var_histories->SetOldpscostCount0(var_name, pscost_count0);
+      var_histories->SetOldpscostCount1(var_name, pscost_count1);
    }
+
    bool use_relpscost = false;
-   if (rand() % 10 >= 2)
+   if (rand() % 10 >= 10)
    {
       use_relpscost = true;
       *result = SCIP_DIDNOTRUN;
@@ -262,7 +236,7 @@ static SCIP_DECL_BRANCHEXECLP(branchExeclpLevelpscost)
    SCIP_CALL(SCIPduplicateBufferArray(scip, &lpcandsfrac, tmplpcandsfrac, nlpcands));
 
    /* execute branching rule */
-   int level = node_depth / 10;
+
    int best_lp_candidate_index = -1;
    double best_cost = 0.0;
    for (int i = 0; i < nlpcands; ++i)
@@ -292,14 +266,6 @@ static SCIP_DECL_BRANCHEXECLP(branchExeclpLevelpscost)
    if (use_relpscost)
    {
       *result = SCIP_DIDNOTRUN;
-      /*
-      SCIP_BRANCHRULE *relbranchrule;
-      relbranchrule = SCIPfindBranchrule(scip, "relpscost");
-      // SCIPexecRelpscostBranching(SCIP *scip, SCIP_VAR **branchcands, double *branchcandssol,
-      // double *branchcandsfrac, int nbranchcands, unsigned int executebranching, SCIP_RESULT *result)
-      SCIPexecRelpscostBranching(scip, lpcands, lpcandssol, lpcandsfrac,
-                                 nlpcands, TRUE, result);
-                                 */
    }
    else
    {

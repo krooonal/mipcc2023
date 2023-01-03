@@ -8,6 +8,7 @@ add_library(solutions solutions.cpp)
 add_library(v_history var_history.cpp)
 add_library(event_solfeedback event_solfeedback.cpp)
 add_library(branch_cumpscost branch_cumpscost.cpp)
+add_library(branch_levelpscost branch_levelpscost.cpp)
 add_library(parameters parameters.cpp)
 
 add_executable(cppex
@@ -18,6 +19,7 @@ target_link_libraries(cppex v_history)
 target_link_libraries(cppex event_solfeedback)
 target_link_libraries(cppex parameters)
 target_link_libraries(cppex branch_cumpscost)
+target_link_libraries(cppex branch_levelpscost)
 
 add_executable(experiment experiment.cpp)
 target_link_libraries(experiment ${SCIP_LIBRARIES})

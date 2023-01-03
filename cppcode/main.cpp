@@ -21,6 +21,7 @@
 #include "event_solfeedback.h"
 #include "parameters.h"
 #include "branch_cumpscost.h"
+#include "branch_levelpscost.h"
 
 using namespace std;
 
@@ -121,6 +122,9 @@ SCIP_RETCODE execmain(int argc, const char **argv)
     // Branching rule.
     // SCIP_CALL(SCIPincludeBranchruleCumpscost(scip, &var_histories,
     //                                          /*cost_update_factor=*/0.9));
+
+    SCIP_CALL(SCIPincludeBranchruleLevelpscost(scip, &var_histories,
+                                               /*cost_update_factor=*/0.9));
 
     for (int index = 0; index < instances.size(); ++index)
     {
