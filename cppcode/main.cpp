@@ -163,7 +163,7 @@ SCIP_RETCODE execmain(int argc, const char **argv)
             // {
             //     solution_pool.AddNextSolutionToModel(scip);
             // }
-            var_histories.SetHistoryResetCount(history_reset.GetBestValue());
+            // var_histories.SetHistoryResetCount(history_reset.GetBestValue());
             var_histories.AddToModel(scip, scip_variables);
         }
 
@@ -284,6 +284,7 @@ SCIP_RETCODE execmain(int argc, const char **argv)
     }
     provide_hint.PrintStats();
     max_cuts.PrintStats();
+    history_reset.PrintStats();
     cout << "Provided hints: " << hint_total
          << " successful hints: " << hint_success << endl;
 
