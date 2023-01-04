@@ -253,9 +253,16 @@ static SCIP_DECL_BRANCHEXECLP(branchExeclpLevelpscost)
          var_name = parent_vars[0]->name;
       }
       double levelpscount = branchruledata->var_histories->GetLevelpscostCount(var_name, level);
-      if (levelpscount < 10.0)
+      if (levelpscount < 20.0)
          continue;
       double levelpscost = branchruledata->var_histories->GetLevelpscost(var_name, level);
+      double oldpscost0 = branchruledata->var_histories->GetOldpscost0(var_name);
+      double oldpscost1 = branchruledata->var_histories->GetOldpscost1(var_name);
+      if (abs(oldpscost0 * oldpscost1 - levelpscost) > 1.0)
+      {
+         cout << "Level: " << level << " levelpscost "
+              << levelpscost << " Real " << oldpscost0 * oldpscost1 << endl;
+      }
       if (levelpscost > best_cost)
       {
          best_lp_candidate_index = i;
