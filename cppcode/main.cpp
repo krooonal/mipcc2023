@@ -123,8 +123,8 @@ SCIP_RETCODE execmain(int argc, const char **argv)
     // SCIP_CALL(SCIPincludeBranchruleCumpscost(scip, &var_histories,
     //                                          /*cost_update_factor=*/0.9));
 
-    // SCIP_CALL(SCIPincludeBranchruleLevelpscost(scip, &var_histories,
-    //                                            /*cost_update_factor=*/0.9));
+    SCIP_CALL(SCIPincludeBranchruleLevelpscost(scip, &var_histories,
+                                               /*cost_update_factor=*/0.9));
 
     for (int index = 0; index < instances.size(); ++index)
     {
