@@ -257,10 +257,11 @@ double VarHistories::GetLevelpscostCount1(string name, int level)
         if (level < level_pscosts_count.size())
         {
             downcount = level_pscosts_count[level];
-            if (rand() % 10 == 0)
+            if (rand() % 1000 == 0)
             {
                 cout << name << endl;
                 printvector(level_pscosts_count);
+                printvector(var_levelpscost1_[name]);
             }
         }
     }
