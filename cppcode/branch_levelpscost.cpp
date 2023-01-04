@@ -243,7 +243,7 @@ static SCIP_DECL_BRANCHEXECLP(branchExeclpLevelpscost)
    }
 
    bool use_relpscost = false;
-   if (rand() % 10 >= 10)
+   if (rand() % 10 >= 10 || level == 0)
    {
       use_relpscost = true;
       *result = SCIP_DIDNOTRUN;
