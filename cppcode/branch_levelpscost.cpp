@@ -217,15 +217,15 @@ static SCIP_DECL_BRANCHEXECLP(branchExeclpLevelpscost)
          double levelpscount = var_histories->GetLevelpscostCount(var_name, level);
          if (abs(pscost_count0 + pscost_count1 - levelpscount) > 1.0)
          {
-            cout << "Level: " << level << " levelpscount "
+            cout << var_name << " Level: " << level << " levelpscount "
                  << levelpscount << " Real " << pscost_count0 + pscost_count1
                  << endl;
          }
-         if (abs(oldpscost0 * oldpscost1 - levelpscost) > 1.0)
-         {
-            cout << "Level: " << level << " levelpscost "
-                 << levelpscost << " Real " << oldpscost0 * oldpscost1 << endl;
-         }
+         // if (abs(oldpscost0 * oldpscost1 - levelpscost) > 1.0)
+         // {
+         //    cout << "Level: " << level << " levelpscost "
+         //         << levelpscost << " Real " << oldpscost0 * oldpscost1 << endl;
+         // }
       }
    }
 
