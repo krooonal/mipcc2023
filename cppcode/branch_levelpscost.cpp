@@ -190,6 +190,9 @@ static SCIP_DECL_BRANCHEXECLP(branchExeclpLevelpscost)
       double countdiff0 = pscost_count0 - prev_count0;
       double countdiff1 = pscost_count1 - prev_count1;
 
+      cout << var_name << " " << pscost_count0 << " " << pscost0
+           << " " << prev_count0 << " " << prev_pscost0 << endl;
+
       if (countdiff0 > 0)
       {
          double update = pscost0 * pscost_count0 - prev_pscost0 * prev_count0;

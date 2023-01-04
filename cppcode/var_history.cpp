@@ -253,7 +253,7 @@ double VarHistories::GetLevelpscostCount(string name, int level)
 {
     double upcount = GetLevelpscostCount1(name, level);
     double downcount = GetLevelpscostCount0(name, level);
-    cout << name << " " << upcount << " " << downcount << endl;
+    // cout << name << " " << upcount << " " << downcount << endl;
     return upcount + downcount;
 }
 
@@ -301,10 +301,10 @@ void VarHistories::UpdateLevelpscost0(string name, int level, double cost_update
     vector<double> &level_pscosts_count = var_levelpscost0_count_[name];
 
     current_cost = (current_cost * oldcount + weight * cost_update) / (newcount);
-    // cout << "Update count and cost of "
-    //      << name << " " << count << " " << current_cost << endl;
+    cout << "Update count and cost of "
+         << name << " " << newcount << " " << current_cost << endl;
     level_pscosts[level] = current_cost;
-    level_pscosts_count[level] = count;
+    level_pscosts_count[level] = newcount;
 }
 
 void VarHistories::UpdateLevelpscost1(string name, int level, double cost_update,
@@ -354,6 +354,6 @@ void VarHistories::UpdateLevelpscost1(string name, int level, double cost_update
     // cout << "Update count and cost of "
     //      << name << " " << count << " " << current_cost << endl;
     level_pscosts[level] = current_cost;
-    level_pscosts_count[level] = count;
+    level_pscosts_count[level] = newcount;
 }
 // LEVELPSCOST----------------------------------------
