@@ -77,7 +77,7 @@ SCIP_RETCODE Solution::AddToModelComplete(SCIP *scip,
     SCIP_CALL(SCIPaddSolFree(scip, &solution, &is_stored));
     if (is_stored)
     {
-        cout << "Added a partial solution\n";
+        cout << "Added a Complete solution\n";
         // cout << "Number of partial solutions: "
         // << SCIPgetNPartialSols(scip) << "\n";
     }
