@@ -19,6 +19,15 @@
 
 using namespace std;
 
+void printvector(vector<double> v)
+{
+    for (int i = 0; i < v.size(); ++i)
+    {
+        cout << v[i] << " ";
+    }
+    cout << endl;
+}
+
 void VarHistories::Populate(SCIP *scip,
                             std::vector<SCIP_VAR *> &scip_variables)
 {
@@ -248,6 +257,11 @@ double VarHistories::GetLevelpscostCount1(string name, int level)
         if (level < level_pscosts_count.size())
         {
             downcount = level_pscosts_count[level];
+            if (rand() % 10 == 0)
+            {
+                cout << name << endl;
+                printvector(level_pscosts_count);
+            }
         }
     }
     return downcount;
