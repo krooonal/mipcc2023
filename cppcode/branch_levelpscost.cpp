@@ -27,6 +27,7 @@ struct SCIP_BranchruleData
    VarHistories *var_histories = NULL;
    // std::map<long long, double> node_lp_values;
    double cost_update_factor = 0.0;
+   int call_count = 0;
 };
 
 /*
@@ -164,82 +165,87 @@ static SCIP_DECL_BRANCHEXECLP(branchExeclpLevelpscost)
    // double current_lp_obj = SCIPgetLPObjval(scip);
    // branchruledata->node_lp_values[current_node_num] = current_lp_obj;
 
-   // Iterate through all variables to find current pseudocosts
-   SCIP_VAR **scip_vars = SCIPgetVars(scip);
-   int n_vars = SCIPgetNVars(scip);
-   for (int i = 0; i < n_vars; ++i)
+   branchruledata->call_count++;
+   if (branchruledata->call_count > 5)
    {
-      SCIP_VAR *var = scip_vars[i];
-      SCIP_VAR **parent_vars = var->parentvars;
-      int n_parents = var->nparentvars;
-      string var_name = var->name;
-      if (n_parents > 0)
+      branchruledata->call_count = 0;
+      // Iterate through all variables to find current pseudocosts
+      SCIP_VAR **scip_vars = SCIPgetVars(scip);
+      int n_vars = SCIPgetNVars(scip);
+      for (int i = 0; i < n_vars; ++i)
       {
-         var_name = parent_vars[0]->name;
-      }
-      double pscost_count0 = var->historycrun->pscostcount[0];
-      double pscost_count1 = var->historycrun->pscostcount[1];
-      double pscost0 = var->historycrun->pscostweightedmean[0];
-      double pscost1 = var->historycrun->pscostweightedmean[1];
+         SCIP_VAR *var = scip_vars[i];
+         SCIP_VAR **parent_vars = var->parentvars;
+         int n_parents = var->nparentvars;
+         string var_name = var->name;
+         if (n_parents > 0)
+         {
+            var_name = parent_vars[0]->name;
+         }
+         double pscost_count0 = var->historycrun->pscostcount[0];
+         double pscost_count1 = var->historycrun->pscostcount[1];
+         double pscost0 = var->historycrun->pscostweightedmean[0];
+         double pscost1 = var->historycrun->pscostweightedmean[1];
 
-      double prev_count0 = var_histories->GetOldpscostCount0(var_name);
-      double prev_count1 = var_histories->GetOldpscostCount1(var_name);
-      double prev_pscost0 = var_histories->GetOldpscost0(var_name);
-      double prev_pscost1 = var_histories->GetOldpscost1(var_name);
+         double prev_count0 = var_histories->GetOldpscostCount0(var_name);
+         double prev_count1 = var_histories->GetOldpscostCount1(var_name);
+         double prev_pscost0 = var_histories->GetOldpscost0(var_name);
+         double prev_pscost1 = var_histories->GetOldpscost1(var_name);
 
-      double countdiff0 = pscost_count0 - prev_count0;
-      double countdiff1 = pscost_count1 - prev_count1;
+         double countdiff0 = pscost_count0 - prev_count0;
+         double countdiff1 = pscost_count1 - prev_count1;
 
-      // cout << var_name << " " << pscost_count0 << " " << pscost0
-      //      << " " << prev_count0 << " " << prev_pscost0 << endl;
+         // cout << var_name << " " << pscost_count0 << " " << pscost0
+         //      << " " << prev_count0 << " " << prev_pscost0 << endl;
 
-      // if (countdiff0 < 0 || countdiff1 < 0)
-      // {
-      //    cout << "Negative count diff " << countdiff0 << " " << countdiff1 << endl;
-      // }
-
-      if (countdiff0 > 0)
-      {
-         double update = pscost0 * pscost_count0 - prev_pscost0 * prev_count0;
-         var_histories->UpdateLevelpscost0(var_name, level, update, countdiff0);
-         // double levelpscount0 = var_histories->GetLevelpscostCount0(var_name, level);
-         // if (levelpscount0 != pscost_count0)
+         // if (countdiff0 < 0 || countdiff1 < 0)
          // {
-         //    cout << "countdiff0 " << countdiff0
-         //         << " levelpscount0 " << levelpscount0
-         //         << " pscost_count0 " << pscost_count0 << endl;
+         //    cout << "Negative count diff " << countdiff0 << " " << countdiff1 << endl;
          // }
-         // assert(levelpscount0 == pscost_count0);
-      }
-      if (countdiff1 > 0)
-      {
-         double update = pscost1 * pscost_count1 - prev_pscost1 * prev_count1;
-         var_histories->UpdateLevelpscost1(var_name, level, update, countdiff1);
-      }
 
-      var_histories->SetOldpscost0(var_name, pscost0);
-      var_histories->SetOldpscost1(var_name, pscost1);
-      var_histories->SetOldpscostCount0(var_name, pscost_count0);
-      var_histories->SetOldpscostCount1(var_name, pscost_count1);
+         if (countdiff0 > 0)
+         {
+            double update = pscost0 * pscost_count0 - prev_pscost0 * prev_count0;
+            var_histories->UpdateLevelpscost0(var_name, level, update, countdiff0);
+            // double levelpscount0 = var_histories->GetLevelpscostCount0(var_name, level);
+            // if (levelpscount0 != pscost_count0)
+            // {
+            //    cout << "countdiff0 " << countdiff0
+            //         << " levelpscount0 " << levelpscount0
+            //         << " pscost_count0 " << pscost_count0 << endl;
+            // }
+            // assert(levelpscount0 == pscost_count0);
+         }
+         if (countdiff1 > 0)
+         {
+            double update = pscost1 * pscost_count1 - prev_pscost1 * prev_count1;
+            var_histories->UpdateLevelpscost1(var_name, level, update, countdiff1);
+         }
 
-      // if (level == 0)
-      // {
-      //    double levelpscost = var_histories->GetLevelpscost(var_name, level);
-      //    double oldpscost0 = var_histories->GetOldpscost0(var_name);
-      //    double oldpscost1 = var_histories->GetOldpscost1(var_name);
-      //    double levelpscount = var_histories->GetLevelpscostCount(var_name, level);
-      //    if (abs(pscost_count0 + pscost_count1 - levelpscount) > 1.0)
-      //    {
-      //       cout << var_name << " Level: " << level << " levelpscount "
-      //            << levelpscount << " Real " << pscost_count0 + pscost_count1
-      //            << endl;
-      //    }
-      //    // if (abs(oldpscost0 * oldpscost1 - levelpscost) > 1.0)
-      //    // {
-      //    //    cout << "Level: " << level << " levelpscost "
-      //    //         << levelpscost << " Real " << oldpscost0 * oldpscost1 << endl;
-      //    // }
-      // }
+         var_histories->SetOldpscost0(var_name, pscost0);
+         var_histories->SetOldpscost1(var_name, pscost1);
+         var_histories->SetOldpscostCount0(var_name, pscost_count0);
+         var_histories->SetOldpscostCount1(var_name, pscost_count1);
+
+         // if (level == 0)
+         // {
+         //    double levelpscost = var_histories->GetLevelpscost(var_name, level);
+         //    double oldpscost0 = var_histories->GetOldpscost0(var_name);
+         //    double oldpscost1 = var_histories->GetOldpscost1(var_name);
+         //    double levelpscount = var_histories->GetLevelpscostCount(var_name, level);
+         //    if (abs(pscost_count0 + pscost_count1 - levelpscount) > 1.0)
+         //    {
+         //       cout << var_name << " Level: " << level << " levelpscount "
+         //            << levelpscount << " Real " << pscost_count0 + pscost_count1
+         //            << endl;
+         //    }
+         //    // if (abs(oldpscost0 * oldpscost1 - levelpscost) > 1.0)
+         //    // {
+         //    //    cout << "Level: " << level << " levelpscost "
+         //    //         << levelpscost << " Real " << oldpscost0 * oldpscost1 << endl;
+         //    // }
+         // }
+      }
    }
 
    bool use_relpscost = false;
