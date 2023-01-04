@@ -175,7 +175,7 @@ static SCIP_DECL_BRANCHEXECLP(branchExeclpLevelpscost)
       string var_name = var->name;
       if (n_parents > 0)
       {
-         // var_name = parent_vars[0]->name;
+         var_name = parent_vars[0]->name;
       }
       double pscost_count0 = var->historycrun->pscostcount[0];
       double pscost_count1 = var->historycrun->pscostcount[1];
@@ -193,10 +193,17 @@ static SCIP_DECL_BRANCHEXECLP(branchExeclpLevelpscost)
       // cout << var_name << " " << pscost_count0 << " " << pscost0
       //      << " " << prev_count0 << " " << prev_pscost0 << endl;
 
+      if (countdiff0 < 0 || countdiff1 < 0)
+      {
+         cout << "Negative count diff " << countdiff0 << " " << countdiff1 << endl;
+      }
+
       if (countdiff0 > 0)
       {
          double update = pscost0 * pscost_count0 - prev_pscost0 * prev_count0;
          var_histories->UpdateLevelpscost0(var_name, level, update, countdiff0);
+         double levelpscount0 = var_histories->GetLevelpscostCount0(var_name, level);
+         assert(levelpscount0 == pscost_count0);
       }
       if (countdiff1 > 0)
       {
@@ -269,7 +276,7 @@ static SCIP_DECL_BRANCHEXECLP(branchExeclpLevelpscost)
       string var_name = var->name;
       if (n_parents > 0)
       {
-         // var_name = parent_vars[0]->name;
+         var_name = parent_vars[0]->name;
       }
       double levelpscount = var_histories->GetLevelpscostCount(var_name, level);
       if (levelpscount < 20.0)
