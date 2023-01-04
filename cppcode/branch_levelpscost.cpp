@@ -226,6 +226,7 @@ static SCIP_DECL_BRANCHEXECLP(branchExeclpLevelpscost)
    SCIP_CALL(SCIPgetLPBranchCands(scip, &tmplpcands, &tmplpcandssol,
                                   &tmplpcandsfrac, NULL, &nlpcands, NULL));
    assert(nlpcands > 0);
+   cout << "called 1" << endl;
 
    /* copy LP banching candidates and solution values, because they
     * will be updated w.r.t. the strong branching LP
@@ -252,6 +253,7 @@ static SCIP_DECL_BRANCHEXECLP(branchExeclpLevelpscost)
       double levelpscount = branchruledata->var_histories->GetLevelpscostCount(var_name, level);
       if (levelpscount < 10.0)
          continue;
+      cout << "here 2" << endl;
       double levelpscost = branchruledata->var_histories->GetLevelpscost(var_name, level);
       if (levelpscost > best_cost)
       {

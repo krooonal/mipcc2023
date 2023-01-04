@@ -253,6 +253,7 @@ double VarHistories::GetLevelpscostCount(string name, int level)
 {
     double upcount = GetLevelpscostCount1(name, level);
     double downcount = GetLevelpscostCount0(name, level);
+    cout << name << " " << upcount << " " << downcount << endl;
     return upcount + downcount;
 }
 
