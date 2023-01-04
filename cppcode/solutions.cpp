@@ -60,6 +60,29 @@ SCIP_RETCODE Solution::AddToModel(SCIP *scip,
     }
     return SCIP_OKAY;
 }
+SCIP_RETCODE Solution::AddToModelComplete(SCIP *scip,
+                                          std::vector<SCIP_VAR *> &scip_variables)
+{
+    SCIP_SOL *solution;
+    SCIP_CALL(SCIPcreatePartialSol(scip, &solution, NULL));
+    for (SCIP_VAR *var : scip_variables)
+    {
+        const string name = SCIPvarGetName(var);
+        double val = varvalues_.at(name);
+        double var_lb = SCIPvarGetLbGlobal(var);
+        double var_ub = SCIPvarGetUbGlobal(var);
+        SCIP_CALL(SCIPsetSolVal(scip, solution, var, val));
+    }
+    SCIP_Bool is_stored;
+    SCIP_CALL(SCIPaddSolFree(scip, &solution, &is_stored));
+    if (is_stored)
+    {
+        cout << "Added a partial solution\n";
+        // cout << "Number of partial solutions: "
+        // << SCIPgetNPartialSols(scip) << "\n";
+    }
+    return SCIP_OKAY;
+}
 
 std::map<string, double> Solution::GetVarValue()
 {
@@ -107,6 +130,10 @@ SCIP_RETCODE SolutionPool::AddToModel(SCIP *scip,
     for (int i = 0; i < num_solutions_to_add; ++i)
     {
         Solution &solution = solutions_[num_solutions - 1 - i];
+        if (i == 0)
+        {
+            SCIP_CALL(solution.AddToModelComplete(scip, scip_variables));
+        }
         SCIP_CALL(solution.AddToModel(scip, scip_variables));
     }
 

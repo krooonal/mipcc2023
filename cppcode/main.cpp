@@ -123,8 +123,8 @@ SCIP_RETCODE execmain(int argc, const char **argv)
     // SCIP_CALL(SCIPincludeBranchruleCumpscost(scip, &var_histories,
     //                                          /*cost_update_factor=*/0.9));
 
-    SCIP_CALL(SCIPincludeBranchruleLevelpscost(scip, &var_histories,
-                                               /*cost_update_factor=*/0.9));
+    // SCIP_CALL(SCIPincludeBranchruleLevelpscost(scip, &var_histories,
+    //                                            /*cost_update_factor=*/0.9));
 
     for (int index = 0; index < instances.size(); ++index)
     {
@@ -144,6 +144,7 @@ SCIP_RETCODE execmain(int argc, const char **argv)
         cout << "[START] " << CurrentDateTime() << "\n"
              << std::flush;
 
+        // TODO: use timeout -1
         SCIP_CALL(SCIPsetRealParam(scip, "limits/time", timeout - 2));
         SCIP_CALL(SCIPsetIntParam(scip, "presolving/maxrestarts", 0));
         SCIP_CALL(SCIPsetIntParam(scip, "separating/maxcuts", max_cuts.GetBestValue()));
@@ -203,10 +204,6 @@ SCIP_RETCODE execmain(int argc, const char **argv)
         solution.Populate(scip, scip_variables, sol);
         solution_pool.AddSolution(solution);
         var_histories.Populate(scip, scip_variables);
-
-        // system("echo -n \"[END] \";date -Iseconds");
-        cout << "[END] " << CurrentDateTime() << "\n"
-             << std::flush;
 
         // Statistics
         double relative_gap = SCIPgetGap(scip);
@@ -287,6 +284,9 @@ SCIP_RETCODE execmain(int argc, const char **argv)
             max_cuts_root.AdjustScore(-total_score);
             history_reset.AdjustScore(-total_score);
         }
+        // system("echo -n \"[END] \";date -Iseconds");
+        cout << "[END] " << CurrentDateTime() << "\n"
+             << std::flush;
     }
     provide_hint.PrintStats();
     max_cuts.PrintStats();

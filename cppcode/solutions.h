@@ -25,6 +25,8 @@ public:
 
     SCIP_RETCODE AddToModel(SCIP *scip,
                             std::vector<SCIP_VAR *> &scip_variables);
+    SCIP_RETCODE AddToModelComplete(SCIP *scip,
+                                    std::vector<SCIP_VAR *> &scip_variables);
     std::map<string, double> GetVarValue();
 
 private:
