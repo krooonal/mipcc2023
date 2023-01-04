@@ -190,8 +190,8 @@ static SCIP_DECL_BRANCHEXECLP(branchExeclpLevelpscost)
       double countdiff0 = pscost_count0 - prev_count0;
       double countdiff1 = pscost_count1 - prev_count1;
 
-      cout << var_name << " " << pscost_count0 << " " << pscost0
-           << " " << prev_count0 << " " << prev_pscost0 << endl;
+      // cout << var_name << " " << pscost_count0 << " " << pscost0
+      //      << " " << prev_count0 << " " << prev_pscost0 << endl;
 
       if (countdiff0 > 0)
       {
@@ -229,7 +229,6 @@ static SCIP_DECL_BRANCHEXECLP(branchExeclpLevelpscost)
    SCIP_CALL(SCIPgetLPBranchCands(scip, &tmplpcands, &tmplpcandssol,
                                   &tmplpcandsfrac, NULL, &nlpcands, NULL));
    assert(nlpcands > 0);
-   cout << "called 1" << endl;
 
    /* copy LP banching candidates and solution values, because they
     * will be updated w.r.t. the strong branching LP
@@ -256,7 +255,6 @@ static SCIP_DECL_BRANCHEXECLP(branchExeclpLevelpscost)
       double levelpscount = branchruledata->var_histories->GetLevelpscostCount(var_name, level);
       if (levelpscount < 10.0)
          continue;
-      cout << "here 2" << endl;
       double levelpscost = branchruledata->var_histories->GetLevelpscost(var_name, level);
       if (levelpscost > best_cost)
       {
@@ -274,7 +272,6 @@ static SCIP_DECL_BRANCHEXECLP(branchExeclpLevelpscost)
    }
    else
    {
-      cout << "Branching on Levelpscost rule. Best cost: " << best_cost << endl;
       SCIP_NODE *downchild;
       SCIP_NODE *upchild;
       SCIP_VAR *var = lpcands[best_lp_candidate_index];

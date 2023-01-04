@@ -301,8 +301,8 @@ void VarHistories::UpdateLevelpscost0(string name, int level, double cost_update
     vector<double> &level_pscosts_count = var_levelpscost0_count_[name];
 
     current_cost = (current_cost * oldcount + weight * cost_update) / (newcount);
-    cout << "Update count and cost of "
-         << name << " " << newcount << " " << current_cost << endl;
+    // cout << "Update count and cost of "
+    //      << name << " " << newcount << " " << current_cost << endl;
     level_pscosts[level] = current_cost;
     level_pscosts_count[level] = newcount;
 }
