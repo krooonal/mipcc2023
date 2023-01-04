@@ -249,14 +249,14 @@ static SCIP_DECL_BRANCHEXECLP(branchExeclpLevelpscost)
       {
          var_name = parent_vars[0]->name;
       }
-      long long cumpscount = branchruledata->var_histories->GetLevelpscostCount(var_name, level);
-      if (cumpscount < 40ll)
+      double levelpscount = branchruledata->var_histories->GetLevelpscostCount(var_name, level);
+      if (levelpscount < 10.0)
          continue;
-      double Levelpscost = branchruledata->var_histories->GetLevelpscost(var_name, level);
-      if (Levelpscost > best_cost)
+      double levelpscost = branchruledata->var_histories->GetLevelpscost(var_name, level);
+      if (levelpscost > best_cost)
       {
          best_lp_candidate_index = i;
-         best_cost = Levelpscost;
+         best_cost = levelpscost;
       }
    }
 
