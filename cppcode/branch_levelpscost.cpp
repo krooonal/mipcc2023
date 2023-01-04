@@ -175,7 +175,7 @@ static SCIP_DECL_BRANCHEXECLP(branchExeclpLevelpscost)
       string var_name = var->name;
       if (n_parents > 0)
       {
-         var_name = parent_vars[0]->name;
+         // var_name = parent_vars[0]->name;
       }
       double pscost_count0 = var->historycrun->pscostcount[0];
       double pscost_count1 = var->historycrun->pscostcount[1];
@@ -269,7 +269,7 @@ static SCIP_DECL_BRANCHEXECLP(branchExeclpLevelpscost)
       string var_name = var->name;
       if (n_parents > 0)
       {
-         var_name = parent_vars[0]->name;
+         // var_name = parent_vars[0]->name;
       }
       double levelpscount = var_histories->GetLevelpscostCount(var_name, level);
       if (levelpscount < 20.0)

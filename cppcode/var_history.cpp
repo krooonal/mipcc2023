@@ -315,8 +315,8 @@ void VarHistories::UpdateLevelpscost1(string name, int level, double cost_update
 {
     double count = 0;
     double current_cost = 0.0;
-    if (weight > 1.0)
-        cout << "Called with weight " << weight << endl;
+    // if (weight > 1.0)
+    //     cout << "Called with weight " << weight << endl;
     if (var_levelpscost1_.find(name) != var_levelpscost1_.end())
     {
         vector<double> &level_pscosts = var_levelpscost1_[name];
