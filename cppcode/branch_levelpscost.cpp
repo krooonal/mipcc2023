@@ -203,6 +203,11 @@ static SCIP_DECL_BRANCHEXECLP(branchExeclpLevelpscost)
          double update = pscost0 * pscost_count0 - prev_pscost0 * prev_count0;
          var_histories->UpdateLevelpscost0(var_name, level, update, countdiff0);
          double levelpscount0 = var_histories->GetLevelpscostCount0(var_name, level);
+         if (levelpscount0 != pscost_count0)
+         {
+            cout << "levelpscount0 " << levelpscount0
+                 << " pscost_count0 " << pscost_count0 << endl;
+         }
          assert(levelpscount0 == pscost_count0);
       }
       if (countdiff1 > 0)
