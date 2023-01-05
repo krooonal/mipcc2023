@@ -50,10 +50,10 @@ struct HeuristicStats
     void printstat()
     {
         cout << name
-             << " calls " << n_calls
-             << " solns " << n_solns
-             << " bestsolns " << n_best_solns
-             << " time " << time_spent
+             << "\tcalls " << n_calls
+             << "\tsolns " << n_solns
+             << "\tbestsolns " << n_best_solns
+             << "\ttime " << time_spent
              << endl;
     }
 };
@@ -67,8 +67,8 @@ struct BranchingStats
     void printstat()
     {
         cout << name
-             << " calls " << n_calls
-             << " time " << time_spent
+             << "\tcalls " << n_calls
+             << "\ttime " << time_spent
              << endl;
     }
 };
@@ -157,8 +157,8 @@ SCIP_RETCODE execmain(int argc, const char **argv)
     // SCIP_CALL(SCIPincludeBranchruleCumpscost(scip, &var_histories,
     //                                          /*cost_update_factor=*/0.9));
 
-    SCIP_CALL(SCIPincludeBranchruleLevelpscost(scip, &var_histories,
-                                               /*cost_update_factor=*/0.9));
+    // SCIP_CALL(SCIPincludeBranchruleLevelpscost(scip, &var_histories,
+    //                                            /*cost_update_factor=*/0.9));
 
     std::map<string, HeuristicStats> heuristic_stats;
     std::map<string, BranchingStats> branching_stats;
