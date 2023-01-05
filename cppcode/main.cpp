@@ -238,8 +238,7 @@ SCIP_RETCODE execmain(int argc, const char **argv)
             {
                 cout << SCIPbranchruleGetName(branch_rules[i])
                      << " " << n_calls
-                     << " " << SCIPbranchruleGetSetupTime(branch_rules[i])
-                     << " " << SCIPbranchruleGetTime(branch_rules[i])
+                     << " time " << SCIPbranchruleGetTime(branch_rules[i])
                      << endl;
             }
         }
@@ -254,9 +253,9 @@ SCIP_RETCODE execmain(int argc, const char **argv)
             if (n_calls > 0)
             {
                 cout << SCIPheurGetName(heuristics[i])
-                     << " " << SCIPheurGetNSolsFound(heuristics[i])
-                     << " " << SCIPheurGetNBestSolsFound(heuristics[i])
-                     << " " << SCIPheurGetTime(heuristics[i])
+                     << " sol " << SCIPheurGetNSolsFound(heuristics[i])
+                     << " bestsol " << SCIPheurGetNBestSolsFound(heuristics[i])
+                     << " time " << SCIPheurGetTime(heuristics[i])
                      << endl;
             }
         }

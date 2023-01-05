@@ -249,10 +249,10 @@ static SCIP_DECL_BRANCHEXECLP(branchExeclpLevelpscost)
    }
 
    bool use_relpscost = false;
-   if (rand() % 10 >= 10 || level == 0)
+   if (rand() % 10 >= 0 || level == 0)
    {
       use_relpscost = true;
-      *result = SCIP_DIDNOTRUN;
+      *result = SCIP_DIDNOTFIND;
       return SCIP_OKAY;
    }
    SCIP_VAR **tmplpcands;
@@ -315,7 +315,7 @@ static SCIP_DECL_BRANCHEXECLP(branchExeclpLevelpscost)
 
    if (use_relpscost)
    {
-      *result = SCIP_DIDNOTRUN;
+      *result = SCIP_DIDNOTFIND;
    }
    else
    {
