@@ -289,7 +289,7 @@ SCIP_RETCODE execmain(int argc, const char **argv)
         // Print heuristic stats
         SCIP_HEUR **heuristics = SCIPgetHeurs(scip);
         int n_heuristics = SCIPgetNHeurs(scip);
-        cout << "Heuristic stats\n";
+        // cout << "Heuristic stats\n";
         for (int i = 0; i < n_heuristics; ++i)
         {
             int n_calls = SCIPheurGetNCalls(heuristics[i]);
