@@ -296,6 +296,7 @@ SCIP_RETCODE execmain(int argc, const char **argv)
             if (n_calls > 0)
             {
                 string name = SCIPheurGetName(heuristics[i]);
+                heuristic_stats[name].name = name;
                 heuristic_stats[name].n_calls += n_calls;
                 heuristic_stats[name].n_solns += SCIPheurGetNSolsFound(heuristics[i]);
                 heuristic_stats[name].n_best_solns += SCIPheurGetNBestSolsFound(heuristics[i]);
