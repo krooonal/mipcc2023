@@ -237,7 +237,27 @@ SCIP_RETCODE execmain(int argc, const char **argv)
             if (n_calls > 0)
             {
                 cout << SCIPbranchruleGetName(branch_rules[i])
-                     << " " << n_calls << endl;
+                     << " " << n_calls
+                     << " " << SCIPbranchruleGetSetupTime(branch_rules[i])
+                     << " " << SCIPbranchruleGetTime(branch_rules[i])
+                     << endl;
+            }
+        }
+
+        // Print heuristic stats
+        SCIP_HEUR **heuristics = SCIPgetHeurs(scip);
+        int n_heuristics = SCIPgetNHeurs(scip);
+        cout << "Heuristic stats\n";
+        for (int i = 0; i < n_heuristics; ++i)
+        {
+            int n_calls = SCIPheurGetNCalls(heuristics[i]);
+            if (n_calls > 0)
+            {
+                cout << SCIPheurGetName(heuristics[i])
+                     << " " << SCIPheurGetNSolsFound(heuristics[i])
+                     << " " << SCIPheurGetNBestSolsFound(heuristics[i])
+                     << " " << SCIPheurGetTime(heuristics[i])
+                     << endl;
             }
         }
 

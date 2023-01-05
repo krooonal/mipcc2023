@@ -291,9 +291,11 @@ static SCIP_DECL_BRANCHEXECLP(branchExeclpLevelpscost)
          var_name = parent_vars[0]->name;
       }
       double levelpscount = var_histories->GetLevelpscostCount(var_name, level);
-      if (levelpscount < 40.0)
-         continue;
       double levelpscost = var_histories->GetLevelpscost(var_name, level);
+      if (levelpscount < 40.0)
+      {
+         levelpscost = SCIPgetVarPseudocostScore(scip, var, lpcandssol[i]);
+      }
       // double oldpscost0 = var_histories->GetOldpscost0(var_name);
       // double oldpscost1 = var_histories->GetOldpscost1(var_name);
       // if (abs(oldpscost0 * oldpscost1 - levelpscost) > 1.0)
