@@ -39,6 +39,40 @@ const std::string CurrentDateTime()
     return buf;
 }
 
+struct HeuristicStats
+{
+    string name;
+    long long n_calls;
+    int n_solns;
+    int n_best_solns;
+    double time_spent;
+
+    void printstat()
+    {
+        cout << name
+             << " calls " << n_calls
+             << " solns " << n_solns
+             << " bestsolns " << n_best_solns
+             << " time " << time_spent
+             << endl;
+    }
+};
+
+struct BranchingStats
+{
+    string name;
+    long long n_calls;
+    double time_spent;
+
+    void printstat()
+    {
+        cout << name
+             << " calls " << n_calls
+             << " time " << time_spent
+             << endl;
+    }
+};
+
 SCIP_RETCODE execmain(int argc, const char **argv)
 {
     string meta_file_path = argv[1];
@@ -125,6 +159,9 @@ SCIP_RETCODE execmain(int argc, const char **argv)
 
     SCIP_CALL(SCIPincludeBranchruleLevelpscost(scip, &var_histories,
                                                /*cost_update_factor=*/0.9));
+
+    std::map<string, HeuristicStats> heuristic_stats;
+    std::map<string, BranchingStats> branching_stats;
 
     for (int index = 0; index < instances.size(); ++index)
     {
@@ -236,9 +273,15 @@ SCIP_RETCODE execmain(int argc, const char **argv)
             int n_calls = SCIPbranchruleGetNLPCalls(branch_rules[i]);
             if (n_calls > 0)
             {
-                cout << SCIPbranchruleGetName(branch_rules[i])
+                string name = SCIPbranchruleGetName(branch_rules[i]);
+                double time_spent = SCIPbranchruleGetTime(branch_rules[i]);
+                branching_stats[name].name = name;
+                branching_stats[name].n_calls += n_calls;
+                branching_stats[name].time_spent += time_spent;
+                // TODO Remove this?
+                cout << name
                      << " " << n_calls
-                     << " time " << SCIPbranchruleGetTime(branch_rules[i])
+                     << " time " << time_spent
                      << endl;
             }
         }
@@ -252,11 +295,16 @@ SCIP_RETCODE execmain(int argc, const char **argv)
             int n_calls = SCIPheurGetNCalls(heuristics[i]);
             if (n_calls > 0)
             {
-                cout << SCIPheurGetName(heuristics[i])
-                     << " sol " << SCIPheurGetNSolsFound(heuristics[i])
-                     << " bestsol " << SCIPheurGetNBestSolsFound(heuristics[i])
-                     << " time " << SCIPheurGetTime(heuristics[i])
-                     << endl;
+                string name = SCIPheurGetName(heuristics[i]);
+                heuristic_stats[name].n_calls += n_calls;
+                heuristic_stats[name].n_solns += SCIPheurGetNSolsFound(heuristics[i]);
+                heuristic_stats[name].n_best_solns += SCIPheurGetNBestSolsFound(heuristics[i]);
+                heuristic_stats[name].time_spent += SCIPheurGetTime(heuristics[i]);
+                // cout << name
+                //      << " sol " << SCIPheurGetNSolsFound(heuristics[i])
+                //      << " bestsol " << SCIPheurGetNBestSolsFound(heuristics[i])
+                //      << " time " << SCIPheurGetTime(heuristics[i])
+                //      << endl;
             }
         }
 
@@ -313,6 +361,16 @@ SCIP_RETCODE execmain(int argc, const char **argv)
     // history_reset.PrintStats();
     cout << "Provided hints: " << hint_total
          << " successful hints: " << hint_success << endl;
+
+    for (auto branching : branching_stats)
+    {
+        branching.second.printstat();
+    }
+
+    for (auto heuristic : heuristic_stats)
+    {
+        heuristic.second.printstat();
+    }
 
     return SCIP_OKAY;
 }
