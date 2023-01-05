@@ -45,6 +45,7 @@ public:
     void SetOldpscostCount1(string name, double value);
 
     double GetLevelpscost(string name, int level);
+    double GetLevelpscost(string name, int level, double solval);
     double GetLevelpscost0(string name, int level);
     double GetLevelpscost1(string name, int level);
     double GetLevelpscostCount(string name, int level);

@@ -234,6 +234,14 @@ double VarHistories::GetLevelpscost(string name, int level)
     double downcost = GetLevelpscost0(name, level);
     return upcost * downcost;
 }
+double VarHistories::GetLevelpscost(string name, int level, double solval)
+{
+    double flr = floor(solval);
+    double cl = ceil(solval);
+    double upcost = GetLevelpscost1(name, level) * (cl - solval);
+    double downcost = GetLevelpscost0(name, level) * (solval - flr);
+    return upcost * downcost;
+}
 
 double VarHistories::GetLevelpscostCount0(string name, int level)
 {

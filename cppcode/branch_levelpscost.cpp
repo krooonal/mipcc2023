@@ -166,7 +166,7 @@ static SCIP_DECL_BRANCHEXECLP(branchExeclpLevelpscost)
    // branchruledata->node_lp_values[current_node_num] = current_lp_obj;
 
    branchruledata->call_count++;
-   if (branchruledata->call_count > 5)
+   if (branchruledata->call_count > 0)
    {
       branchruledata->call_count = 0;
       // Iterate through all variables to find current pseudocosts
