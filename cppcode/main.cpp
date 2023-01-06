@@ -49,8 +49,8 @@ struct HeuristicStats
 
     void printstat()
     {
-        cout << name
-             << "\t\tcalls " << n_calls
+        cout << name << setw(25) << left
+             << "calls " << n_calls
              << "\tsolns " << n_solns
              << "\tbestsolns " << n_best_solns
              << "\ttime " << time_spent
@@ -66,8 +66,8 @@ struct BranchingStats
 
     void printstat()
     {
-        cout << name
-             << "\t\tcalls " << n_calls
+        cout << name << setw(25) << left
+             << "calls " << n_calls
              << "\ttime " << time_spent
              << endl;
     }
