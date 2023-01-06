@@ -183,7 +183,7 @@ SCIP_RETCODE execmain(int argc, const char **argv)
 
         // TODO: use timeout -1
         SCIP_CALL(SCIPsetRealParam(scip, "limits/time", timeout - 2));
-        SCIP_CALL(SCIPsetIntParam(scip, "presolving/maxrestarts", 0));
+        // SCIP_CALL(SCIPsetIntParam(scip, "presolving/maxrestarts", 0));
         SCIP_CALL(SCIPsetIntParam(scip, "separating/maxcuts", max_cuts.GetBestValue()));
         SCIP_CALL(SCIPsetIntParam(scip, "separating/maxcutsroot", max_cuts_root.GetBestValue()));
         // SCIP_CALL(SCIPsetIntParam(scip, "branching/pscost/priority", 40000)); // default 2000
