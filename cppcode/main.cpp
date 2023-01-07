@@ -136,9 +136,9 @@ SCIP_RETCODE execmain(int argc, const char **argv)
     max_cuts_root.AddValue(2000);
     max_cuts_root.AddValue(0);
 
-    Parameter<double> history_reset(0.7, "history_reset");
-    history_reset.AddValue(4.0);
-    history_reset.AddValue(3.0);
+    // Parameter<double> history_reset(0.7, "history_reset");
+    // history_reset.AddValue(4.0);
+    // history_reset.AddValue(3.0);
 
     Parameter<int> max_restarts(0.7, "max_restarts");
     max_restarts.AddValue(0);
@@ -201,7 +201,7 @@ SCIP_RETCODE execmain(int argc, const char **argv)
                 if (heuristic.second.n_solns == 0)
                 {
                     string heuristic_param = "heuristics/" + heuristic.first + "/freq";
-                    SCIP_CALL(SCIPsetIntParam(scip, heuristic_param.c_str(), 0));
+                    SCIP_CALL(SCIPsetIntParam(scip, heuristic_param.c_str(), -1));
                 }
             }
         }
@@ -368,7 +368,7 @@ SCIP_RETCODE execmain(int argc, const char **argv)
 
             max_cuts.AdjustScore(-total_score);
             max_cuts_root.AdjustScore(-total_score);
-            history_reset.AdjustScore(-total_score);
+            // history_reset.AdjustScore(-total_score);
             max_restarts.AdjustScore(-total_score);
         }
         // system("echo -n \"[END] \";date -Iseconds");
