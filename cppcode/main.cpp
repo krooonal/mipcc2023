@@ -140,6 +140,10 @@ SCIP_RETCODE execmain(int argc, const char **argv)
     history_reset.AddValue(4.0);
     history_reset.AddValue(3.0);
 
+    Parameter<int> max_restarts(0.7, "max_restarts");
+    max_restarts.AddValue(0);
+    max_restarts.AddValue(1);
+
     // Parameter<int> bfs_priority(0.7, "bfs_priority");
     // bfs_priority.AddValue(100000);
     // bfs_priority.AddValue(300000);
@@ -183,10 +187,24 @@ SCIP_RETCODE execmain(int argc, const char **argv)
 
         // TODO: use timeout -1
         SCIP_CALL(SCIPsetRealParam(scip, "limits/time", timeout - 2));
-        // SCIP_CALL(SCIPsetIntParam(scip, "presolving/maxrestarts", 0));
+        // SCIP_CALL(SCIPsetIntParam(scip, "presolving/maxrestarts", max_restarts.GetBestValue()));
+        SCIP_CALL(SCIPsetIntParam(scip, "presolving/maxrestarts", 0));
         SCIP_CALL(SCIPsetIntParam(scip, "separating/maxcuts", max_cuts.GetBestValue()));
         SCIP_CALL(SCIPsetIntParam(scip, "separating/maxcutsroot", max_cuts_root.GetBestValue()));
         // SCIP_CALL(SCIPsetIntParam(scip, "branching/pscost/priority", 40000)); // default 2000
+
+        if (index >= 25)
+        {
+            // Turn off non performing heuristics
+            for (auto heuristic : heuristic_stats)
+            {
+                if (heuristic.second.n_solns == 0)
+                {
+                    string heuristic_param = "heuristics/" + heuristic.first + "/freq";
+                    SCIP_CALL(SCIPsetIntParam(scip, heuristic_param.c_str(), 0));
+                }
+            }
+        }
 
         SCIP_VAR **vars;
         vars = SCIPgetOrigVars(scip);
@@ -351,6 +369,7 @@ SCIP_RETCODE execmain(int argc, const char **argv)
             max_cuts.AdjustScore(-total_score);
             max_cuts_root.AdjustScore(-total_score);
             history_reset.AdjustScore(-total_score);
+            max_restarts.AdjustScore(-total_score);
         }
         // system("echo -n \"[END] \";date -Iseconds");
         cout << "[END] " << CurrentDateTime() << "\n"
@@ -360,6 +379,7 @@ SCIP_RETCODE execmain(int argc, const char **argv)
     max_cuts.PrintStats();
     max_cuts_root.PrintStats();
     // history_reset.PrintStats();
+    max_restarts.PrintStats();
     cout << "Provided hints: " << hint_total
          << " successful hints: " << hint_success << endl;
 
