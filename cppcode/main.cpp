@@ -123,29 +123,29 @@ SCIP_RETCODE execmain(int argc, const char **argv)
     SCIPmessagehdlrSetQuiet(SCIPgetMessagehdlr(scip), TRUE);
 
     // Provide prev solution?
-    Parameter<bool> provide_hint(0.7, "provide_hint");
+    Parameter<bool> provide_hint(0.4, "provide_hint");
     provide_hint.AddValue(true);
     provide_hint.AddValue(false);
     int hint_success = 0;
     int hint_total = 0;
 
-    Parameter<int> max_cuts(0.7, "max_cuts");
+    Parameter<int> max_cuts(0.4, "max_cuts");
     max_cuts.AddValue(100);
     max_cuts.AddValue(0);
 
-    Parameter<int> max_cuts_root(0.7, "max_cuts_root");
+    Parameter<int> max_cuts_root(0.4, "max_cuts_root");
     max_cuts_root.AddValue(2000);
     max_cuts_root.AddValue(0);
 
-    // Parameter<double> history_reset(0.7, "history_reset");
+    // Parameter<double> history_reset(0.3, "history_reset");
     // history_reset.AddValue(4.0);
     // history_reset.AddValue(3.0);
 
-    // Parameter<int> max_restarts(0.7, "max_restarts");
+    // Parameter<int> max_restarts(0.3, "max_restarts");
     // max_restarts.AddValue(0);
     // max_restarts.AddValue(1);
 
-    // Parameter<int> bfs_priority(0.7, "bfs_priority");
+    // Parameter<int> bfs_priority(0.3, "bfs_priority");
     // bfs_priority.AddValue(100000);
     // bfs_priority.AddValue(300000);
 
@@ -188,12 +188,14 @@ SCIP_RETCODE execmain(int argc, const char **argv)
 
         // TODO: use timeout -1
         SCIP_CALL(SCIPsetRealParam(scip, "limits/time", timeout - 2));
-        // SCIP_CALL(SCIPsetIntParam(scip, "presolving/maxrestarts", max_restarts.GetBestValue()));
-        SCIP_CALL(SCIPsetIntParam(scip, "presolving/maxrestarts", 0));
-        SCIP_CALL(SCIPsetIntParam(scip, "separating/maxcuts", max_cuts.GetBestValue()));
-        SCIP_CALL(SCIPsetIntParam(scip, "separating/maxcutsroot", max_cuts_root.GetBestValue()));
-        // SCIP_CALL(SCIPsetIntParam(scip, "branching/pscost/priority", 40000)); // default 2000
-
+        if (index > 0)
+        {
+            // SCIP_CALL(SCIPsetIntParam(scip, "presolving/maxrestarts", max_restarts.GetBestValue()));
+            SCIP_CALL(SCIPsetIntParam(scip, "presolving/maxrestarts", 0));
+            SCIP_CALL(SCIPsetIntParam(scip, "separating/maxcuts", max_cuts.GetBestValue()));
+            SCIP_CALL(SCIPsetIntParam(scip, "separating/maxcutsroot", max_cuts_root.GetBestValue()));
+            // SCIP_CALL(SCIPsetIntParam(scip, "branching/pscost/priority", 40000)); // default 2000
+        }
         if (index >= 25)
         {
             // Turn off non performing heuristics

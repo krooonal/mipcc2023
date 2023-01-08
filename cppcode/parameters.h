@@ -34,7 +34,6 @@ public:
     void PrintStats();
 
 private:
-    double impact_factor_ = 1.0;
     string name_ = "";
     std::vector<T> values_;
     std::vector<double> scores_;
@@ -46,11 +45,10 @@ private:
 };
 
 template <typename T>
-Parameter<T>::Parameter(double impact_factor, string name)
+Parameter<T>::Parameter(double c_fac, string name)
 {
     name_ = name;
-    impact_factor_ = impact_factor;
-    c_fac_ = 1.0 - impact_factor_;
+    c_fac_ = c_fac;
 }
 
 template <typename T>
