@@ -99,7 +99,7 @@ T Parameter<T>::GetBestValue()
         }
         for (int i = 0; i < values_.size(); ++i)
         {
-            if (final_scores_[i] + 0.05 > final_scores_[best_index])
+            if (final_scores_[i] + 0.03 > final_scores_[best_index])
             {
                 bucket.push_back(i);
             }
