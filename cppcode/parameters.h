@@ -97,14 +97,21 @@ T Parameter<T>::GetBestValue()
                 best_index = i;
             }
         }
+        for (int i = 0; i < values_.size(); ++i)
+        {
+            if (final_scores_[i] + 0.05 > final_scores_[best_index])
+            {
+                bucket.push_back(i);
+            }
+        }
     }
+
+    // bucket is never empty. The best param is always in it.
+    if (bucket.size() > 1)
+        best_index = bucket[rand() % bucket.size()];
     else
-    {
-        if (bucket.size() > 1)
-            best_index = bucket[rand() % bucket.size()];
-        else
-            best_index = bucket[0];
-    }
+        best_index = bucket[0];
+
     current_index_ = best_index;
     cout << name_ << ": Trying value: " << values_[best_index]
          << " at index: " << best_index
