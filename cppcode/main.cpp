@@ -87,6 +87,10 @@ SCIP_RETCODE execmain(int argc, const char **argv)
     pos = meta_file_name.find(".");
     string meta_file_name_wo_ext = meta_file_name.substr(0, pos);
 
+    // Create solutions directory
+    string command = "mkdir -p solutions/" + meta_file_name_wo_ext;
+    system(command.c_str());
+
     int timeout = 0;
     vector<string> instances;
     ifstream meta_file(meta_file_path);
@@ -174,10 +178,6 @@ SCIP_RETCODE execmain(int argc, const char **argv)
     std::map<string, HeuristicStats> heuristic_stats;
     std::map<string, BranchingStats> branching_stats;
 
-    // Create solutions directory
-    string command = "mkdir -p solutions/" + meta_file_name_wo_ext;
-    system(command.c_str());
-
     for (int index = 0; index < instances.size(); ++index)
     {
         string instance = instances[index];
@@ -243,7 +243,7 @@ SCIP_RETCODE execmain(int argc, const char **argv)
 
         // Solve
         SCIP_CALL(SCIPsolve(scip));
-        // TODO: Write solution
+        // Write solution
         if (SCIPgetNSols(scip) <= 0)
         {
             continue;
@@ -256,7 +256,7 @@ SCIP_RETCODE execmain(int argc, const char **argv)
         std::cout << "[DUALBOUND] " << std::fixed << std::setprecision(9)
                   << dual_bound << "\n"
                   << std::flush;
-        // TODO: Add solution to file and pool.
+        // Add solution to file and pool.
         ofstream solution_file;
         solution_file.open("solutions/" + meta_file_name_wo_ext + "/" + instance_name + ".sol");
         for (SCIP_VAR *scip_var : scip_variables)
