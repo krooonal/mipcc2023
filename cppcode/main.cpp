@@ -98,6 +98,12 @@ SCIP_RETCODE execmain(int argc, const char **argv)
         stringstream ss(line);
         ss >> timeout_str >> timeout;
         cout << timeout << endl;
+        getline(meta_file, line); // OBJ
+        getline(meta_file, line); // LO
+        getline(meta_file, line); // UP
+        getline(meta_file, line); // LHS
+        getline(meta_file, line); // RHS
+        getline(meta_file, line); // MAT
         while (getline(meta_file, line))
         {
             instances.push_back(line);
