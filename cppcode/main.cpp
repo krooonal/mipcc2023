@@ -49,12 +49,12 @@ struct HeuristicStats
 
     void printstat()
     {
-        cout << setw(25) << left << name
-             << "calls " << setw(10) << left << n_calls
-             << " solns " << setw(5) << left << n_solns
-             << " bestsolns " << setw(5) << left << n_best_solns
-             << " time " << time_spent
-             << endl;
+        std::cout << setw(25) << left << name
+                  << "calls " << setw(10) << left << n_calls
+                  << " solns " << setw(5) << left << n_solns
+                  << " bestsolns " << setw(5) << left << n_best_solns
+                  << " time " << time_spent
+                  << endl;
     }
 };
 
@@ -66,10 +66,10 @@ struct BranchingStats
 
     void printstat()
     {
-        cout << setw(25) << left << name
-             << "calls " << setw(10) << left << n_calls
-             << " time " << time_spent
-             << endl;
+        std::cout << setw(25) << left << name
+                  << "calls " << setw(10) << left << n_calls
+                  << " time " << time_spent
+                  << endl;
     }
 };
 
@@ -77,11 +77,11 @@ SCIP_RETCODE execmain(int argc, const char **argv)
 {
     srand(42);
     string meta_file_path = argv[1];
-    cout << meta_file_path << endl;
+    std::cout << meta_file_path << endl;
     int pos = meta_file_path.find("datasets");
     // TODO: Fix this. base_dir is current working directory.
     string base_dir = meta_file_path.substr(0, pos);
-    cout << base_dir << endl;
+    std::cout << base_dir << endl;
     pos = meta_file_path.find_last_of("/");
     string meta_file_name = meta_file_path.substr(pos + 1, string::npos);
     pos = meta_file_name.find(".");
@@ -97,7 +97,7 @@ SCIP_RETCODE execmain(int argc, const char **argv)
         getline(meta_file, line);
         stringstream ss(line);
         ss >> timeout_str >> timeout;
-        cout << timeout << endl;
+        std::cout << timeout << endl;
         getline(meta_file, line); // OBJ
         getline(meta_file, line); // LO
         getline(meta_file, line); // UP
@@ -112,7 +112,7 @@ SCIP_RETCODE execmain(int argc, const char **argv)
         // DO NOT PRINT INSTANCE NAMES. IT SPOILS THE EVAL.
         // for (string instance : instances)
         // {
-        //     cout << instance << endl;
+        //     std::cout << instance << endl;
         // }
         meta_file.close();
     }
@@ -174,6 +174,10 @@ SCIP_RETCODE execmain(int argc, const char **argv)
     std::map<string, HeuristicStats> heuristic_stats;
     std::map<string, BranchingStats> branching_stats;
 
+    // Create solutions directory
+    string command = "mkdir -p solutions/" + meta_file_name_wo_ext;
+    system(command.c_str());
+
     for (int index = 0; index < instances.size(); ++index)
     {
         string instance = instances[index];
@@ -181,16 +185,16 @@ SCIP_RETCODE execmain(int argc, const char **argv)
         string instance_name = instance.substr(pos + 1, string::npos);
         string filename = base_dir + instance;
 
-        cout << "[INSTANCE] " << instance_name << "\n"
-             << std::flush;
+        std::cout << "[INSTANCE] " << instance_name << "\n"
+                  << std::flush;
         // Read in *.MPS file
         SCIP_CALL(SCIPreadMps(scip, reader, filename.c_str(), result, NULL, NULL,
                               NULL, NULL, NULL, NULL));
 
         // Print the time
         // system("echo -n \"[START] \"; date -Iseconds");
-        cout << "[START] " << CurrentDateTime() << "\n"
-             << std::flush;
+        std::cout << "[START] " << CurrentDateTime() << "\n"
+                  << std::flush;
 
         // TODO: use timeout -1
         SCIP_CALL(SCIPsetRealParam(scip, "limits/time", timeout - 2));
@@ -249,9 +253,9 @@ SCIP_RETCODE execmain(int argc, const char **argv)
 
         // Dual bound.
         double dual_bound = SCIPgetDualbound(scip);
-        cout << "[DUALBOUND] " << std::fixed << std::setprecision(9)
-             << dual_bound << "\n"
-             << std::flush;
+        std::cout << "[DUALBOUND] " << std::fixed << std::setprecision(9)
+                  << dual_bound << "\n"
+                  << std::flush;
         // TODO: Add solution to file and pool.
         ofstream solution_file;
         solution_file.open("solutions/" + meta_file_name_wo_ext + "/" + instance_name + ".sol");
@@ -284,17 +288,17 @@ SCIP_RETCODE execmain(int argc, const char **argv)
         double best_solution_val = SCIPgetPrimalbound(scip);
         double first_solution_dist = abs(first_solution_val - best_solution_val);
         double first_sol_time = scip->stat->firstprimaltime;
-        cout << "Relative gap: " << relative_gap << endl;
-        cout << "time_score: " << time_score << endl;
-        cout << "first_solution_dist: " << first_solution_dist << endl;
-        cout << "first_sol_time: " << first_sol_time << endl;
-        cout << "total_score: " << total_score << endl;
-        cout << "adjusted_score: " << adjusted_score << endl;
+        std::cout << "Relative gap: " << relative_gap << endl;
+        std::cout << "time_score: " << time_score << endl;
+        std::cout << "first_solution_dist: " << first_solution_dist << endl;
+        std::cout << "first_sol_time: " << first_sol_time << endl;
+        std::cout << "total_score: " << total_score << endl;
+        std::cout << "adjusted_score: " << adjusted_score << endl;
 
         // Print branching stats
         SCIP_BRANCHRULE **branch_rules = SCIPgetBranchrules(scip);
         int n_branch_rules = SCIPgetNBranchrules(scip);
-        cout << "Branching stats\n";
+        std::cout << "Branching stats\n";
         for (int i = 0; i < n_branch_rules; ++i)
         {
             int n_calls = SCIPbranchruleGetNLPCalls(branch_rules[i]);
@@ -306,17 +310,17 @@ SCIP_RETCODE execmain(int argc, const char **argv)
                 branching_stats[name].n_calls += n_calls;
                 branching_stats[name].time_spent += time_spent;
                 // TODO Remove this?
-                cout << name
-                     << " " << n_calls
-                     << " time " << time_spent
-                     << endl;
+                std::cout << name
+                          << " " << n_calls
+                          << " time " << time_spent
+                          << endl;
             }
         }
 
         // Print heuristic stats
         SCIP_HEUR **heuristics = SCIPgetHeurs(scip);
         int n_heuristics = SCIPgetNHeurs(scip);
-        // cout << "Heuristic stats\n";
+        // std::cout << "Heuristic stats\n";
         for (int i = 0; i < n_heuristics; ++i)
         {
             int n_calls = SCIPheurGetNCalls(heuristics[i]);
@@ -328,7 +332,7 @@ SCIP_RETCODE execmain(int argc, const char **argv)
                 heuristic_stats[name].n_solns += SCIPheurGetNSolsFound(heuristics[i]);
                 heuristic_stats[name].n_best_solns += SCIPheurGetNBestSolsFound(heuristics[i]);
                 heuristic_stats[name].time_spent += SCIPheurGetTime(heuristics[i]);
-                // cout << name
+                // std::cout << name
                 //      << " sol " << SCIPheurGetNSolsFound(heuristics[i])
                 //      << " bestsol " << SCIPheurGetNBestSolsFound(heuristics[i])
                 //      << " time " << SCIPheurGetTime(heuristics[i])
@@ -342,10 +346,10 @@ SCIP_RETCODE execmain(int argc, const char **argv)
         SCIP_Longint comp_sol_calls = SCIPheurGetNCalls(comp_sol_heur);
         SCIP_Longint comp_sol_solns = SCIPheurGetNSolsFound(comp_sol_heur);
         SCIP_Real comp_soln_time = SCIPheurGetTime(comp_sol_heur);
-        cout << "Calls " << comp_sol_calls
-             << " Solns " << comp_sol_solns
-             << " Time " << comp_soln_time
-             << endl;
+        std::cout << "Calls " << comp_sol_calls
+                  << " Solns " << comp_sol_solns
+                  << " Time " << comp_soln_time
+                  << endl;
         if (comp_sol_calls > 0)
         {
             hint_total++;
@@ -381,16 +385,16 @@ SCIP_RETCODE execmain(int argc, const char **argv)
             // max_restarts.AdjustScore(-total_score);
         }
         // system("echo -n \"[END] \";date -Iseconds");
-        cout << "[END] " << CurrentDateTime() << "\n"
-             << std::flush;
+        std::cout << "[END] " << CurrentDateTime() << "\n"
+                  << std::flush;
     }
     provide_hint.PrintStats();
     max_cuts.PrintStats();
     max_cuts_root.PrintStats();
     // history_reset.PrintStats();
     // max_restarts.PrintStats();
-    cout << "Provided hints: " << hint_total
-         << " successful hints: " << hint_success << endl;
+    std::cout << "Provided hints: " << hint_total
+              << " successful hints: " << hint_success << endl;
 
     for (auto branching : branching_stats)
     {
