@@ -111,7 +111,7 @@ SCIP_RETCODE execmain(int argc, const char **argv)
 
         getline(meta_file, line); // LO
         string lo_str = "[LO] ";
-        std::string::size_type i = line.find(lo_str);
+        i = line.find(lo_str);
         if (i != std::string::npos)
             line.erase(i, lo_str.length());
         if (line != "-")
@@ -122,7 +122,7 @@ SCIP_RETCODE execmain(int argc, const char **argv)
 
         getline(meta_file, line); // UP
         string up_str = "[UP] ";
-        std::string::size_type i = line.find(up_str);
+        i = line.find(up_str);
         if (i != std::string::npos)
             line.erase(i, up_str.length());
         if (line != "-")
@@ -133,7 +133,7 @@ SCIP_RETCODE execmain(int argc, const char **argv)
 
         getline(meta_file, line); // LHS
         string lhs_str = "[LHS] ";
-        std::string::size_type i = line.find(lhs_str);
+        i = line.find(lhs_str);
         if (i != std::string::npos)
             line.erase(i, lhs_str.length());
         if (line != "-")
@@ -144,7 +144,7 @@ SCIP_RETCODE execmain(int argc, const char **argv)
 
         getline(meta_file, line); // RHS
         string rhs_str = "[RHS] ";
-        std::string::size_type i = line.find(rhs_str);
+        i = line.find(rhs_str);
         if (i != std::string::npos)
             line.erase(i, rhs_str.length());
         if (line != "-")
@@ -155,7 +155,7 @@ SCIP_RETCODE execmain(int argc, const char **argv)
 
         getline(meta_file, line); // MAT
         string mat_str = "[MAT] ";
-        std::string::size_type i = line.find(mat_str);
+        i = line.find(mat_str);
         if (i != std::string::npos)
             line.erase(i, mat_str.length());
         if (line != "-")
