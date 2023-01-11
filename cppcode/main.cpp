@@ -92,6 +92,7 @@ SCIP_RETCODE execmain(int argc, const char **argv)
     system(command.c_str());
 
     int timeout = 0;
+    bool obj_only_change = true;
     vector<string> instances;
     ifstream meta_file(meta_file_path);
     if (meta_file.is_open())
@@ -103,11 +104,55 @@ SCIP_RETCODE execmain(int argc, const char **argv)
         ss >> timeout_str >> timeout;
         std::cout << timeout << endl;
         getline(meta_file, line); // OBJ
+        stringstream ss(line);
+        string obj_change, obj_str;
+        ss >> obj_str >> obj_change;
+
         getline(meta_file, line); // LO
+        stringstream ss(line);
+        string lo_change, lo_str;
+        ss >> lo_str >> lo_change;
+        if (lo_change != "-")
+        {
+            obj_only_change = false;
+        }
+
         getline(meta_file, line); // UP
+        stringstream ss(line);
+        string up_change, up_str;
+        ss >> up_str >> up_change;
+        if (up_change != "-")
+        {
+            obj_only_change = false;
+        }
+
         getline(meta_file, line); // LHS
+        stringstream ss(line);
+        string lhs_change, lhs_str;
+        ss >> lhs_str >> lhs_change;
+        if (lhs_change != "-")
+        {
+            obj_only_change = false;
+        }
+
         getline(meta_file, line); // RHS
+        stringstream ss(line);
+        string rhs_change, rhs_str;
+        ss >> rhs_str >> rhs_change;
+        if (rhs_change != "-")
+        {
+            obj_only_change = false;
+        }
+
         getline(meta_file, line); // MAT
+        stringstream ss(line);
+        string mat_change, mat_str;
+        ss >> mat_str >> mat_change;
+        if (mat_change != "-")
+        {
+            obj_only_change = false;
+        }
+
         while (getline(meta_file, line))
         {
             instances.push_back(line);
@@ -119,6 +164,11 @@ SCIP_RETCODE execmain(int argc, const char **argv)
         //     std::cout << instance << endl;
         // }
         meta_file.close();
+    }
+
+    if (obj_only_change)
+    {
+        std::cout << "Obj only change" << endl;
     }
 
     SCIP *scip = nullptr;
