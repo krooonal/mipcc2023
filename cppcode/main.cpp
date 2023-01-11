@@ -244,8 +244,7 @@ SCIP_RETCODE execmain(int argc, const char **argv)
     // SCIP_CALL(SCIPincludeBranchruleCumpscost(scip, &var_histories,
     //                                          /*cost_update_factor=*/0.9));
 
-    // SCIP_CALL(SCIPincludeBranchruleLevelpscost(scip, &var_histories,
-    //                                            /*cost_update_factor=*/0.9));
+    SCIP_CALL(SCIPincludeBranchruleLevelpscost(scip, &var_histories));
 
     std::map<string, HeuristicStats> heuristic_stats;
     std::map<string, BranchingStats> branching_stats;

@@ -41,6 +41,7 @@ void VarHistories::Populate(SCIP *scip,
         const string name = SCIPvarGetName(var);
         SCIP_VAR *trans_var = SCIPvarGetTransVar(var);
         SCIP_HISTORY var_history = *(trans_var->history);
+        // var->valuehistory;
         // cout << "pseudocost counts: "
         //      << var_history.pscostcount[0] << " "
         //      << var_history.pscostcount[1] << endl;

@@ -4,6 +4,7 @@
 #include "branch_levelpscost.h"
 #include "scip/struct_var.h"
 #include "scip/struct_tree.h"
+#include "scip/struct_history.h"
 
 #include "scip/branch_relpscost.h"
 
@@ -155,126 +156,42 @@ static SCIP_DECL_BRANCHEXECLP(branchExeclpLevelpscost)
       return SCIP_OKAY;
    }
 
-   SCIP_NODE *current_node = SCIPgetCurrentNode(scip);
-   int node_depth = SCIPnodeGetDepth(current_node);
+   int node_depth = SCIPgetDepth(scip);
    int level = node_depth / 10;
-
-   // Store current node variable LP values. This can slow us down?
-   // Store current node LP objective value.
-   // long long current_node_num = current_node->number;
-   // double current_lp_obj = SCIPgetLPObjval(scip);
-   // branchruledata->node_lp_values[current_node_num] = current_lp_obj;
-
-   branchruledata->call_count++;
-   if (branchruledata->call_count > 0)
+   if (level >= 10)
    {
-      branchruledata->call_count = 0;
-      // Iterate through all variables to find current pseudocosts
-      SCIP_VAR **scip_vars = SCIPgetVars(scip);
-      int n_vars = SCIPgetNVars(scip);
-      for (int i = 0; i < n_vars; ++i)
-      {
-         SCIP_VAR *var = scip_vars[i];
-         SCIP_VAR **parent_vars = var->parentvars;
-         int n_parents = var->nparentvars;
-         string var_name = var->name;
-         if (n_parents > 0)
-         {
-            var_name = parent_vars[0]->name;
-         }
-         double pscost_count0 = var->historycrun->pscostcount[0];
-         double pscost_count1 = var->historycrun->pscostcount[1];
-         double pscost0 = var->historycrun->pscostweightedmean[0];
-         double pscost1 = var->historycrun->pscostweightedmean[1];
-
-         double prev_count0 = var_histories->GetOldpscostCount0(var_name);
-         double prev_count1 = var_histories->GetOldpscostCount1(var_name);
-         double prev_pscost0 = var_histories->GetOldpscost0(var_name);
-         double prev_pscost1 = var_histories->GetOldpscost1(var_name);
-
-         double countdiff0 = pscost_count0 - prev_count0;
-         double countdiff1 = pscost_count1 - prev_count1;
-
-         // cout << var_name << " " << pscost_count0 << " " << pscost0
-         //      << " " << prev_count0 << " " << prev_pscost0 << endl;
-
-         // if (countdiff0 < 0 || countdiff1 < 0)
-         // {
-         //    cout << "Negative count diff " << countdiff0 << " " << countdiff1 << endl;
-         // }
-
-         if (countdiff0 > 0)
-         {
-            double update = pscost0 * pscost_count0 - prev_pscost0 * prev_count0;
-            var_histories->UpdateLevelpscost0(var_name, level, update, countdiff0);
-            // double levelpscount0 = var_histories->GetLevelpscostCount0(var_name, level);
-            // if (levelpscount0 != pscost_count0)
-            // {
-            //    cout << "countdiff0 " << countdiff0
-            //         << " levelpscount0 " << levelpscount0
-            //         << " pscost_count0 " << pscost_count0 << endl;
-            // }
-            // assert(levelpscount0 == pscost_count0);
-         }
-         if (countdiff1 > 0)
-         {
-            double update = pscost1 * pscost_count1 - prev_pscost1 * prev_count1;
-            var_histories->UpdateLevelpscost1(var_name, level, update, countdiff1);
-         }
-
-         var_histories->SetOldpscost0(var_name, pscost0);
-         var_histories->SetOldpscost1(var_name, pscost1);
-         var_histories->SetOldpscostCount0(var_name, pscost_count0);
-         var_histories->SetOldpscostCount1(var_name, pscost_count1);
-
-         // if (level == 0)
-         // {
-         //    double levelpscost = var_histories->GetLevelpscost(var_name, level);
-         //    double oldpscost0 = var_histories->GetOldpscost0(var_name);
-         //    double oldpscost1 = var_histories->GetOldpscost1(var_name);
-         //    double levelpscount = var_histories->GetLevelpscostCount(var_name, level);
-         //    if (abs(pscost_count0 + pscost_count1 - levelpscount) > 1.0)
-         //    {
-         //       cout << var_name << " Level: " << level << " levelpscount "
-         //            << levelpscount << " Real " << pscost_count0 + pscost_count1
-         //            << endl;
-         //    }
-         //    // if (abs(oldpscost0 * oldpscost1 - levelpscost) > 1.0)
-         //    // {
-         //    //    cout << "Level: " << level << " levelpscost "
-         //    //         << levelpscost << " Real " << oldpscost0 * oldpscost1 << endl;
-         //    // }
-         // }
-      }
+      level = 9;
    }
 
    bool use_relpscost = false;
-   if (rand() % 10 >= 0 || level == 0)
+   if (rand() % 10 >= 10 || level == 0)
    {
       use_relpscost = true;
       *result = SCIP_DIDNOTFIND;
       return SCIP_OKAY;
    }
-   SCIP_VAR **tmplpcands;
+   // SCIP_VAR **tmplpcands;
    SCIP_VAR **lpcands;
-   SCIP_Real *tmplpcandssol;
+   // SCIP_Real *tmplpcandssol;
    SCIP_Real *lpcandssol;
-   SCIP_Real *tmplpcandsfrac;
-   SCIP_Real *lpcandsfrac;
+   // SCIP_Real *tmplpcandsfrac;
+   // SCIP_Real *lpcandsfrac;
    int nlpcands;
 
    /* get branching candidates */
-   SCIP_CALL(SCIPgetLPBranchCands(scip, &tmplpcands, &tmplpcandssol,
-                                  &tmplpcandsfrac, NULL, &nlpcands, NULL));
+   // SCIP_CALL(SCIPgetLPBranchCands(scip, &tmplpcands, &tmplpcandssol,
+   //                                &tmplpcandsfrac, NULL, &nlpcands, NULL));
+   SCIP_CALL(SCIPgetLPBranchCands(scip, &lpcands, &lpcandssol,
+                                  NULL, NULL, &nlpcands, NULL));
    assert(nlpcands > 0);
 
    /* copy LP banching candidates and solution values, because they
     * will be updated w.r.t. the strong branching LP
     * solution
     */
-   SCIP_CALL(SCIPduplicateBufferArray(scip, &lpcands, tmplpcands, nlpcands));
-   SCIP_CALL(SCIPduplicateBufferArray(scip, &lpcandssol, tmplpcandssol, nlpcands));
-   SCIP_CALL(SCIPduplicateBufferArray(scip, &lpcandsfrac, tmplpcandsfrac, nlpcands));
+   // SCIP_CALL(SCIPduplicateBufferArray(scip, &lpcands, tmplpcands, nlpcands));
+   // SCIP_CALL(SCIPduplicateBufferArray(scip, &lpcandssol, tmplpcandssol, nlpcands));
+   // SCIP_CALL(SCIPduplicateBufferArray(scip, &lpcandsfrac, tmplpcandsfrac, nlpcands));
 
    /* execute branching rule */
 
@@ -290,19 +207,16 @@ static SCIP_DECL_BRANCHEXECLP(branchExeclpLevelpscost)
       {
          var_name = parent_vars[0]->name;
       }
-      double levelpscount = var_histories->GetLevelpscostCount(var_name, level);
-      double levelpscost = var_histories->GetLevelpscost(var_name, level);
+      double levelpscount0 = var->history->levelpscostcount[0][level];
+      double levelpscount1 = var->history->levelpscostcount[1][level];
+      double levelpscount = levelpscount0 + levelpscount1;
+      double levelpscost0 = max(1e-6, var->history->levelpscostweightedmean[0][level]);
+      double levelpscost1 = max(1e-6, var->history->levelpscostweightedmean[1][level]);
+      double levelpscost = levelpscost0 * levelpscost1;
       if (levelpscount < 40.0)
       {
          levelpscost = SCIPgetVarPseudocostScore(scip, var, lpcandssol[i]);
       }
-      // double oldpscost0 = var_histories->GetOldpscost0(var_name);
-      // double oldpscost1 = var_histories->GetOldpscost1(var_name);
-      // if (abs(oldpscost0 * oldpscost1 - levelpscost) > 1.0)
-      // {
-      //    cout << "Level: " << level << " levelpscost "
-      //         << levelpscost << " Real " << oldpscost0 * oldpscost1 << endl;
-      // }
       if (levelpscost > best_cost)
       {
          best_lp_candidate_index = i;
@@ -319,11 +233,12 @@ static SCIP_DECL_BRANCHEXECLP(branchExeclpLevelpscost)
    }
    else
    {
-      SCIP_NODE *downchild;
-      SCIP_NODE *upchild;
+      // SCIP_NODE *downchild;
+      // SCIP_NODE *upchild;
       SCIP_VAR *var = lpcands[best_lp_candidate_index];
-      double val = lpcandssol[best_lp_candidate_index];
-      SCIPbranchVarVal(scip, var, val, &downchild, NULL, &upchild);
+      // double val = lpcandssol[best_lp_candidate_index];
+      SCIPbranchVar(scip, var, NULL, NULL, NULL);
+      // SCIPbranchVarVal(scip, var, val, &downchild, NULL, &upchild);
       *result = SCIP_BRANCHED;
    }
 
@@ -332,9 +247,9 @@ static SCIP_DECL_BRANCHEXECLP(branchExeclpLevelpscost)
    //    // cout << "Branched on current node\n";
    // }
 
-   SCIPfreeBufferArray(scip, &lpcandsfrac);
-   SCIPfreeBufferArray(scip, &lpcandssol);
-   SCIPfreeBufferArray(scip, &lpcands);
+   // SCIPfreeBufferArray(scip, &lpcandsfrac);
+   // SCIPfreeBufferArray(scip, &lpcandssol);
+   // SCIPfreeBufferArray(scip, &lpcands);
    return SCIP_OKAY;
 }
 #else
@@ -376,8 +291,7 @@ SCIP_DECL_BRANCHEXECPS(branchExecpsLevelpscost)
 /** creates the Levelpscost branching rule and includes it in SCIP */
 SCIP_RETCODE SCIPincludeBranchruleLevelpscost(
     SCIP *scip,
-    VarHistories *var_histories,
-    double cost_update_factor)
+    VarHistories *var_histories)
 {
    SCIP_BRANCHRULEDATA *branchruledata;
    SCIP_BRANCHRULE *branchrule;
@@ -388,7 +302,6 @@ SCIP_RETCODE SCIPincludeBranchruleLevelpscost(
    /* TODO: (optional) create branching rule specific data here */
    SCIP_CALL(SCIPallocBlockMemory(scip, &branchruledata));
    branchruledata->var_histories = var_histories;
-   branchruledata->cost_update_factor = cost_update_factor;
 
    branchrule = NULL;
 

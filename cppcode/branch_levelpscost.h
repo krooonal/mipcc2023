@@ -16,8 +16,7 @@ extern "C"
     SCIP_EXPORT
     SCIP_RETCODE SCIPincludeBranchruleLevelpscost(
         SCIP *scip,
-        VarHistories *var_histories,
-        double cost_update_factor);
+        VarHistories *var_histories);
 
     /**@addtogroup BRANCHINGRULES
      *
