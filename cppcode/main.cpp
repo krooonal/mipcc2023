@@ -109,6 +109,7 @@ SCIP_RETCODE execmain(int argc, const char **argv)
         ss >> obj_str >> obj_change;
 
         getline(meta_file, line); // LO
+        std::cout << line << endl;
         ss << line;
         string lo_change, lo_str;
         ss >> lo_str >> lo_change;
