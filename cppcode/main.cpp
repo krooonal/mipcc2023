@@ -114,7 +114,7 @@ SCIP_RETCODE execmain(int argc, const char **argv)
         ss >> lo_str >> lo_change;
         if (lo_change != "-")
         {
-            std::cout << "LO changed " << lo_change << endl;
+            std::cout << "LO changed " << lo_str << " " << lo_change << endl;
             obj_only_change = false;
         }
 
