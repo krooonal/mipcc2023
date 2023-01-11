@@ -93,6 +93,7 @@ SCIP_RETCODE execmain(int argc, const char **argv)
 
     int timeout = 0;
     bool obj_only_change = true;
+    bool obj_change = false;
     vector<string> instances;
     ifstream meta_file(meta_file_path);
     if (meta_file.is_open())
@@ -108,6 +109,8 @@ SCIP_RETCODE execmain(int argc, const char **argv)
         std::string::size_type i = line.find(obj_str);
         if (i != std::string::npos)
             line.erase(i, obj_str.length());
+        if (line != "-")
+            obj_change = true;
 
         getline(meta_file, line); // LO
         string lo_str = "[LO] ";
@@ -116,7 +119,7 @@ SCIP_RETCODE execmain(int argc, const char **argv)
             line.erase(i, lo_str.length());
         if (line != "-")
         {
-            std::cout << "LO changed " << lo_str << " " << line << endl;
+            std::cout << "LO changed " << line << endl;
             obj_only_change = false;
         }
 
@@ -127,7 +130,7 @@ SCIP_RETCODE execmain(int argc, const char **argv)
             line.erase(i, up_str.length());
         if (line != "-")
         {
-            std::cout << "UP changed " << up_str << " " << line << endl;
+            std::cout << "UP changed " << line << endl;
             obj_only_change = false;
         }
 
@@ -138,7 +141,7 @@ SCIP_RETCODE execmain(int argc, const char **argv)
             line.erase(i, lhs_str.length());
         if (line != "-")
         {
-            std::cout << "LHS changed " << lhs_str << " " << line << endl;
+            std::cout << "LHS changed " << line << endl;
             obj_only_change = false;
         }
 
@@ -149,7 +152,7 @@ SCIP_RETCODE execmain(int argc, const char **argv)
             line.erase(i, rhs_str.length());
         if (line != "-")
         {
-            std::cout << "RHS changed " << rhs_str << " " << line << endl;
+            std::cout << "RHS changed " << line << endl;
             obj_only_change = false;
         }
 
@@ -160,7 +163,7 @@ SCIP_RETCODE execmain(int argc, const char **argv)
             line.erase(i, mat_str.length());
         if (line != "-")
         {
-            std::cout << "MAT changed " << mat_str << " " << line << endl;
+            std::cout << "MAT changed " << line << endl;
             obj_only_change = false;
         }
 
@@ -225,6 +228,14 @@ SCIP_RETCODE execmain(int argc, const char **argv)
 
     SolutionPool solution_pool;
     VarHistories var_histories;
+    if (obj_only_change)
+    {
+        var_histories.SetHistoryResetCount(1.0);
+    }
+    // else if (obj_change)
+    // {
+    //     var_histories.SetHistoryResetCount(2.0);
+    // }
 
     // Event handler.
     // SCIP_CALL(SCIPincludeEventHdlrSolFeedback(scip, &solution_pool));
