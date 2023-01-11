@@ -114,6 +114,7 @@ SCIP_RETCODE execmain(int argc, const char **argv)
         ss >> lo_str >> lo_change;
         if (lo_change != "-")
         {
+            std::cout << "LO changed " << lo_change << endl;
             obj_only_change = false;
         }
 
@@ -123,6 +124,7 @@ SCIP_RETCODE execmain(int argc, const char **argv)
         ss >> up_str >> up_change;
         if (up_change != "-")
         {
+            std::cout << "UP changed " << up_change << endl;
             obj_only_change = false;
         }
 
@@ -132,6 +134,7 @@ SCIP_RETCODE execmain(int argc, const char **argv)
         ss >> lhs_str >> lhs_change;
         if (lhs_change != "-")
         {
+            std::cout << "LHS changed " << lhs_change << endl;
             obj_only_change = false;
         }
 
@@ -141,6 +144,7 @@ SCIP_RETCODE execmain(int argc, const char **argv)
         ss >> rhs_str >> rhs_change;
         if (rhs_change != "-")
         {
+            std::cout << "RHS changed " << rhs_change << endl;
             obj_only_change = false;
         }
 
