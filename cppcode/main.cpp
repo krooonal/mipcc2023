@@ -104,57 +104,63 @@ SCIP_RETCODE execmain(int argc, const char **argv)
         ss >> timeout_str >> timeout;
         std::cout << timeout << endl;
         getline(meta_file, line); // OBJ
-        ss << line;
-        string obj_change, obj_str;
-        ss >> obj_str >> obj_change;
+        string obj_str = "[OBJ] ";
+        std::string::size_type i = line.find(obj_str);
+        if (i != std::string::npos)
+            line.erase(i, obj_str.length());
 
         getline(meta_file, line); // LO
-        std::cout << line << endl;
-        ss << line;
-        string lo_change, lo_str;
-        ss >> lo_str >> lo_change;
-        if (lo_change != "-")
+        string lo_str = "[LO] ";
+        std::string::size_type i = line.find(lo_str);
+        if (i != std::string::npos)
+            line.erase(i, lo_str.length());
+        if (line != "-")
         {
-            std::cout << "LO changed " << lo_str << " " << lo_change << endl;
+            std::cout << "LO changed " << lo_str << " " << line << endl;
             obj_only_change = false;
         }
 
         getline(meta_file, line); // UP
-        ss << line;
-        string up_change, up_str;
-        ss >> up_str >> up_change;
-        if (up_change != "-")
+        string up_str = "[UP] ";
+        std::string::size_type i = line.find(up_str);
+        if (i != std::string::npos)
+            line.erase(i, up_str.length());
+        if (line != "-")
         {
-            std::cout << "UP changed " << up_change << endl;
+            std::cout << "UP changed " << up_str << " " << line << endl;
             obj_only_change = false;
         }
 
         getline(meta_file, line); // LHS
-        ss << line;
-        string lhs_change, lhs_str;
-        ss >> lhs_str >> lhs_change;
-        if (lhs_change != "-")
+        string lhs_str = "[LHS] ";
+        std::string::size_type i = line.find(lhs_str);
+        if (i != std::string::npos)
+            line.erase(i, lhs_str.length());
+        if (line != "-")
         {
-            std::cout << "LHS changed " << lhs_change << endl;
+            std::cout << "LHS changed " << lhs_str << " " << line << endl;
             obj_only_change = false;
         }
 
         getline(meta_file, line); // RHS
-        ss << line;
-        string rhs_change, rhs_str;
-        ss >> rhs_str >> rhs_change;
-        if (rhs_change != "-")
+        string rhs_str = "[RHS] ";
+        std::string::size_type i = line.find(rhs_str);
+        if (i != std::string::npos)
+            line.erase(i, rhs_str.length());
+        if (line != "-")
         {
-            std::cout << "RHS changed " << rhs_change << endl;
+            std::cout << "RHS changed " << rhs_str << " " << line << endl;
             obj_only_change = false;
         }
 
         getline(meta_file, line); // MAT
-        ss << line;
-        string mat_change, mat_str;
-        ss >> mat_str >> mat_change;
-        if (mat_change != "-")
+        string mat_str = "[MAT] ";
+        std::string::size_type i = line.find(mat_str);
+        if (i != std::string::npos)
+            line.erase(i, mat_str.length());
+        if (line != "-")
         {
+            std::cout << "MAT changed " << mat_str << " " << line << endl;
             obj_only_change = false;
         }
 
