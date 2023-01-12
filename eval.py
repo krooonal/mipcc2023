@@ -99,7 +99,7 @@ def compute_scores(dual, time_difference_secs, sol_found, primal, time_limit):
     scores = {}
 
     # open: verify correctness of dual bound w.r.t. ground truth
-    absgap = max(primal - dual, 0.0)
+    absgap = max(abs(primal - dual), 0.0)
     solved = absgap <= 1e-5
 
     # non-optimal solutions receive full time
