@@ -562,6 +562,16 @@ SCIP_RETCODE execmain(int argc, const char **argv)
         heuristic.second.printstat();
     }
 
+    for (auto presolve : presolve_stats)
+    {
+        presolve.second.printstat();
+    }
+
+    for (auto separator : sepa_stats)
+    {
+        separator.second.printstat();
+    }
+
     return SCIP_OKAY;
 }
 
