@@ -42,10 +42,10 @@ const std::string CurrentDateTime()
 struct HeuristicStats
 {
     string name;
-    long long n_calls;
-    int n_solns;
-    int n_best_solns;
-    double time_spent;
+    long long n_calls = 0ll;
+    int n_solns = 0;
+    int n_best_solns = 0;
+    double time_spent = 0.0;
 
     void printstat()
     {
@@ -61,13 +61,51 @@ struct HeuristicStats
 struct BranchingStats
 {
     string name;
-    long long n_calls;
-    double time_spent;
+    long long n_calls = 0ll;
+    int max_depth = 0;
+    double time_spent = 0.0;
 
     void printstat()
     {
         std::cout << setw(25) << left << name
                   << "calls " << setw(10) << left << n_calls
+                  << " maxdepth " << setw(10) << left << max_depth
+                  << " time " << time_spent
+                  << endl;
+    }
+};
+
+struct PresolveStats
+{
+    string name;
+    long long n_calls = 0ll;
+    int total_changes = 0;
+    double time_spent = 0.0;
+
+    void printstat()
+    {
+        std::cout << setw(25) << left << name
+                  << "calls " << setw(10) << left << n_calls
+                  << " changes " << setw(10) << left << total_changes
+                  << " time " << time_spent
+                  << endl;
+    }
+};
+
+struct SpearatorStats
+{
+    string name;
+    long long n_calls = 0ll;
+    long long cuts_found = 0ll;
+    long long cuts_added = 0ll;
+    double time_spent = 0.0;
+
+    void printstat()
+    {
+        std::cout << setw(25) << left << name
+                  << "calls " << setw(10) << left << n_calls
+                  << " cuts_found " << setw(10) << left << cuts_found
+                  << " cuts_added " << setw(10) << left << cuts_added
                   << " time " << time_spent
                   << endl;
     }
@@ -230,7 +268,7 @@ SCIP_RETCODE execmain(int argc, const char **argv)
     VarHistories var_histories;
     if (obj_only_change)
     {
-        var_histories.SetHistoryResetCount(1.0);
+        var_histories.SetHistoryResetCount(3.0);
     }
     // else if (obj_change)
     // {
@@ -248,6 +286,8 @@ SCIP_RETCODE execmain(int argc, const char **argv)
 
     std::map<string, HeuristicStats> heuristic_stats;
     std::map<string, BranchingStats> branching_stats;
+    std::map<string, PresolveStats> presolve_stats;
+    std::map<string, SpearatorStats> sepa_stats;
 
     for (int index = 0; index < instances.size(); ++index)
     {
@@ -277,7 +317,7 @@ SCIP_RETCODE execmain(int argc, const char **argv)
             SCIP_CALL(SCIPsetIntParam(scip, "separating/maxcutsroot", max_cuts_root.GetBestValue()));
             // SCIP_CALL(SCIPsetIntParam(scip, "branching/pscost/priority", 40000)); // default 2000
         }
-        if (index >= 25)
+        if (index >= 15)
         {
             // Turn off non performing heuristics
             for (auto heuristic : heuristic_stats)
@@ -377,9 +417,12 @@ SCIP_RETCODE execmain(int argc, const char **argv)
             {
                 string name = SCIPbranchruleGetName(branch_rules[i]);
                 double time_spent = SCIPbranchruleGetTime(branch_rules[i]);
+                int max_depth = SCIPbranchruleGetMaxdepth(branch_rules[i]);
                 branching_stats[name].name = name;
                 branching_stats[name].n_calls += n_calls;
                 branching_stats[name].time_spent += time_spent;
+                if (branching_stats[name].max_depth < max_depth)
+                    branching_stats[name].max_depth = max_depth;
                 // TODO Remove this?
                 std::cout << name
                           << " " << n_calls
@@ -408,6 +451,48 @@ SCIP_RETCODE execmain(int argc, const char **argv)
                 //      << " bestsol " << SCIPheurGetNBestSolsFound(heuristics[i])
                 //      << " time " << SCIPheurGetTime(heuristics[i])
                 //      << endl;
+            }
+        }
+
+        // Presolve stats
+        SCIP_PRESOL **presolvers = SCIPgetPresols(scip);
+        int n_presolvers = SCIPgetNPresols(scip);
+        for (int i = 0; i < n_presolvers; ++i)
+        {
+            int n_calls = SCIPpresolGetNCalls(presolvers[i]);
+            if (n_calls > 0)
+            {
+                string name = SCIPpresolGetName(presolvers[i]);
+                presolve_stats[name].name = name;
+                presolve_stats[name].time_spent += SCIPpresolGetTime(presolvers[i]);
+
+                int total_changes = SCIPpresolGetNChgBds(presolvers[i]) +
+                                    SCIPpresolGetNAddConss(presolvers[i]) +
+                                    SCIPpresolGetNAddHoles(presolvers[i]) +
+                                    SCIPpresolGetNAggrVars(presolvers[i]) +
+                                    SCIPpresolGetNChgCoefs(presolvers[i]) +
+                                    SCIPpresolGetNChgSides(presolvers[i]) +
+                                    SCIPpresolGetNChgVarTypes(presolvers[i]) +
+                                    SCIPpresolGetNDelConss(presolvers[i]) +
+                                    SCIPpresolGetNFixedVars(presolvers[i]) +
+                                    SCIPpresolGetNUpgdConss(presolvers[i]);
+                presolve_stats[name].total_changes += total_changes;
+            }
+        }
+
+        // Cuts stats
+        SCIP_SEPA **separators = SCIPgetSepas(scip);
+        int n_sepas = SCIPgetNSepas(scip);
+        for (int i = 0; i < n_sepas; ++i)
+        {
+            int n_calls = SCIPsepaGetNCalls(separators[i]);
+            if (n_calls > 0)
+            {
+                string name = SCIPsepaGetName(separators[i]);
+                sepa_stats[name].name = name;
+                sepa_stats[name].time_spent += SCIPsepaGetTime(separators[i]);
+                sepa_stats[name].cuts_found += SCIPsepaGetNCutsFound(separators[i]);
+                sepa_stats[name].cuts_added += SCIPsepaGetNCutsApplied(separators[i]);
             }
         }
 
