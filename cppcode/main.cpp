@@ -328,6 +328,26 @@ SCIP_RETCODE execmain(int argc, const char **argv)
                     SCIP_CALL(SCIPsetIntParam(scip, heuristic_param.c_str(), -1));
                 }
             }
+
+            // // Turn off non performing presolves
+            // for (auto presolve : presolve_stats)
+            // {
+            //     if (presolve.second.total_changes == 0)
+            //     {
+            //         string presolve_param = "presolving/" + presolve.first + "/maxrounds";
+            //         SCIP_CALL(SCIPsetIntParam(scip, presolve_param.c_str(), 0));
+            //     }
+            // }
+
+            // // Turn off non performing separators
+            // for (auto separator : sepa_stats)
+            // {
+            //     if (separator.second.cuts_added == 0)
+            //     {
+            //         string spea_param = "separating/" + separator.first + "/freq";
+            //         SCIP_CALL(SCIPsetIntParam(scip, spea_param.c_str(), -1));
+            //     }
+            // }
         }
 
         SCIP_VAR **vars;
@@ -465,7 +485,7 @@ SCIP_RETCODE execmain(int argc, const char **argv)
                 string name = SCIPpresolGetName(presolvers[i]);
                 presolve_stats[name].name = name;
                 presolve_stats[name].time_spent += SCIPpresolGetTime(presolvers[i]);
-
+                presolve_stats[name].n_calls += n_calls;
                 int total_changes = SCIPpresolGetNChgBds(presolvers[i]) +
                                     SCIPpresolGetNAddConss(presolvers[i]) +
                                     SCIPpresolGetNAddHoles(presolvers[i]) +
@@ -490,6 +510,7 @@ SCIP_RETCODE execmain(int argc, const char **argv)
             {
                 string name = SCIPsepaGetName(separators[i]);
                 sepa_stats[name].name = name;
+                sepa_stats[name].n_calls += n_calls;
                 sepa_stats[name].time_spent += SCIPsepaGetTime(separators[i]);
                 sepa_stats[name].cuts_found += SCIPsepaGetNCutsFound(separators[i]);
                 sepa_stats[name].cuts_added += SCIPsepaGetNCutsApplied(separators[i]);
