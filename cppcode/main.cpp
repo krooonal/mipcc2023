@@ -15,6 +15,7 @@
 #include <iomanip>
 #include <stdio.h>
 #include <time.h>
+#include <random>
 
 #include "var_history.h"
 #include "solutions.h"
@@ -113,7 +114,8 @@ struct SpearatorStats
 
 SCIP_RETCODE execmain(int argc, const char **argv)
 {
-    srand(42);
+    // srand(42);
+    // mt19937 mt1(42);
     string meta_file_path = argv[1];
     std::cout << meta_file_path << endl;
     int pos = meta_file_path.find("datasets");
@@ -235,17 +237,17 @@ SCIP_RETCODE execmain(int argc, const char **argv)
     SCIPmessagehdlrSetQuiet(SCIPgetMessagehdlr(scip), TRUE);
 
     // Provide prev solution?
-    Parameter<bool> provide_hint(0.3, "provide_hint");
+    Parameter<bool> provide_hint(0.3, "provide_hint", /*seed=*/189);
     provide_hint.AddValue(true);
     provide_hint.AddValue(false);
     int hint_success = 0;
     int hint_total = 0;
 
-    Parameter<int> max_cuts(0.3, "max_cuts");
+    Parameter<int> max_cuts(0.3, "max_cuts", /*seed=*/978);
     max_cuts.AddValue(100);
     max_cuts.AddValue(0);
 
-    Parameter<int> max_cuts_root(0.3, "max_cuts_root");
+    Parameter<int> max_cuts_root(0.3, "max_cuts_root", /*seed=*/1654);
     max_cuts_root.AddValue(2000);
     max_cuts_root.AddValue(0);
 

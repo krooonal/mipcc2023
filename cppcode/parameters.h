@@ -15,6 +15,7 @@
 #include <iomanip>
 #include <stdio.h>
 #include <time.h>
+#include <random>
 
 using namespace std;
 
@@ -22,7 +23,7 @@ template <typename T>
 class Parameter
 {
 public:
-    Parameter(double impact_factor, string name);
+    Parameter(double impact_factor, string name, int seed);
     void AddValue(T value);
     void AdjustScore(double score);
     void AdjustScore(double score, int index);
@@ -42,13 +43,15 @@ private:
     double c_fac_ = 0.3;
     int current_index_ = 0;
     int total_counts_ = 0;
+    mt19937 mt_;
 };
 
 template <typename T>
-Parameter<T>::Parameter(double c_fac, string name)
+Parameter<T>::Parameter(double c_fac, string name, int seed)
 {
     name_ = name;
     c_fac_ = c_fac;
+    seed >> mt_;
 }
 
 template <typename T>
@@ -108,7 +111,7 @@ T Parameter<T>::GetBestValue()
 
     // bucket is never empty. The best param is always in it.
     if (bucket.size() > 1)
-        best_index = bucket[rand() % bucket.size()];
+        best_index = bucket[mt_() % bucket.size()];
     else
         best_index = bucket[0];
 
