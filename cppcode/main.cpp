@@ -317,7 +317,7 @@ SCIP_RETCODE execmain(int argc, const char **argv)
             SCIP_CALL(SCIPsetIntParam(scip, "separating/maxcutsroot", max_cuts_root.GetBestValue()));
             // SCIP_CALL(SCIPsetIntParam(scip, "branching/pscost/priority", 40000)); // default 2000
         }
-        if (index >= 15)
+        if (index >= 25)
         {
             // Turn off non performing heuristics
             for (auto heuristic : heuristic_stats)
@@ -329,25 +329,28 @@ SCIP_RETCODE execmain(int argc, const char **argv)
                 }
             }
 
-            // // Turn off non performing presolves
-            // for (auto presolve : presolve_stats)
-            // {
-            //     if (presolve.second.total_changes == 0)
-            //     {
-            //         string presolve_param = "presolving/" + presolve.first + "/maxrounds";
-            //         SCIP_CALL(SCIPsetIntParam(scip, presolve_param.c_str(), 0));
-            //     }
-            // }
-
             // // Turn off non performing separators
-            // for (auto separator : sepa_stats)
-            // {
-            //     if (separator.second.cuts_added == 0)
-            //     {
-            //         string spea_param = "separating/" + separator.first + "/freq";
-            //         SCIP_CALL(SCIPsetIntParam(scip, spea_param.c_str(), -1));
-            //     }
-            // }
+            for (auto separator : sepa_stats)
+            {
+                if (separator.second.cuts_added == 0 && separator.second.time_spent > 1.0)
+                {
+                    string spea_param = "separating/" + separator.first + "/freq";
+                    SCIP_CALL(SCIPsetIntParam(scip, spea_param.c_str(), -1));
+                }
+            }
+        }
+
+        if (index >= 15)
+        {
+            // Turn off non performing presolves
+            for (auto presolve : presolve_stats)
+            {
+                if (presolve.second.total_changes == 0 && presolve.second.time_spent > 2.0)
+                {
+                    string presolve_param = "presolving/" + presolve.first + "/maxrounds";
+                    SCIP_CALL(SCIPsetIntParam(scip, presolve_param.c_str(), 0));
+                }
+            }
         }
 
         SCIP_VAR **vars;
@@ -437,12 +440,9 @@ SCIP_RETCODE execmain(int argc, const char **argv)
             {
                 string name = SCIPbranchruleGetName(branch_rules[i]);
                 double time_spent = SCIPbranchruleGetTime(branch_rules[i]);
-                int max_depth = SCIPbranchruleGetMaxdepth(branch_rules[i]);
                 branching_stats[name].name = name;
                 branching_stats[name].n_calls += n_calls;
                 branching_stats[name].time_spent += time_spent;
-                if (branching_stats[name].max_depth < max_depth)
-                    branching_stats[name].max_depth = max_depth;
                 // TODO Remove this?
                 std::cout << name
                           << " " << n_calls
