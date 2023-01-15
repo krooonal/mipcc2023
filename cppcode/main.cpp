@@ -237,17 +237,17 @@ SCIP_RETCODE execmain(int argc, const char **argv)
     SCIPmessagehdlrSetQuiet(SCIPgetMessagehdlr(scip), TRUE);
 
     // Provide prev solution?
-    Parameter<bool> provide_hint(0.3, "provide_hint", /*seed=*/189);
+    Parameter<bool> provide_hint(0.3, "provide_hint", /*seed=*/56166895);
     provide_hint.AddValue(true);
     provide_hint.AddValue(false);
     int hint_success = 0;
     int hint_total = 0;
 
-    Parameter<int> max_cuts(0.3, "max_cuts", /*seed=*/978);
+    Parameter<int> max_cuts(0.3, "max_cuts", /*seed=*/984321);
     max_cuts.AddValue(100);
     max_cuts.AddValue(0);
 
-    Parameter<int> max_cuts_root(0.3, "max_cuts_root", /*seed=*/1654);
+    Parameter<int> max_cuts_root(0.3, "max_cuts_root", /*seed=*/5198413);
     max_cuts_root.AddValue(2000);
     max_cuts_root.AddValue(0);
 
