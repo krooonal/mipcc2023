@@ -47,11 +47,10 @@ private:
 };
 
 template <typename T>
-Parameter<T>::Parameter(double c_fac, string name, int seed)
+Parameter<T>::Parameter(double c_fac, string name, int seed) : mt_(seed)
 {
     name_ = name;
     c_fac_ = c_fac;
-    seed >> mt_;
 }
 
 template <typename T>
