@@ -80,4 +80,14 @@ turn off non performing presolve after index 15
 turn off non performing cuts after index 25
 --- 15 jan full ---
 Use mt19937 for random number generation in param tuning.
+--- 15 jan full 2---
+Recompile scip without levelpscost added code.
+--- 16 jan full ---
+switch to pscost after index 4
+
+TODOs
+if only obj change -> history reset to 1
+go back to faster tuning?
+Max restarts as parameter 0,1
+Tune without randomness
 

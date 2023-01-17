@@ -317,7 +317,10 @@ SCIP_RETCODE execmain(int argc, const char **argv)
             SCIP_CALL(SCIPsetIntParam(scip, "presolving/maxrestarts", 0));
             SCIP_CALL(SCIPsetIntParam(scip, "separating/maxcuts", max_cuts.GetBestValue()));
             SCIP_CALL(SCIPsetIntParam(scip, "separating/maxcutsroot", max_cuts_root.GetBestValue()));
-            // SCIP_CALL(SCIPsetIntParam(scip, "branching/pscost/priority", 40000)); // default 2000
+            if (index > 4)
+            {
+                SCIP_CALL(SCIPsetIntParam(scip, "branching/pscost/priority", 40000)); // default 2000
+            }
         }
         if (index >= 25)
         {
