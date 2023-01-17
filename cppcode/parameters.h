@@ -33,6 +33,14 @@ public:
         return current_index_;
     }
     void PrintStats();
+    void SetExploreCount(int explore_count)
+    {
+        explore_count_ = explore_count;
+    }
+    void SetSwitchFlag(int switch_flag)
+    {
+        switch_flag_ = switch_flag;
+    }
 
 private:
     string name_ = "";
@@ -44,6 +52,8 @@ private:
     int current_index_ = 0;
     int total_counts_ = 0;
     mt19937 mt_;
+    int explore_count_ = 10;
+    int switch_flag_ = 0; // Only for binary parameters.
 };
 
 template <typename T>
@@ -83,36 +93,48 @@ void Parameter<T>::AddValue(T value)
 template <typename T>
 T Parameter<T>::GetBestValue()
 {
-    vector<int> bucket;
-    for (int i = 0; i < values_.size(); ++i)
-    {
-        if (counts_[i] < 5)
-            bucket.push_back(i);
-    }
     int best_index = 0;
-    if (bucket.empty())
-    {
-        for (int i = 0; i < values_.size(); ++i)
-        {
-            if (final_scores_[i] > final_scores_[best_index])
-            {
-                best_index = i;
-            }
-        }
-        for (int i = 0; i < values_.size(); ++i)
-        {
-            if (final_scores_[i] + 0.03 > final_scores_[best_index])
-            {
-                bucket.push_back(i);
-            }
-        }
-    }
 
-    // bucket is never empty. The best param is always in it.
-    if (bucket.size() > 1)
-        best_index = bucket[mt_() % bucket.size()];
-    else
-        best_index = bucket[0];
+    if (explore_count_ > 0)
+    {
+        if (values_.size() == 2)
+            best_index = (switch_flag_ & explore_count_) ? 1 : 0;
+        else
+            best_index = mt_() % values_.size();
+        explore_count_--;
+    }
+    else // Exploit.
+    {
+        vector<int> bucket;
+        for (int i = 0; i < values_.size(); ++i)
+        {
+            if (counts_[i] < 4)
+                bucket.push_back(i);
+        }
+        if (bucket.empty())
+        {
+            for (int i = 0; i < values_.size(); ++i)
+            {
+                if (final_scores_[i] > final_scores_[best_index])
+                {
+                    best_index = i;
+                }
+            }
+            for (int i = 0; i < values_.size(); ++i)
+            {
+                // Only converge if gains are significant.
+                if (final_scores_[i] + 0.03 > final_scores_[best_index])
+                {
+                    bucket.push_back(i);
+                }
+            }
+        }
+        // bucket is never empty. The best param is always in it.
+        if (bucket.size() > 1)
+            best_index = bucket[mt_() % bucket.size()];
+        else
+            best_index = bucket[0];
+    }
 
     current_index_ = best_index;
     cout << name_ << ": Trying value: " << values_[best_index]

@@ -133,6 +133,7 @@ SCIP_RETCODE execmain(int argc, const char **argv)
 
     int timeout = 0;
     bool obj_only_change = true;
+    bool rhs_only_change = true;
     bool obj_change = false;
     vector<string> instances;
     ifstream meta_file(meta_file_path);
@@ -150,7 +151,10 @@ SCIP_RETCODE execmain(int argc, const char **argv)
         if (i != std::string::npos)
             line.erase(i, obj_str.length());
         if (line != "-")
+        {
             obj_change = true;
+            rhs_only_change = false;
+        }
 
         getline(meta_file, line); // LO
         string lo_str = "[LO] ";
@@ -161,6 +165,7 @@ SCIP_RETCODE execmain(int argc, const char **argv)
         {
             std::cout << "LO changed " << line << endl;
             obj_only_change = false;
+            rhs_only_change = false;
         }
 
         getline(meta_file, line); // UP
@@ -172,6 +177,7 @@ SCIP_RETCODE execmain(int argc, const char **argv)
         {
             std::cout << "UP changed " << line << endl;
             obj_only_change = false;
+            rhs_only_change = false;
         }
 
         getline(meta_file, line); // LHS
@@ -205,6 +211,7 @@ SCIP_RETCODE execmain(int argc, const char **argv)
         {
             std::cout << "MAT changed " << line << endl;
             obj_only_change = false;
+            rhs_only_change = false;
         }
 
         while (getline(meta_file, line))
@@ -238,16 +245,22 @@ SCIP_RETCODE execmain(int argc, const char **argv)
 
     // Provide prev solution?
     Parameter<bool> provide_hint(0.3, "provide_hint", /*seed=*/56166895);
+    provide_hint.SetExploreCount(8); // Hints are not always converted.
+    provide_hint.SetSwitchFlag(1 << 0);
     provide_hint.AddValue(true);
     provide_hint.AddValue(false);
     int hint_success = 0;
     int hint_total = 0;
 
     Parameter<int> max_cuts(0.3, "max_cuts", /*seed=*/984321);
+    max_cuts.SetExploreCount(8);
+    max_cuts.SetSwitchFlag(1 << 1);
     max_cuts.AddValue(100);
     max_cuts.AddValue(0);
 
     Parameter<int> max_cuts_root(0.3, "max_cuts_root", /*seed=*/5198413);
+    max_cuts_root.SetExploreCount(8);
+    max_cuts_root.SetSwitchFlag(1 << 2);
     max_cuts_root.AddValue(2000);
     max_cuts_root.AddValue(0);
 
@@ -315,10 +328,15 @@ SCIP_RETCODE execmain(int argc, const char **argv)
         {
             // SCIP_CALL(SCIPsetIntParam(scip, "presolving/maxrestarts", max_restarts.GetBestValue()));
             SCIP_CALL(SCIPsetIntParam(scip, "presolving/maxrestarts", 0));
-            SCIP_CALL(SCIPsetIntParam(scip, "separating/maxcuts", max_cuts.GetBestValue()));
-            SCIP_CALL(SCIPsetIntParam(scip, "separating/maxcutsroot", max_cuts_root.GetBestValue()));
             if (index > 4)
             {
+                // Tune some parameters after a delay.
+                SCIP_CALL(SCIPsetIntParam(scip, "separating/maxcuts", max_cuts.GetBestValue()));
+                SCIP_CALL(SCIPsetIntParam(scip, "separating/maxcutsroot", max_cuts_root.GetBestValue()));
+            }
+            if (rhs_only_change && index > 4)
+            {
+                // Pseudocosts are well trained if objective and bounds are not changed.
                 SCIP_CALL(SCIPsetIntParam(scip, "branching/pscost/priority", 40000)); // default 2000
             }
         }

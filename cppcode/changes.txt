@@ -84,10 +84,15 @@ Use mt19937 for random number generation in param tuning.
 Recompile scip without levelpscost added code.
 --- 16 jan full ---
 switch to pscost after index 4
+--- 16 jan full 2---
+(if only lhs/rhs has changed) switch to pscost after index 4
+Explore without randomness (explore count 8)
+Tune cuts after index 4
+
 
 TODOs
 if only obj change -> history reset to 1
 go back to faster tuning?
 Max restarts as parameter 0,1
-Tune without randomness
+
 
