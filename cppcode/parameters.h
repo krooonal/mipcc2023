@@ -212,7 +212,7 @@ void Parameter<T>::PrintStats()
     {
         cout << "Value " << values_[i]
              << " count " << counts_[i]
-             << " Qscore " << scores_[i]
+             << " Qscore " << scores_[i].Mean()
              << " Final score " << final_scores_[i] << endl;
     }
 }
