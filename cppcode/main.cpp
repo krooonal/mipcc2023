@@ -283,7 +283,7 @@ SCIP_RETCODE execmain(int argc, const char **argv)
     VarHistories var_histories;
     if (obj_only_change)
     {
-        var_histories.SetHistoryResetCount(3.0);
+        var_histories.SetHistoryResetCount(1.0);
     }
     // else if (obj_change)
     // {
@@ -578,9 +578,11 @@ SCIP_RETCODE execmain(int argc, const char **argv)
             {
                 provide_hint.AdjustScore(-total_score);
             }
-
-            max_cuts.AdjustScore(-total_score);
-            max_cuts_root.AdjustScore(-total_score);
+            // if (index > 4) // The first value is default value.
+            {
+                max_cuts.AdjustScore(-total_score);
+                max_cuts_root.AdjustScore(-total_score);
+            }
             // history_reset.AdjustScore(-total_score);
             // max_restarts.AdjustScore(-total_score);
         }

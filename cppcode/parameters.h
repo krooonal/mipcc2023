@@ -19,6 +19,63 @@
 
 using namespace std;
 
+// https://www.johndcook.com/blog/standard_deviation/
+class RunningStat
+{
+public:
+    RunningStat() : num_data_(0) {}
+
+    void Clear()
+    {
+        num_data_ = 0;
+    }
+
+    void Push(double x)
+    {
+        num_data_++;
+
+        // See Knuth TAOCP vol 2, 3rd edition, page 232
+        if (num_data_ == 1)
+        {
+            old_mean_ = new_mean_ = x;
+            old_std_ = 0.0;
+        }
+        else
+        {
+            new_mean_ = old_mean_ + (x - old_mean_) / num_data_;
+            new_std_ = old_std_ + (x - old_mean_) * (x - new_mean_);
+
+            // set up for next iteration
+            old_mean_ = new_mean_;
+            old_std_ = new_std_;
+        }
+    }
+
+    int NumDataValues() const
+    {
+        return num_data_;
+    }
+
+    double Mean() const
+    {
+        return (num_data_ > 0) ? new_mean_ : 0.0;
+    }
+
+    double Variance() const
+    {
+        return ((num_data_ > 1) ? new_std_ / (num_data_ - 1) : 0.0);
+    }
+
+    double StandardDeviation() const
+    {
+        return sqrt(Variance());
+    }
+
+private:
+    int num_data_;
+    double old_mean_, new_mean_, old_std_, new_std_;
+};
+
 template <typename T>
 class Parameter
 {
@@ -45,7 +102,7 @@ public:
 private:
     string name_ = "";
     std::vector<T> values_;
-    std::vector<double> scores_;
+    std::vector<RunningStat> scores_;
     std::vector<double> final_scores_;
     std::vector<int> counts_;
     double c_fac_ = 0.3;
@@ -72,10 +129,11 @@ void Parameter<T>::AdjustScore(double score)
 template <typename T>
 void Parameter<T>::AdjustScore(double score, int index)
 {
-    scores_[index] = (scores_[index] * counts_[index] + score) / (counts_[index] + 1);
+    // scores_[index] = (scores_[index] * counts_[index] + score) / (counts_[index] + 1);
+    scores_[index].Push(score);
     counts_[index] += 1;
     total_counts_ += 1;
-    final_scores_[index] = scores_[index] + (c_fac_ / counts_[index]);
+    final_scores_[index] = scores_[index].Mean() + (c_fac_ / counts_[index]);
     cout << name_ << ": Updated score of " << values_[index]
          << " to " << final_scores_[index] << endl;
 }
@@ -84,7 +142,8 @@ template <typename T>
 void Parameter<T>::AddValue(T value)
 {
     values_.push_back(value);
-    scores_.push_back(0.0);
+    RunningStat s;
+    scores_.push_back(s);
     // High scores for the value that hasn't been tried yet.
     final_scores_.push_back(5.0);
     counts_.push_back(0);
@@ -123,7 +182,8 @@ T Parameter<T>::GetBestValue()
             for (int i = 0; i < values_.size(); ++i)
             {
                 // Only converge if gains are significant.
-                if (final_scores_[i] + 0.03 > final_scores_[best_index])
+                if (final_scores_[i] + scores_[i].StandardDeviation() >
+                    final_scores_[best_index])
                 {
                     bucket.push_back(i);
                 }

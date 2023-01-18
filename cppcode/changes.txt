@@ -88,10 +88,13 @@ switch to pscost after index 4
 (if only lhs/rhs has changed) switch to pscost after index 4
 Explore without randomness (explore count 8)
 Tune cuts after index 4
+--- 17 jan full ---
+parameters: If final scores are within standard dev, pick randomly
+if only obj change -> history reset to 1
 
 
 TODOs
-if only obj change -> history reset to 1
+
 go back to faster tuning?
 Max restarts as parameter 0,1
 
