@@ -200,6 +200,7 @@ T Parameter<T>::GetBestValue()
     cout << name_ << ": Trying value: " << values_[best_index]
          << " at index: " << best_index
          << " Score: " << final_scores_[best_index]
+         << " Stdev: " << scores_[best_index].StandardDeviation()
          << endl;
     return values_[best_index];
 }
