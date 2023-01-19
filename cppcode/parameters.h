@@ -182,7 +182,7 @@ T Parameter<T>::GetBestValue()
             for (int i = 0; i < values_.size(); ++i)
             {
                 // Only converge if gains are significant.
-                if (final_scores_[i] + scores_[i].StandardDeviation() >
+                if (final_scores_[i] + scores_[i].StandardDeviation() / 10.0 >
                     final_scores_[best_index])
                 {
                     bucket.push_back(i);
