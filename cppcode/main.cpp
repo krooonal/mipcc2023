@@ -283,7 +283,7 @@ SCIP_RETCODE execmain(int argc, const char **argv)
     VarHistories var_histories;
     if (obj_only_change)
     {
-        var_histories.SetHistoryResetCount(1.0);
+        // var_histories.SetHistoryResetCount(1.0);
     }
     // else if (obj_change)
     // {
