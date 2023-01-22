@@ -268,9 +268,11 @@ SCIP_RETCODE execmain(int argc, const char **argv)
     // history_reset.AddValue(4.0);
     // history_reset.AddValue(3.0);
 
-    // Parameter<int> max_restarts(0.3, "max_restarts");
-    // max_restarts.AddValue(0);
-    // max_restarts.AddValue(1);
+    Parameter<int> max_restarts(0.3, "max_restarts", /*seed=*/285949);
+    max_restarts.SetExploreCount(8);
+    max_restarts.SetSwitchFlag(1 << 0);
+    max_restarts.AddValue(0);
+    max_restarts.AddValue(1);
 
     // Parameter<int> bfs_priority(0.3, "bfs_priority");
     // bfs_priority.AddValue(100000);
@@ -326,8 +328,7 @@ SCIP_RETCODE execmain(int argc, const char **argv)
         SCIP_CALL(SCIPsetRealParam(scip, "limits/time", timeout - 2));
         if (index > 0)
         {
-            // SCIP_CALL(SCIPsetIntParam(scip, "presolving/maxrestarts", max_restarts.GetBestValue()));
-            SCIP_CALL(SCIPsetIntParam(scip, "presolving/maxrestarts", 0));
+
             if (index > 4)
             {
                 // Tune some parameters after a delay.
@@ -338,6 +339,14 @@ SCIP_RETCODE execmain(int argc, const char **argv)
             {
                 // Pseudocosts are well trained if objective and bounds are not changed.
                 SCIP_CALL(SCIPsetIntParam(scip, "branching/pscost/priority", 40000)); // default 2000
+            }
+            if (index > 9)
+            {
+                SCIP_CALL(SCIPsetIntParam(scip, "presolving/maxrestarts", max_restarts.GetBestValue()));
+            }
+            else
+            {
+                SCIP_CALL(SCIPsetIntParam(scip, "presolving/maxrestarts", 0));
             }
         }
         if (index >= 25)
@@ -584,7 +593,7 @@ SCIP_RETCODE execmain(int argc, const char **argv)
                 max_cuts_root.AdjustScore(-total_score);
             }
             // history_reset.AdjustScore(-total_score);
-            // max_restarts.AdjustScore(-total_score);
+            max_restarts.AdjustScore(-total_score);
         }
         // system("echo -n \"[END] \";date -Iseconds");
         std::cout << "[END] " << CurrentDateTime() << "\n"
