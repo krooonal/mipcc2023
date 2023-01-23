@@ -326,6 +326,19 @@ SCIP_RETCODE execmain(int argc, const char **argv)
 
         // TODO: use timeout -1
         SCIP_CALL(SCIPsetRealParam(scip, "limits/time", timeout - 2));
+
+        if (index == 0)
+        {
+            // Solve first instance with pure strong branching.
+            SCIP_CALL(SCIPsetIntParam(scip, "branching/fullstrong/priority", 40000)); // default 0
+            // SCIP_CALL(SCIPsetRealParam(scip, "branching/relpscost/maxreliable", 10.0)); // default 5
+        }
+        else
+        {
+            // Back to normal.
+            SCIP_CALL(SCIPsetIntParam(scip, "branching/fullstrong/priority", 0)); // default 0
+            // SCIP_CALL(SCIPsetRealParam(scip, "branching/relpscost/maxreliable", 5.0)); // default 5
+        }
         if (index > 0)
         {
 
@@ -603,7 +616,7 @@ SCIP_RETCODE execmain(int argc, const char **argv)
     max_cuts.PrintStats();
     max_cuts_root.PrintStats();
     // history_reset.PrintStats();
-    // max_restarts.PrintStats();
+    max_restarts.PrintStats();
     std::cout << "Provided hints: " << hint_total
               << " successful hints: " << hint_success << endl;
 
