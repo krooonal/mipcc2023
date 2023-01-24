@@ -473,6 +473,7 @@ SCIP_RETCODE execmain(int argc, const char **argv)
         std::cout << "first_sol_time: " << first_sol_time << endl;
         std::cout << "total_score: " << total_score << endl;
         std::cout << "adjusted_score: " << adjusted_score << endl;
+        std::cout << "Number of runs: " << scip->stat->nruns << endl;
 
         // Print branching stats
         SCIP_BRANCHRULE **branch_rules = SCIPgetBranchrules(scip);
@@ -616,7 +617,7 @@ SCIP_RETCODE execmain(int argc, const char **argv)
             }
         }
         // system("echo -n \"[END] \";date -Iseconds");
-        std::cout << "[END] " << CurrentDateTime() << "\n"
+        std::cout << "[END] " << CurrentDateTime() << "\n\n"
                   << std::flush;
     }
     provide_hint.PrintStats();
