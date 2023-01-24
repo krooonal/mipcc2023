@@ -330,14 +330,14 @@ SCIP_RETCODE execmain(int argc, const char **argv)
         if (index == 0)
         {
             // Solve first instance with pure strong branching.
-            SCIP_CALL(SCIPsetIntParam(scip, "branching/fullstrong/priority", 40000)); // default 0
-            // SCIP_CALL(SCIPsetRealParam(scip, "branching/relpscost/maxreliable", 10.0)); // default 5
+            // SCIP_CALL(SCIPsetIntParam(scip, "branching/fullstrong/priority", 40000)); // default 0
+            SCIP_CALL(SCIPsetRealParam(scip, "branching/relpscost/maxreliable", 10.0)); // default 5
         }
         else
         {
             // Back to normal.
-            SCIP_CALL(SCIPsetIntParam(scip, "branching/fullstrong/priority", 0)); // default 0
-            // SCIP_CALL(SCIPsetRealParam(scip, "branching/relpscost/maxreliable", 5.0)); // default 5
+            // SCIP_CALL(SCIPsetIntParam(scip, "branching/fullstrong/priority", 0)); // default 0
+            SCIP_CALL(SCIPsetRealParam(scip, "branching/relpscost/maxreliable", 5.0)); // default 5
         }
         if (index > 0)
         {
@@ -606,7 +606,14 @@ SCIP_RETCODE execmain(int argc, const char **argv)
                 max_cuts_root.AdjustScore(-total_score);
             }
             // history_reset.AdjustScore(-total_score);
-            max_restarts.AdjustScore(-total_score);
+            if (scip->stat->nruns > 1)
+            {
+                max_restarts.AdjustScore(-total_score, 1);
+            }
+            else
+            {
+                max_restarts.AdjustScore(-total_score, 0);
+            }
         }
         // system("echo -n \"[END] \";date -Iseconds");
         std::cout << "[END] " << CurrentDateTime() << "\n"
