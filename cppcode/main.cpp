@@ -237,6 +237,7 @@ SCIP_RETCODE execmain(int argc, const char **argv)
     SCIP_CALL(SCIPcreate(&scip)); // Creating the SCIP environment
     // include default plugins.
     SCIP_CALL(SCIPincludeDefaultPlugins(scip));
+    std::cout << "SCIP Version: " << SCIPversion() << endl;
     // Creating the SCIP Problem.
     SCIP_CALL(SCIPcreateProbBasic(scip, "Reoptimization"));
 
@@ -330,14 +331,14 @@ SCIP_RETCODE execmain(int argc, const char **argv)
         if (index == 0)
         {
             // Solve first instance with pure strong branching.
-            // SCIP_CALL(SCIPsetIntParam(scip, "branching/fullstrong/priority", 40000)); // default 0
-            SCIP_CALL(SCIPsetRealParam(scip, "branching/relpscost/maxreliable", 10.0)); // default 5
+            SCIP_CALL(SCIPsetIntParam(scip, "branching/fullstrong/priority", 40000)); // default 0
+            // SCIP_CALL(SCIPsetRealParam(scip, "branching/relpscost/maxreliable", 10.0)); // default 5
         }
         else
         {
             // Back to normal.
-            // SCIP_CALL(SCIPsetIntParam(scip, "branching/fullstrong/priority", 0)); // default 0
-            SCIP_CALL(SCIPsetRealParam(scip, "branching/relpscost/maxreliable", 5.0)); // default 5
+            SCIP_CALL(SCIPsetIntParam(scip, "branching/fullstrong/priority", 0)); // default 0
+            // SCIP_CALL(SCIPsetRealParam(scip, "branching/relpscost/maxreliable", 5.0)); // default 5
         }
         if (index > 0)
         {
@@ -353,14 +354,14 @@ SCIP_RETCODE execmain(int argc, const char **argv)
                 // Pseudocosts are well trained if objective and bounds are not changed.
                 SCIP_CALL(SCIPsetIntParam(scip, "branching/pscost/priority", 40000)); // default 2000
             }
-            if (index > 9)
-            {
-                SCIP_CALL(SCIPsetIntParam(scip, "presolving/maxrestarts", max_restarts.GetBestValue()));
-            }
-            else
-            {
-                SCIP_CALL(SCIPsetIntParam(scip, "presolving/maxrestarts", 0));
-            }
+            // if (index > 9)
+            // {
+            //     SCIP_CALL(SCIPsetIntParam(scip, "presolving/maxrestarts", max_restarts.GetBestValue()));
+            // }
+            // else
+            // {
+            SCIP_CALL(SCIPsetIntParam(scip, "presolving/maxrestarts", 0));
+            // }
         }
         if (index >= 25)
         {
