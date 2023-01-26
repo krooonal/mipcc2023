@@ -25,7 +25,7 @@ add_executable(experiment experiment.cpp)
 target_link_libraries(experiment ${SCIP_LIBRARIES})
 
 add_executable(basecppex basemain.cpp)
-target_link_libraries(cppex ${SCIP_LIBRARIES})
+target_link_libraries(basecppex ${SCIP_LIBRARIES})
 
 if( TARGET examples )
     add_dependencies( examples cppex )
