@@ -5,4 +5,6 @@
 #cd cppcode/build/
 #make
 #cd ../../
-./cppcode/build/cppex $1
+# ./cppcode/build/cppex $1
+
+./cppcode/build/basecppex $1
