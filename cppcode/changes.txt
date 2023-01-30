@@ -110,7 +110,9 @@ scip v 8.0.3
 back to scip v 8.0.2
 --- 26 jan base full ---
 Conditional compilation in mipcomp.sh
-completesol heuristic nodesofs to 1000 (default 500)
+completesol heuristic nodesofs to 5000 (default 500)
+completesol heuristic solutions to -1 (default 5)
+Provide 9 prev solutions.
 
 
 TODOs

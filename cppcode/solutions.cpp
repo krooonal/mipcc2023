@@ -126,7 +126,7 @@ SCIP_RETCODE SolutionPool::AddToModel(SCIP *scip,
     if (solutions_.empty())
         return SCIP_OKAY;
     int num_solutions = solutions_.size();
-    int num_solutions_to_add = min(num_solutions, 5);
+    int num_solutions_to_add = min(num_solutions, 9);
     for (int i = 0; i < num_solutions_to_add; ++i)
     {
         Solution &solution = solutions_[num_solutions - 1 - i];

@@ -342,7 +342,8 @@ SCIP_RETCODE execmain(int argc, const char **argv)
         }
         if (index > 0)
         {
-            SCIP_CALL(SCIPsetLongintParam(scip, "heuristics/completesol/nodesofs", 1000)); // default 500
+            SCIP_CALL(SCIPsetLongintParam(scip, "heuristics/completesol/nodesofs", 5000)); // default 500
+            SCIP_CALL(SCIPsetIntParam(scip, "heuristics/completesol/solutions", -1));      // default 5
             if (index > 4)
             {
                 // Tune some parameters after a delay.
