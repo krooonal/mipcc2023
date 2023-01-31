@@ -453,7 +453,7 @@ SCIP_RETCODE execmain(int argc, const char **argv)
         solution.Populate(scip, scip_variables, sol);
         solution_pool.AddSolution(solution);
         var_histories.Populate(scip, scip_variables);
-        if (obj_only_change)
+        // if (obj_only_change)
         {
             cuts_pool.CaptureCuts(scip);
         }
