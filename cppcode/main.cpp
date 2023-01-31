@@ -19,9 +19,10 @@
 
 #include "var_history.h"
 #include "solutions.h"
-#include "event_solfeedback.h"
+#include "cuts_pool.h"
+// #include "event_solfeedback.h"
 #include "parameters.h"
-#include "branch_cumpscost.h"
+// #include "branch_cumpscost.h"
 // #include "branch_levelpscost.h"
 
 using namespace std;
@@ -280,6 +281,7 @@ SCIP_RETCODE execmain(int argc, const char **argv)
 
     SolutionPool solution_pool;
     VarHistories var_histories;
+    CutsPool cuts_pool;
     if (obj_only_change)
     {
         // All previous solutions are feasible. Spend less time exploring them.
@@ -451,12 +453,10 @@ SCIP_RETCODE execmain(int argc, const char **argv)
         solution.Populate(scip, scip_variables, sol);
         solution_pool.AddSolution(solution);
         var_histories.Populate(scip, scip_variables);
-
-        // Gather cuts.
-        SCIP_CUT **scip_cuts;
-        scip_cuts = SCIPgetPoolCuts(scip);
-        int scip_n_cuts = SCIPgetNPoolCuts(scip);
-        std::cout << "Number of cuts: " << scip_n_cuts << endl;
+        if (obj_only_change)
+        {
+            cuts_pool.CaptureCuts(scip);
+        }
 
         // Statistics
         double relative_gap = SCIPgetGap(scip);
@@ -484,7 +484,7 @@ SCIP_RETCODE execmain(int argc, const char **argv)
         // Print branching stats
         SCIP_BRANCHRULE **branch_rules = SCIPgetBranchrules(scip);
         int n_branch_rules = SCIPgetNBranchrules(scip);
-        std::cout << "Branching stats\n";
+        // std::cout << "Branching stats\n";
         for (int i = 0; i < n_branch_rules; ++i)
         {
             int n_calls = SCIPbranchruleGetNLPCalls(branch_rules[i]);
