@@ -64,6 +64,11 @@ public:
         common_sol_factor_ *= increase_factor_;
     }
 
+    void SetNumHintSolns(int num)
+    {
+        num_hint_solns_ = num;
+    }
+
 private:
     std::vector<Solution> solutions_;
     Solution common_sol_;
@@ -73,6 +78,7 @@ private:
     std::map<string, std::map<double, int>> varvaluefreq_;
     std::vector<SCIP_VAR *> *current_scip_variables_;
     int last_added_solution_index_ = -1;
+    int num_hint_solns_ = 9;
 };
 
 #endif

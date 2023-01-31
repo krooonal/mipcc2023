@@ -275,10 +275,6 @@ SCIP_RETCODE execmain(int argc, const char **argv)
     max_restarts.AddValue(0);
     max_restarts.AddValue(1);
 
-    // Parameter<int> bfs_priority(0.3, "bfs_priority");
-    // bfs_priority.AddValue(100000);
-    // bfs_priority.AddValue(300000);
-
     SCIP_RESULT *result;
     result = new SCIP_RESULT[3];
 
@@ -286,7 +282,8 @@ SCIP_RETCODE execmain(int argc, const char **argv)
     VarHistories var_histories;
     if (obj_only_change)
     {
-        // var_histories.SetHistoryResetCount(1.0);
+        // All previous solutions are feasible. Spend less time exploring them.
+        solution_pool.SetNumHintSolns(5);
     }
     // else if (obj_change)
     // {
@@ -334,16 +331,17 @@ SCIP_RETCODE execmain(int argc, const char **argv)
             SCIP_CALL(SCIPsetIntParam(scip, "branching/fullstrong/priority", 40000)); // default 0
             // SCIP_CALL(SCIPsetRealParam(scip, "branching/relpscost/maxreliable", 10.0)); // default 5
         }
-        else
+        if (index > 0)
         {
             // Back to normal.
             SCIP_CALL(SCIPsetIntParam(scip, "branching/fullstrong/priority", 0)); // default 0
             // SCIP_CALL(SCIPsetRealParam(scip, "branching/relpscost/maxreliable", 5.0)); // default 5
-        }
-        if (index > 0)
-        {
-            SCIP_CALL(SCIPsetLongintParam(scip, "heuristics/completesol/nodesofs", 5000)); // default 500
-            SCIP_CALL(SCIPsetIntParam(scip, "heuristics/completesol/solutions", -1));      // default 5
+            if (!obj_only_change)
+            {
+                // Regular efforts works if only the objective has changed. Otherwise, increase the effort.
+                SCIP_CALL(SCIPsetLongintParam(scip, "heuristics/completesol/nodesofs", 5000)); // default 500
+                SCIP_CALL(SCIPsetIntParam(scip, "heuristics/completesol/solutions", -1));      // default 5
+            }
             if (index > 4)
             {
                 // Tune some parameters after a delay.
@@ -453,6 +451,12 @@ SCIP_RETCODE execmain(int argc, const char **argv)
         solution.Populate(scip, scip_variables, sol);
         solution_pool.AddSolution(solution);
         var_histories.Populate(scip, scip_variables);
+
+        // Gather cuts.
+        SCIP_CUT **scip_cuts;
+        scip_cuts = SCIPgetPoolCuts(scip);
+        int scip_n_cuts = SCIPgetNPoolCuts(scip);
+        std::cout << "Number of cuts: " << scip_n_cuts << endl;
 
         // Statistics
         double relative_gap = SCIPgetGap(scip);
