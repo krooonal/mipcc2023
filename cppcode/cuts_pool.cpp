@@ -64,3 +64,35 @@ void CutsPool::CaptureCuts(SCIP *scip, SCIP_SOL *sol)
     }
     cout << "Current cut size: " << all_cuts_.size() << endl;
 }
+
+void CutsPool::AddCutsToModel(SCIP *scip, std::vector<SCIP_VAR *> &scip_variables)
+{
+    name_var_.clear();
+    for (SCIP_VAR *var : scip_variables)
+    {
+        const string name = SCIPvarGetName(var);
+        name_var_[name] = var;
+    }
+    int num_cuts = all_cuts_.size();
+    for (int i = 0; i < min(10, num_cuts); ++i)
+    {
+        Cut &cut = all_cuts_[i];
+        SCIP_CONS *cons;
+        string name = "cut_" + std::to_string(i);
+        SCIPcreateConsLinear(scip, &cons, name.c_str(), 0, NULL, NULL,
+                             cut.lhs, cut.rhs,
+                             /*initial=*/false, /*separate=*/TRUE,
+                             /*enforce=*/TRUE, /*check=*/false,
+                             /*propagate=*/TRUE, /*local=*/FALSE,
+                             /*modifiable=*/FALSE, /*dynamic=*/FALSE,
+                             /*removable=*/true, /*stickingatnode=*/FALSE);
+        for (int j = 0; j < cut.vars.size(); ++j)
+        {
+            SCIP_VAR *var = name_var_[cut.vars[j]];
+            double coeff = cut.coeffs[j];
+            SCIPaddCoefLinear(scip, cons, var, coeff);
+        }
+        SCIPaddCons(scip, cons);
+        cout << "Added cut\n";
+    }
+}

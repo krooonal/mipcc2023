@@ -28,7 +28,7 @@ class CutsPool
 {
 public:
     void CaptureCuts(SCIP *scip, SCIP_SOL *sol);
-    // void AddCutsToModel(SCIP *scip);
+    void AddCutsToModel(SCIP *scip, std::vector<SCIP_VAR *> &scip_variables);
 
 private:
     std::map<string, SCIP_VAR *> name_var_;

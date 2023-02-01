@@ -164,7 +164,7 @@ SCIP_RETCODE execmain(int argc, const char **argv)
             line.erase(i, lo_str.length());
         if (line != "-")
         {
-            std::cout << "LO changed " << line << endl;
+            std::cout << "LO changed " << endl;
             obj_only_change = false;
             rhs_only_change = false;
         }
@@ -176,7 +176,7 @@ SCIP_RETCODE execmain(int argc, const char **argv)
             line.erase(i, up_str.length());
         if (line != "-")
         {
-            std::cout << "UP changed " << line << endl;
+            std::cout << "UP changed " << endl;
             obj_only_change = false;
             rhs_only_change = false;
         }
@@ -188,7 +188,7 @@ SCIP_RETCODE execmain(int argc, const char **argv)
             line.erase(i, lhs_str.length());
         if (line != "-")
         {
-            std::cout << "LHS changed " << line << endl;
+            std::cout << "LHS changed " << endl;
             obj_only_change = false;
         }
 
@@ -199,7 +199,7 @@ SCIP_RETCODE execmain(int argc, const char **argv)
             line.erase(i, rhs_str.length());
         if (line != "-")
         {
-            std::cout << "RHS changed " << line << endl;
+            std::cout << "RHS changed " << endl;
             obj_only_change = false;
         }
 
@@ -210,7 +210,7 @@ SCIP_RETCODE execmain(int argc, const char **argv)
             line.erase(i, mat_str.length());
         if (line != "-")
         {
-            std::cout << "MAT changed " << line << endl;
+            std::cout << "MAT changed " << endl;
             obj_only_change = false;
             rhs_only_change = false;
         }
@@ -226,11 +226,6 @@ SCIP_RETCODE execmain(int argc, const char **argv)
         //     std::cout << instance << endl;
         // }
         meta_file.close();
-    }
-
-    if (obj_only_change)
-    {
-        std::cout << "Obj only change" << endl;
     }
 
     SCIP *scip = nullptr;
@@ -420,6 +415,11 @@ SCIP_RETCODE execmain(int argc, const char **argv)
             // solution_pool.SetCurrentScipVars(&scip_variables);
             // var_histories.SetHistoryResetCount(history_reset.GetBestValue());
             var_histories.AddToModel(scip, scip_variables);
+            if (obj_only_change)
+            {
+                // Reuse some cuts!
+                cuts_pool.AddCutsToModel(scip, scip_variables);
+            }
         }
 
         // Solve
