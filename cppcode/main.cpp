@@ -455,7 +455,7 @@ SCIP_RETCODE execmain(int argc, const char **argv)
         var_histories.Populate(scip, scip_variables);
         // if (obj_only_change)
         {
-            cuts_pool.CaptureCuts(scip);
+            cuts_pool.CaptureCuts(scip, sol);
         }
 
         // Statistics

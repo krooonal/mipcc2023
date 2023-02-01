@@ -27,7 +27,7 @@ public:
 class CutsPool
 {
 public:
-    void CaptureCuts(SCIP *scip);
+    void CaptureCuts(SCIP *scip, SCIP_SOL *sol);
     // void AddCutsToModel(SCIP *scip);
 
 private:
