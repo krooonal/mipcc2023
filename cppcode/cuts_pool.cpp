@@ -49,7 +49,7 @@ void CutsPool::CaptureCuts(SCIP *scip, SCIP_SOL *sol)
             double sol_val = SCIPgetSolVal(scip, sol, var);
             expr_val += coeff * sol_val;
         }
-        if (expr_val < cut.lhs || expr_val > cut.rhs)
+        if (expr_val + 1e-6 < cut.lhs || expr_val > cut.rhs + 1e-6)
         {
             cout << "Cut violated in original space\n";
             cout << cut.lhs << " " << cut.rhs << " " << expr_val << endl;
