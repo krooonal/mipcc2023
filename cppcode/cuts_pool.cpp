@@ -4,6 +4,15 @@
 
 using namespace std;
 
+bool cut_sorter(Cut const &c1, Cut const &c2)
+{
+    if (c1.age == c2.age)
+    {
+        return c1.active_lps > c2.active_lps;
+    }
+    return c1.age < c2.age;
+}
+
 void CutsPool::CaptureCuts(SCIP *scip, SCIP_SOL *sol)
 {
     // Gather cuts.
@@ -13,15 +22,18 @@ void CutsPool::CaptureCuts(SCIP *scip, SCIP_SOL *sol)
     std::cout << "Number of cuts: " << scip_n_cuts << endl;
     for (int i = 0; i < scip_n_cuts; ++i)
     {
-        SCIP_CUT *cut = scip_cuts[i];
-        int age = SCIPcutGetAge(cut);
-        SCIP_ROW *row = SCIPcutGetRow(cut);
-        double lhs = SCIProwGetLhs(row);
-        double rhs = SCIProwGetRhs(row);
+        Cut cut;
+        SCIP_CUT *scip_cut = scip_cuts[i];
+        cut.age = SCIPcutGetAge(scip_cut);
+        SCIP_ROW *row = SCIPcutGetRow(scip_cut);
+        cut.lhs = SCIProwGetLhs(row);
+        cut.rhs = SCIProwGetRhs(row);
+        cut.active_lps = SCIProwGetActiveLPCount(row);
         SCIP_COL **cols = SCIProwGetCols(row);
         int n_nonzeros = SCIProwGetNNonz(row);
         double *coeffs = SCIProwGetVals(row);
         double expr_val = 0.0;
+
         for (int j = 0; j < n_nonzeros; ++j)
         {
             double coeff = coeffs[j];
@@ -31,21 +43,23 @@ void CutsPool::CaptureCuts(SCIP *scip, SCIP_SOL *sol)
             while (var->nparentvars >= 1 && SCIPvarGetStatus(var) != SCIP_VARSTATUS_ORIGINAL)
                 var = var->parentvars[0];
             string name = SCIPvarGetName(var);
-            if (i == 0)
-            {
-                cout << coeff << name << " ";
-            }
+            cut.vars.push_back(name);
+            cut.coeffs.push_back(coeff);
             double sol_val = SCIPgetSolVal(scip, sol, var);
             expr_val += coeff * sol_val;
         }
-        if (i == 0)
+        if (expr_val < cut.lhs || expr_val > cut.rhs)
         {
-            cout << lhs << " " << rhs << endl;
-        }
-        if (expr_val < lhs || expr_val > rhs)
-        {
-            cout << lhs << " " << rhs << " " << expr_val << endl;
+            cout << "Cut violated in original space\n";
+            cout << cut.lhs << " " << cut.rhs << " " << expr_val << endl;
             assert(false);
         }
+        all_cuts_.push_back(cut);
     }
+    std::sort(all_cuts_.begin(), all_cuts_.end(), cut_sorter);
+    if (all_cuts_.size() > 100)
+    {
+        all_cuts_.resize(100);
+    }
+    cout << "Current cut size: " << all_cuts_.size() << endl;
 }

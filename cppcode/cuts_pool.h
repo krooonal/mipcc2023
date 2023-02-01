@@ -15,14 +15,14 @@
 
 using namespace std;
 
-class Cut
+struct Cut
 {
-public:
     std::vector<string> vars;
     std::vector<double> coeffs;
     double lhs;
     double rhs;
     double age;
+    long long active_lps;
 };
 class CutsPool
 {
