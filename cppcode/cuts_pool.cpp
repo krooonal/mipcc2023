@@ -1,5 +1,5 @@
 #include <scip/struct_cuts.h>
-#include <scip/struct_var.h>
+#include "scip/struct_var.h"
 #include "cuts_pool.h"
 
 using namespace std;
@@ -27,11 +27,11 @@ void CutsPool::CaptureCuts(SCIP *scip, SCIP_SOL *sol)
             double coeff = coeffs[j];
             SCIP_COL *col = cols[j];
             SCIP_VAR *var = SCIPcolGetVar(col);
-            if (var->nparentvars > 0)
-            {
-                var = var->parentvars[0];
-            }
-            string name = SCIPvarGetName(var);
+            // if (var->nparentvars > 0)
+            // {
+            //     var = var->parentvars[0];
+            // }
+            string name = SCIPvarGetName(var->parentvars[0]);
             if (i == 0)
             {
                 cout << coeff << name << " ";
