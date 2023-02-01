@@ -1,6 +1,6 @@
+#include "cuts_pool.h"
 #include <scip/struct_cuts.h>
 #include "scip/struct_var.h"
-#include "cuts_pool.h"
 
 using namespace std;
 
