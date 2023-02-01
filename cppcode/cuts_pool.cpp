@@ -27,11 +27,16 @@ void CutsPool::CaptureCuts(SCIP *scip, SCIP_SOL *sol)
             double coeff = coeffs[j];
             SCIP_COL *col = cols[j];
             SCIP_VAR *var = SCIPcolGetVar(col);
+            string name = SCIPvarGetName(var);
+            if (i == 0)
+            {
+                cout << coeff << name << " ";
+            }
             if (var->nparentvars > 0)
             {
                 var = var->parentvars[0];
             }
-            string name = SCIPvarGetName(var);
+            name = SCIPvarGetName(var);
             if (i == 0)
             {
                 cout << coeff << name << " ";
