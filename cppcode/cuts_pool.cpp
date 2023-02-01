@@ -1,3 +1,4 @@
+#include <algorithm>
 #include "cuts_pool.h"
 #include <scip/struct_cuts.h>
 #include "scip/struct_var.h"
