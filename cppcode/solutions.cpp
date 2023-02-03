@@ -163,10 +163,6 @@ SCIP_RETCODE SolutionPool::AddToModel(SCIP *scip,
             SCIP_CALL(SCIPsetSolVal(scip, common_solution, var, value));
             num_var_hinted++;
         }
-        else
-        {
-            // cout << varvaluefreq_[var_name][value] << " did not qualify\n";
-        }
     }
     cout << "Number of vars hinted = " << num_var_hinted << endl;
     SCIP_Bool is_stored;
@@ -174,8 +170,6 @@ SCIP_RETCODE SolutionPool::AddToModel(SCIP *scip,
     if (is_stored)
     {
         cout << "Added a common partial solution\n";
-        // cout << "Number of partial solutions: "
-        // << SCIPgetNPartialSols(scip) << "\n";
     }
     return SCIP_OKAY;
 }

@@ -74,6 +74,7 @@ void CutsPool::AddCutsToModel(SCIP *scip, std::vector<SCIP_VAR *> &scip_variable
         name_var_[name] = var;
     }
     int num_cuts = all_cuts_.size();
+    int added_cuts_count = 0;
     for (int i = 0; i < min(10, num_cuts); ++i)
     {
         Cut &cut = all_cuts_[i];
@@ -93,6 +94,8 @@ void CutsPool::AddCutsToModel(SCIP *scip, std::vector<SCIP_VAR *> &scip_variable
             SCIPaddCoefLinear(scip, cons, var, coeff);
         }
         SCIPaddCons(scip, cons);
-        cout << "Added cut\n";
+        added_cuts_count++;
+        // cout << "Added cut\n";
     }
+    cout << "Added cuts: " << added_cuts_count << endl;
 }
