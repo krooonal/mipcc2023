@@ -19,7 +19,7 @@
 
 #include "var_history.h"
 #include "solutions.h"
-#include "cuts_pool.h"
+// #include "cuts_pool.h"
 // #include "event_solfeedback.h"
 #include "parameters.h"
 // #include "branch_cumpscost.h"
@@ -276,7 +276,7 @@ SCIP_RETCODE execmain(int argc, const char **argv)
 
     SolutionPool solution_pool;
     VarHistories var_histories;
-    CutsPool cuts_pool;
+    // CutsPool cuts_pool;
     if (obj_only_change)
     {
         // All previous solutions are feasible. Spend less time exploring them.
@@ -415,11 +415,11 @@ SCIP_RETCODE execmain(int argc, const char **argv)
             // solution_pool.SetCurrentScipVars(&scip_variables);
             // var_histories.SetHistoryResetCount(history_reset.GetBestValue());
             var_histories.AddToModel(scip, scip_variables);
-            if (obj_only_change)
-            {
-                // Reuse some cuts!
-                cuts_pool.AddCutsToModel(scip, scip_variables);
-            }
+            // if (obj_only_change)
+            // {
+            //     // Reuse some cuts!
+            //     cuts_pool.AddCutsToModel(scip, scip_variables);
+            // }
         }
 
         // Solve
@@ -453,10 +453,10 @@ SCIP_RETCODE execmain(int argc, const char **argv)
         solution.Populate(scip, scip_variables, sol);
         solution_pool.AddSolution(solution);
         var_histories.Populate(scip, scip_variables);
-        if (obj_only_change)
-        {
-            cuts_pool.CaptureCuts(scip, sol);
-        }
+        // if (obj_only_change)
+        // {
+        //     cuts_pool.CaptureCuts(scip, sol);
+        // }
 
         // Statistics
         double relative_gap = SCIPgetGap(scip);
