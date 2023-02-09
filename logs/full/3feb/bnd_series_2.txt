@@ -1,0 +1,1524 @@
+datasets/testfiles/bnd_series_2.test
+
+300
+LO changed 
+UP changed 
+SCIP Version: 8.02
+[INSTANCE] bnd_s2_i01.mps.gz
+[START] 2023-02-03T11:21:07
+[DUALBOUND] 314.790226715
+1758
+Common solution set
+Relative gap: 0.385049354
+time_score: 1.000000000
+first_solution_dist: 24.000000000
+first_sol_time: 54.695814000
+total_score: 1.385049354
+adjusted_score: 1.385049354
+Number of runs: 1
+Calls 0 Solns 0 Time 0.000004000
+[END] 2023-02-03T11:26:05
+
+[INSTANCE] bnd_s2_i02.mps.gz
+[START] 2023-02-03T11:26:05
+provide_hint: Trying value: 1 at index: 0 Score: 5.000000000 Stdev: 0.000000000
+Added a partial solution
+[DUALBOUND] 359.000000000
+Relative gap: 0.000000000
+time_score: 0.491416973
+first_solution_dist: 158.000000000
+first_sol_time: 11.894779000
+total_score: 0.491416973
+adjusted_score: 0.540558671
+Number of runs: 1
+Calls 1 Solns 0 Time 0.007261000
+provide_hint: Updated score of 0 to -0.191416973
+max_cuts: Updated score of 100 to -0.191416973
+max_cuts_root: Updated score of 2000 to -0.191416973
+max_restarts: Updated score of 0 to -0.191416973
+[END] 2023-02-03T11:28:32
+
+[INSTANCE] bnd_s2_i03.mps.gz
+[START] 2023-02-03T11:28:32
+provide_hint: Trying value: 0 at index: 1 Score: -0.191416973 Stdev: 0.000000000
+[DUALBOUND] 356.000000000
+Relative gap: 0.000000000
+time_score: 0.401185223
+first_solution_dist: 127.000000000
+first_sol_time: 17.124334000
+total_score: 0.401185223
+adjusted_score: 0.481422268
+Number of runs: 1
+Calls 0 Solns 0 Time 0.000002000
+provide_hint: Updated score of 0 to -0.296301098
+max_cuts: Updated score of 100 to -0.296301098
+max_cuts_root: Updated score of 2000 to -0.296301098
+max_restarts: Updated score of 0 to -0.296301098
+[END] 2023-02-03T11:30:33
+
+[INSTANCE] bnd_s2_i04.mps.gz
+[START] 2023-02-03T11:30:33
+provide_hint: Trying value: 1 at index: 0 Score: 5.000000000 Stdev: 0.000000000
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Number of vars hinted = 1265
+Added a common partial solution
+[DUALBOUND] 399.000000000
+Relative gap: 0.000000000
+time_score: 0.191943257
+first_solution_dist: 197.000000000
+first_sol_time: 5.246110000
+total_score: 0.191943257
+adjusted_score: 0.249526234
+Number of runs: 1
+Calls 1 Solns 0 Time 0.030133000
+provide_hint: Updated score of 0 to -0.261515151
+max_cuts: Updated score of 100 to -0.261515151
+max_cuts_root: Updated score of 2000 to -0.261515151
+max_restarts: Updated score of 0 to -0.261515151
+[END] 2023-02-03T11:31:30
+
+[INSTANCE] bnd_s2_i05.mps.gz
+[START] 2023-02-03T11:31:30
+provide_hint: Trying value: 0 at index: 1 Score: -0.261515151 Stdev: 0.153627513
+[DUALBOUND] 379.000000000
+Relative gap: 0.000000000
+time_score: 0.558532797
+first_solution_dist: 143.000000000
+first_sol_time: 3.164994000
+total_score: 0.558532797
+adjusted_score: 0.781945915
+Number of runs: 1
+Calls 0 Solns 0 Time 0.000002000
+provide_hint: Updated score of 0 to -0.335769562
+max_cuts: Updated score of 100 to -0.335769562
+max_cuts_root: Updated score of 2000 to -0.335769562
+max_restarts: Updated score of 0 to -0.335769562
+[END] 2023-02-03T11:34:18
+
+[INSTANCE] bnd_s2_i06.mps.gz
+[START] 2023-02-03T11:34:18
+max_cuts: Trying value: 100 at index: 0 Score: -0.335769562 Stdev: 0.159493772
+max_cuts_root: Trying value: 2000 at index: 0 Score: -0.335769562 Stdev: 0.159493772
+provide_hint: Trying value: 1 at index: 0 Score: 5.000000000 Stdev: 0.000000000
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Number of vars hinted = 1216
+Added a common partial solution
+[DUALBOUND] 357.000000000
+Relative gap: 0.000000000
+time_score: 0.278597957
+first_solution_dist: 36.000000000
+first_sol_time: 2.425986000
+total_score: 0.278597957
+adjusted_score: 0.417896935
+Number of runs: 1
+Calls 1 Solns 1 Time 2.417616000
+provide_hint: Updated score of 1 to 0.021402043
+max_cuts: Updated score of 100 to -0.324335241
+max_cuts_root: Updated score of 2000 to -0.324335241
+max_restarts: Updated score of 0 to -0.324335241
+[END] 2023-02-03T11:35:41
+
+[INSTANCE] bnd_s2_i07.mps.gz
+[START] 2023-02-03T11:35:42
+max_cuts: Trying value: 0 at index: 1 Score: 5.000000000 Stdev: 0.000000000
+max_cuts_root: Trying value: 0 at index: 1 Score: 5.000000000 Stdev: 0.000000000
+provide_hint: Trying value: 0 at index: 1 Score: -0.335769562 Stdev: 0.159493772
+[DUALBOUND] 358.275000000
+Relative gap: 0.147163492
+time_score: 1.000000000
+first_solution_dist: 136.000000000
+first_sol_time: 8.053533000
+total_score: 1.147163492
+adjusted_score: 1.835461587
+Number of runs: 1
+Calls 0 Solns 0 Time 0.000002000
+provide_hint: Updated score of 0 to -0.498048348
+max_cuts: Updated score of 0 to -0.847163492
+max_cuts_root: Updated score of 0 to -0.847163492
+max_restarts: Updated score of 0 to -0.461473283
+[END] 2023-02-03T11:40:40
+
+[INSTANCE] bnd_s2_i08.mps.gz
+[START] 2023-02-03T11:40:40
+max_cuts: Trying value: 0 at index: 1 Score: -0.847163492 Stdev: 0.000000000
+max_cuts_root: Trying value: 0 at index: 1 Score: -0.847163492 Stdev: 0.000000000
+provide_hint: Trying value: 1 at index: 0 Score: 0.021402043 Stdev: 0.000000000
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Number of vars hinted = 1189
+Added a common partial solution
+[DUALBOUND] 429.000000000
+Relative gap: 0.000000000
+time_score: 0.960131213
+first_solution_dist: 117.000000000
+first_sol_time: 6.536103000
+total_score: 0.960131213
+adjusted_score: 1.632223063
+Number of runs: 1
+Calls 1 Solns 0 Time 0.053358000
+provide_hint: Updated score of 0 to -0.575062159
+max_cuts: Updated score of 0 to -0.903647353
+max_cuts_root: Updated score of 0 to -0.903647353
+max_restarts: Updated score of 0 to -0.532710130
+[END] 2023-02-03T11:45:28
+
+[INSTANCE] bnd_s2_i09.mps.gz
+[START] 2023-02-03T11:45:28
+max_cuts: Trying value: 100 at index: 0 Score: -0.324335241 Stdev: 0.150241686
+max_cuts_root: Trying value: 0 at index: 1 Score: -0.903647353 Stdev: 0.132251792
+provide_hint: Trying value: 0 at index: 1 Score: -0.575062159 Stdev: 0.359127033
+[DUALBOUND] 401.000000000
+Relative gap: 0.000000000
+time_score: 0.402988327
+first_solution_dist: 167.000000000
+first_sol_time: 4.979981000
+total_score: 0.402988327
+adjusted_score: 0.725378988
+Number of runs: 1
+Calls 0 Solns 0 Time 0.000001000
+provide_hint: Updated score of 0 to -0.550480183
+max_cuts: Updated score of 100 to -0.337444089
+max_cuts_root: Updated score of 0 to -0.736761011
+max_restarts: Updated score of 0 to -0.516494905
+[END] 2023-02-03T11:47:29
+
+[INSTANCE] bnd_s2_i10.mps.gz
+[START] 2023-02-03T11:47:29
+max_cuts: Trying value: 100 at index: 0 Score: -0.337444089 Stdev: 0.134595843
+max_cuts_root: Trying value: 0 at index: 1 Score: -0.736761011 Stdev: 0.387123138
+provide_hint: Trying value: 1 at index: 0 Score: 0.021402043 Stdev: 0.000000000
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Number of vars hinted = 1147
+Added a common partial solution
+[DUALBOUND] 363.000000000
+Relative gap: 0.000000000
+time_score: 0.133719173
+first_solution_dist: 37.000000000
+first_sol_time: 2.383803000
+total_score: 0.133719173
+adjusted_score: 0.254066429
+Number of runs: 1
+Calls 1 Solns 1 Time 2.372761000
+provide_hint: Updated score of 1 to -0.056158565
+max_cuts: Updated score of 100 to -0.308340530
+max_cuts_root: Updated score of 0 to -0.586000551
+max_restarts: Updated score of 0 to -0.473964268
+[END] 2023-02-03T11:48:09
+
+[INSTANCE] bnd_s2_i11.mps.gz
+[START] 2023-02-03T11:48:09
+max_cuts: Trying value: 0 at index: 1 Score: -0.903647353 Stdev: 0.132251792
+max_cuts_root: Trying value: 2000 at index: 0 Score: -0.324335241 Stdev: 0.150241686
+provide_hint: Trying value: 1 at index: 0 Score: -0.056158565 Stdev: 0.102444770
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Number of vars hinted = 1286
+Added a common partial solution
+[DUALBOUND] 369.000000000
+Relative gap: 0.000000000
+time_score: 0.121338863
+first_solution_dist: 6.000000000
+first_sol_time: 0.172224000
+total_score: 0.121338863
+adjusted_score: 0.242677727
+Number of runs: 1
+Calls 1 Solns 1 Time 0.162244000
+provide_hint: Updated score of 1 to -0.077885331
+max_cuts: Updated score of 0 to -0.642877856
+max_cuts_root: Updated score of 2000 to -0.290502512
+max_restarts: Updated score of 0 to -0.438701728
+[END] 2023-02-03T11:48:45
+
+[INSTANCE] bnd_s2_i12.mps.gz
+[START] 2023-02-03T11:48:45
+max_cuts: Trying value: 0 at index: 1 Score: -0.642877856 Stdev: 0.546331683
+max_cuts_root: Trying value: 2000 at index: 0 Score: -0.290502512 Stdev: 0.172005525
+provide_hint: Trying value: 1 at index: 0 Score: -0.077885331 Stdev: 0.087439080
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Number of vars hinted = 1275
+Added a common partial solution
+[DUALBOUND] 372.000000000
+Relative gap: 0.000000000
+time_score: 0.621537073
+first_solution_dist: 15.000000000
+first_sol_time: 10.533896000
+total_score: 0.621537073
+adjusted_score: 1.305227854
+Number of runs: 1
+Calls 1 Solns 0 Time 0.303639000
+provide_hint: Updated score of 0 to -0.559362294
+max_cuts: Updated score of 0 to -0.637542660
+max_cuts_root: Updated score of 2000 to -0.337793163
+max_restarts: Updated score of 0 to -0.455323123
+[END] 2023-02-03T11:51:52
+
+[INSTANCE] bnd_s2_i13.mps.gz
+[START] 2023-02-03T11:51:52
+max_cuts: Trying value: 100 at index: 0 Score: -0.308340530 Stdev: 0.155863144
+max_cuts_root: Trying value: 2000 at index: 0 Score: -0.337793163 Stdev: 0.189572769
+provide_hint: Trying value: 1 at index: 0 Score: -0.077885331 Stdev: 0.087439080
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Number of vars hinted = 1267
+Added a common partial solution
+[DUALBOUND] 366.000000000
+Relative gap: 0.000000000
+time_score: 0.851283493
+first_solution_dist: 41.000000000
+first_sol_time: 15.036780000
+total_score: 0.851283493
+adjusted_score: 1.872823685
+Number of runs: 1
+Calls 1 Solns 0 Time 0.066598000
+provide_hint: Updated score of 0 to -0.591797983
+max_cuts: Updated score of 100 to -0.376208400
+max_cuts_root: Updated score of 2000 to -0.401979455
+max_restarts: Updated score of 0 to -0.488319820
+[END] 2023-02-03T11:56:07
+
+[INSTANCE] bnd_s2_i14.mps.gz
+[START] 2023-02-03T11:56:07
+max_cuts: Trying value: 100 at index: 0 Score: -0.376208400 Stdev: 0.228218260
+max_cuts_root: Trying value: 2000 at index: 0 Score: -0.401979455 Stdev: 0.241848730
+provide_hint: Trying value: 1 at index: 0 Score: -0.077885331 Stdev: 0.087439080
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Number of vars hinted = 1252
+Added a common partial solution
+[DUALBOUND] 380.000000000
+Relative gap: 0.000000000
+time_score: 0.771724920
+first_solution_dist: 133.000000000
+first_sol_time: 43.347247000
+total_score: 0.771724920
+adjusted_score: 1.774967316
+Number of runs: 1
+Calls 1 Solns 0 Time 0.209126000
+provide_hint: Updated score of 0 to -0.609790677
+max_cuts: Updated score of 100 to -0.420154680
+max_cuts_root: Updated score of 2000 to -0.443062284
+max_restarts: Updated score of 0 to -0.510120212
+[END] 2023-02-03T11:59:59
+
+[INSTANCE] bnd_s2_i15.mps.gz
+[START] 2023-02-03T11:59:59
+max_cuts: Trying value: 100 at index: 0 Score: -0.420154680 Stdev: 0.244570820
+max_cuts_root: Trying value: 2000 at index: 0 Score: -0.443062284 Stdev: 0.251882284
+provide_hint: Trying value: 1 at index: 0 Score: -0.077885331 Stdev: 0.087439080
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Number of vars hinted = 1242
+Added a common partial solution
+[DUALBOUND] 351.000000000
+Relative gap: 0.000000000
+time_score: 0.445287113
+first_solution_dist: 29.000000000
+first_sol_time: 0.024249000
+total_score: 0.445287113
+adjusted_score: 1.068689072
+Number of runs: 1
+Calls 1 Solns 3 Time 2.604404000
+provide_hint: Updated score of 1 to -0.169735777
+max_cuts: Updated score of 100 to -0.422667923
+max_cuts_root: Updated score of 2000 to -0.443284767
+max_restarts: Updated score of 0 to -0.505489277
+[END] 2023-02-03T12:02:12
+
+[INSTANCE] bnd_s2_i16.mps.gz
+[START] 2023-02-03T12:02:12
+max_cuts: Trying value: 100 at index: 0 Score: -0.422667923 Stdev: 0.230598164
+max_cuts_root: Trying value: 2000 at index: 0 Score: -0.443284767 Stdev: 0.237680561
+provide_hint: Trying value: 1 at index: 0 Score: -0.169735777 Stdev: 0.151568434
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Number of vars hinted = 1234
+Added a common partial solution
+[DUALBOUND] 412.000000000
+Relative gap: 0.000000000
+time_score: 0.262313503
+first_solution_dist: 156.000000000
+first_sol_time: 3.648123000
+total_score: 0.262313503
+adjusted_score: 0.655783758
+Number of runs: 1
+Calls 1 Solns 0 Time 0.072876000
+provide_hint: Updated score of 0 to -0.578201843
+max_cuts: Updated score of 100 to -0.408090249
+max_cuts_root: Updated score of 2000 to -0.426832834
+max_restarts: Updated score of 0 to -0.489277559
+[END] 2023-02-03T12:03:31
+
+[INSTANCE] bnd_s2_i17.mps.gz
+[START] 2023-02-03T12:03:31
+max_cuts: Trying value: 100 at index: 0 Score: -0.408090249 Stdev: 0.226168156
+max_cuts_root: Trying value: 2000 at index: 0 Score: -0.426832834 Stdev: 0.234284241
+provide_hint: Trying value: 1 at index: 0 Score: -0.169735777 Stdev: 0.151568434
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Number of vars hinted = 1231
+Added a common partial solution
+[DUALBOUND] 393.000000000
+Relative gap: 0.000000000
+time_score: 0.107903640
+first_solution_dist: 39.000000000
+first_sol_time: 1.017578000
+total_score: 0.107903640
+adjusted_score: 0.280549464
+Number of runs: 1
+Calls 1 Solns 1 Time 1.006547000
+provide_hint: Updated score of 1 to -0.157369349
+max_cuts: Updated score of 100 to -0.383074698
+max_cuts_root: Updated score of 2000 to -0.400255401
+max_restarts: Updated score of 0 to -0.465441689
+[END] 2023-02-03T12:04:03
+
+[INSTANCE] bnd_s2_i18.mps.gz
+[START] 2023-02-03T12:04:03
+max_cuts: Trying value: 100 at index: 0 Score: -0.383074698 Stdev: 0.235452015
+max_cuts_root: Trying value: 2000 at index: 0 Score: -0.400255401 Stdev: 0.244718548
+provide_hint: Trying value: 1 at index: 0 Score: -0.157369349 Stdev: 0.144825237
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Number of vars hinted = 1222
+Added a common partial solution
+[DUALBOUND] 362.000000000
+Relative gap: 0.000000000
+time_score: 0.611360683
+first_solution_dist: 3.000000000
+first_sol_time: 1.653556000
+total_score: 0.611360683
+adjusted_score: 1.650673845
+Number of runs: 1
+Calls 1 Solns 1 Time 1.645167000
+provide_hint: Updated score of 1 to -0.233034572
+max_cuts: Updated score of 100 to -0.400635158
+max_cuts_root: Updated score of 2000 to -0.416494269
+max_restarts: Updated score of 0 to -0.474025159
+[END] 2023-02-03T12:07:07
+
+[INSTANCE] bnd_s2_i19.mps.gz
+[START] 2023-02-03T12:07:07
+max_cuts: Trying value: 100 at index: 0 Score: -0.400635158 Stdev: 0.232371917
+max_cuts_root: Trying value: 2000 at index: 0 Score: -0.416494269 Stdev: 0.239918350
+provide_hint: Trying value: 1 at index: 0 Score: -0.233034572 Stdev: 0.206521205
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Number of vars hinted = 1219
+Added a common partial solution
+[DUALBOUND] 373.000000000
+Relative gap: 0.000000000
+time_score: 0.127402533
+first_solution_dist: 1.000000000
+first_sol_time: 0.786876000
+total_score: 0.127402533
+adjusted_score: 0.356727093
+Number of runs: 1
+Calls 1 Solns 1 Time 0.775184000
+provide_hint: Updated score of 1 to -0.217944280
+max_cuts: Updated score of 100 to -0.381118542
+max_cuts_root: Updated score of 2000 to -0.395844859
+max_restarts: Updated score of 0 to -0.454768346
+[END] 2023-02-03T12:07:45
+
+[INSTANCE] bnd_s2_i20.mps.gz
+[START] 2023-02-03T12:07:45
+max_cuts: Trying value: 100 at index: 0 Score: -0.381118542 Stdev: 0.236884987
+max_cuts_root: Trying value: 2000 at index: 0 Score: -0.395844859 Stdev: 0.245140209
+provide_hint: Trying value: 1 at index: 0 Score: -0.217944280 Stdev: 0.197491004
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Number of vars hinted = 1215
+Added a common partial solution
+[DUALBOUND] 381.000000000
+Relative gap: 0.000000000
+time_score: 0.376653073
+first_solution_dist: 157.000000000
+first_sol_time: 13.939716000
+total_score: 0.376653073
+adjusted_score: 1.092293913
+Number of runs: 1
+Calls 1 Solns 0 Time 0.066722000
+provide_hint: Updated score of 0 to -0.561406112
+max_cuts: Updated score of 100 to -0.380820844
+max_cuts_root: Updated score of 2000 to -0.394565407
+max_restarts: Updated score of 0 to -0.450657016
+[END] 2023-02-03T12:09:38
+
+[INSTANCE] bnd_s2_i21.mps.gz
+[START] 2023-02-03T12:09:38
+max_cuts: Trying value: 100 at index: 0 Score: -0.380820844 Stdev: 0.228365976
+max_cuts_root: Trying value: 2000 at index: 0 Score: -0.394565407 Stdev: 0.236455734
+provide_hint: Trying value: 1 at index: 0 Score: -0.217944280 Stdev: 0.197491004
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Number of vars hinted = 1281
+Added a common partial solution
+[DUALBOUND] 384.000000000
+Relative gap: 0.000000000
+time_score: 0.732873907
+first_solution_dist: 141.000000000
+first_sol_time: 6.875617000
+total_score: 0.732873907
+adjusted_score: 2.198621720
+Number of runs: 1
+Calls 1 Solns 0 Time 0.067054000
+provide_hint: Updated score of 0 to -0.574595942
+max_cuts: Updated score of 100 to -0.402824161
+max_cuts_root: Updated score of 2000 to -0.415709688
+max_restarts: Updated score of 0 to -0.464767861
+[END] 2023-02-03T12:13:18
+
+[INSTANCE] bnd_s2_i22.mps.gz
+[START] 2023-02-03T12:13:18
+max_cuts: Trying value: 100 at index: 0 Score: -0.402824161 Stdev: 0.235723326
+max_cuts_root: Trying value: 2000 at index: 0 Score: -0.415709688 Stdev: 0.241901658
+provide_hint: Trying value: 1 at index: 0 Score: -0.217944280 Stdev: 0.197491004
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Number of vars hinted = 1266
+Added a common partial solution
+[DUALBOUND] 422.000000000
+Relative gap: 0.000000000
+time_score: 0.307032850
+first_solution_dist: 11.000000000
+first_sol_time: 8.787070000
+total_score: 0.307032850
+adjusted_score: 0.951801835
+Number of runs: 1
+Calls 1 Solns 0 Time 0.063448000
+provide_hint: Updated score of 0 to -0.555484293
+max_cuts: Updated score of 100 to -0.397189378
+max_cuts_root: Updated score of 2000 to -0.409316933
+max_restarts: Updated score of 0 to -0.457256670
+[END] 2023-02-03T12:14:50
+
+[INSTANCE] bnd_s2_i23.mps.gz
+[START] 2023-02-03T12:14:50
+max_cuts: Trying value: 100 at index: 0 Score: -0.397189378 Stdev: 0.229922577
+max_cuts_root: Trying value: 2000 at index: 0 Score: -0.409316933 Stdev: 0.236250480
+provide_hint: Trying value: 1 at index: 0 Score: -0.217944280 Stdev: 0.197491004
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Number of vars hinted = 1264
+Added a common partial solution
+[DUALBOUND] 354.000000000
+Relative gap: 0.000000000
+time_score: 0.164533877
+first_solution_dist: 5.000000000
+first_sol_time: 0.833545000
+total_score: 0.164533877
+adjusted_score: 0.526508405
+Number of runs: 1
+Calls 1 Solns 1 Time 0.823568000
+provide_hint: Updated score of 1 to -0.211267980
+max_cuts: Updated score of 100 to -0.384264072
+max_cuts_root: Updated score of 2000 to -0.395717874
+max_restarts: Updated score of 0 to -0.443951088
+[END] 2023-02-03T12:15:39
+
+[INSTANCE] bnd_s2_i24.mps.gz
+[START] 2023-02-03T12:15:39
+max_cuts: Trying value: 100 at index: 0 Score: -0.384264072 Stdev: 0.230727877
+max_cuts_root: Trying value: 2000 at index: 0 Score: -0.395717874 Stdev: 0.237396678
+provide_hint: Trying value: 1 at index: 0 Score: -0.211267980 Stdev: 0.185982024
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Number of vars hinted = 1256
+Added a common partial solution
+[DUALBOUND] 396.000000000
+Relative gap: 0.000000000
+time_score: 0.908594283
+first_solution_dist: 57.000000000
+first_sol_time: 6.481116000
+total_score: 0.908594283
+adjusted_score: 2.998361135
+Number of runs: 1
+Calls 1 Solns 0 Time 0.065014000
+provide_hint: Updated score of 0 to -0.579024959
+max_cuts: Updated score of 100 to -0.411860399
+max_cuts_root: Updated score of 2000 to -0.422711369
+max_restarts: Updated score of 0 to -0.464152966
+[END] 2023-02-03T12:20:12
+
+[INSTANCE] bnd_s2_i25.mps.gz
+[START] 2023-02-03T12:20:12
+max_cuts: Trying value: 100 at index: 0 Score: -0.411860399 Stdev: 0.252670069
+max_cuts_root: Trying value: 2000 at index: 0 Score: -0.422711369 Stdev: 0.257265217
+provide_hint: Trying value: 1 at index: 0 Score: -0.211267980 Stdev: 0.185982024
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Number of vars hinted = 1253
+Added a common partial solution
+[DUALBOUND] 355.000000000
+Relative gap: 0.000000000
+time_score: 0.622228017
+first_solution_dist: 42.000000000
+first_sol_time: 0.023539000
+total_score: 0.622228017
+adjusted_score: 2.115575257
+Number of runs: 1
+Calls 1 Solns 2 Time 1.741516000
+provide_hint: Updated score of 1 to -0.256930206
+max_cuts: Updated score of 100 to -0.422378780
+max_cuts_root: Updated score of 2000 to -0.432687202
+max_restarts: Updated score of 0 to -0.470739427
+[END] 2023-02-03T12:23:19
+
+[INSTANCE] bnd_s2_i26.mps.gz
+[START] 2023-02-03T12:23:19
+max_cuts: Trying value: 100 at index: 0 Score: -0.422378780 Stdev: 0.249750040
+max_cuts_root: Trying value: 2000 at index: 0 Score: -0.432687202 Stdev: 0.253751323
+provide_hint: Trying value: 1 at index: 0 Score: -0.256930206 Stdev: 0.213921907
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Number of vars hinted = 1250
+Added a common partial solution
+[DUALBOUND] 375.000000000
+Relative gap: 0.000000000
+time_score: 0.143877403
+first_solution_dist: 0.000000000
+first_sol_time: 0.160979000
+total_score: 0.143877403
+adjusted_score: 0.503570912
+Number of runs: 1
+Calls 1 Solns 1 Time 0.150432000
+provide_hint: Updated score of 1 to -0.245624926
+max_cuts: Updated score of 100 to -0.409116810
+max_cuts_root: Updated score of 2000 to -0.418934354
+max_restarts: Updated score of 0 to -0.457664946
+[END] 2023-02-03T12:24:02
+
+[INSTANCE] bnd_s2_i27.mps.gz
+[START] 2023-02-03T12:24:02
+max_cuts: Trying value: 100 at index: 0 Score: -0.409116810 Stdev: 0.251710903
+max_cuts_root: Trying value: 2000 at index: 0 Score: -0.418934354 Stdev: 0.256057618
+provide_hint: Trying value: 1 at index: 0 Score: -0.245624926 Stdev: 0.206931730
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Number of vars hinted = 1248
+Added a common partial solution
+[DUALBOUND] 394.000000000
+Relative gap: 0.000000000
+time_score: 0.214392837
+first_solution_dist: 67.000000000
+first_sol_time: 16.533672000
+total_score: 0.214392837
+adjusted_score: 0.771814212
+Number of runs: 1
+Calls 1 Solns 0 Time 0.449560000
+provide_hint: Updated score of 0 to -0.556235451
+max_cuts: Updated score of 100 to -0.400265720
+max_cuts_root: Updated score of 2000 to -0.409637013
+max_restarts: Updated score of 0 to -0.448308326
+[END] 2023-02-03T12:25:06
+
+[INSTANCE] bnd_s2_i28.mps.gz
+[START] 2023-02-03T12:25:06
+max_cuts: Trying value: 100 at index: 0 Score: -0.400265720 Stdev: 0.249653754
+max_cuts_root: Trying value: 2000 at index: 0 Score: -0.409637013 Stdev: 0.254204532
+provide_hint: Trying value: 1 at index: 0 Score: -0.245624926 Stdev: 0.206931730
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Number of vars hinted = 1244
+Added a common partial solution
+[DUALBOUND] 402.000000000
+Relative gap: 0.000000000
+time_score: 0.283182500
+first_solution_dist: 105.000000000
+first_sol_time: 17.468729000
+total_score: 0.283182500
+adjusted_score: 1.047775250
+Number of runs: 1
+Calls 1 Solns 0 Time 0.062851000
+provide_hint: Updated score of 0 to -0.540173513
+max_cuts: Updated score of 100 to -0.395175145
+max_cuts_root: Updated score of 2000 to -0.404138990
+max_restarts: Updated score of 0 to -0.442192555
+[END] 2023-02-03T12:26:31
+
+[INSTANCE] bnd_s2_i29.mps.gz
+[START] 2023-02-03T12:26:31
+max_cuts: Trying value: 100 at index: 0 Score: -0.395175145 Stdev: 0.245432050
+max_cuts_root: Trying value: 2000 at index: 0 Score: -0.404138990 Stdev: 0.250071899
+provide_hint: Trying value: 1 at index: 0 Score: -0.245624926 Stdev: 0.206931730
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Number of vars hinted = 1242
+Added a common partial solution
+[DUALBOUND] 403.000000000
+Relative gap: 0.000000000
+time_score: 0.329451290
+first_solution_dist: 87.000000000
+first_sol_time: 5.213861000
+total_score: 0.329451290
+adjusted_score: 1.251914902
+Number of runs: 1
+Calls 1 Solns 0 Time 0.103370000
+provide_hint: Updated score of 0 to -0.528466723
+max_cuts: Updated score of 100 to -0.392436651
+max_cuts_root: Updated score of 2000 to -0.401027003
+max_restarts: Updated score of 0 to -0.438166081
+[END] 2023-02-03T12:28:10
+
+[INSTANCE] bnd_s2_i30.mps.gz
+[START] 2023-02-03T12:28:10
+max_cuts: Trying value: 100 at index: 0 Score: -0.392436651 Stdev: 0.240575161
+max_cuts_root: Trying value: 2000 at index: 0 Score: -0.401027003 Stdev: 0.245229889
+provide_hint: Trying value: 1 at index: 0 Score: -0.245624926 Stdev: 0.206931730
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Number of vars hinted = 1234
+Added a common partial solution
+[DUALBOUND] 386.000000000
+Relative gap: 0.000000000
+time_score: 0.366223030
+first_solution_dist: 0.000000000
+first_sol_time: 0.736817000
+total_score: 0.366223030
+adjusted_score: 1.428269817
+Number of runs: 1
+Calls 1 Solns 1 Time 0.727677000
+provide_hint: Updated score of 1 to -0.256588390
+max_cuts: Updated score of 100 to -0.391388106
+max_cuts_root: Updated score of 2000 to -0.399634844
+max_restarts: Updated score of 0 to -0.435685286
+[END] 2023-02-03T12:30:00
+
+[INSTANCE] bnd_s2_i31.mps.gz
+[START] 2023-02-03T12:30:00
+max_cuts: Trying value: 100 at index: 0 Score: -0.391388106 Stdev: 0.235637096
+max_cuts_root: Trying value: 2000 at index: 0 Score: -0.399634844 Stdev: 0.240252924
+provide_hint: Trying value: 1 at index: 0 Score: -0.256588390 Stdev: 0.198204062
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Number of vars hinted = 1289
+Added a common partial solution
+[DUALBOUND] 382.000000000
+Relative gap: 0.000000000
+time_score: 0.549035120
+first_solution_dist: 74.000000000
+first_sol_time: 9.143752000
+total_score: 0.549035120
+adjusted_score: 2.196140480
+Number of runs: 1
+Calls 1 Solns 0 Time 0.056570000
+provide_hint: Updated score of 0 to -0.529549270
+max_cuts: Updated score of 100 to -0.397451453
+max_cuts_root: Updated score of 2000 to -0.405381008
+max_restarts: Updated score of 0 to -0.439463614
+[END] 2023-02-03T12:32:45
+
+[INSTANCE] bnd_s2_i32.mps.gz
+[START] 2023-02-03T12:32:45
+max_cuts: Trying value: 100 at index: 0 Score: -0.397451453 Stdev: 0.232636485
+max_cuts_root: Trying value: 2000 at index: 0 Score: -0.405381008 Stdev: 0.236936105
+provide_hint: Trying value: 1 at index: 0 Score: -0.256588390 Stdev: 0.198204062
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Number of vars hinted = 1287
+Added a common partial solution
+[DUALBOUND] 364.000000000
+Relative gap: 0.000000000
+time_score: 0.315556240
+first_solution_dist: 56.000000000
+first_sol_time: 16.877411000
+total_score: 0.315556240
+adjusted_score: 1.293780584
+Number of runs: 1
+Calls 1 Solns 0 Time 0.056756000
+provide_hint: Updated score of 0 to -0.518849619
+max_cuts: Updated score of 100 to -0.394418297
+max_cuts_root: Updated score of 2000 to -0.402054165
+max_restarts: Updated score of 0 to -0.435466602
+[END] 2023-02-03T12:34:19
+
+[INSTANCE] bnd_s2_i33.mps.gz
+[START] 2023-02-03T12:34:19
+max_cuts: Trying value: 100 at index: 0 Score: -0.394418297 Stdev: 0.228826427
+max_cuts_root: Trying value: 2000 at index: 0 Score: -0.402054165 Stdev: 0.233152469
+provide_hint: Trying value: 1 at index: 0 Score: -0.256588390 Stdev: 0.198204062
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Number of vars hinted = 1284
+Added a common partial solution
+[DUALBOUND] 417.000000000
+Relative gap: 0.000000000
+time_score: 0.406141467
+first_solution_dist: 96.000000000
+first_sol_time: 5.277808000
+total_score: 0.406141467
+adjusted_score: 1.705794160
+Number of runs: 1
+Calls 1 Solns 0 Time 0.056851000
+provide_hint: Updated score of 0 to -0.513482564
+max_cuts: Updated score of 100 to -0.394836982
+max_cuts_root: Updated score of 2000 to -0.402200140
+max_restarts: Updated score of 0 to -0.434550192
+[END] 2023-02-03T12:36:21
+
+[INSTANCE] bnd_s2_i34.mps.gz
+[START] 2023-02-03T12:36:21
+max_cuts: Trying value: 100 at index: 0 Score: -0.394836982 Stdev: 0.224548950
+max_cuts_root: Trying value: 2000 at index: 0 Score: -0.402200140 Stdev: 0.228797945
+provide_hint: Trying value: 1 at index: 0 Score: -0.256588390 Stdev: 0.198204062
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Number of vars hinted = 1283
+Added a common partial solution
+[DUALBOUND] 389.000000000
+Relative gap: 0.000000000
+time_score: 0.251324420
+first_solution_dist: 3.000000000
+first_sol_time: 0.245600000
+total_score: 0.251324420
+adjusted_score: 1.080695006
+Number of runs: 1
+Calls 1 Solns 1 Time 0.236023000
+provide_hint: Updated score of 1 to -0.256149726
+max_cuts: Updated score of 100 to -0.389888273
+max_cuts_root: Updated score of 2000 to -0.396997529
+max_restarts: Updated score of 0 to -0.428997895
+[END] 2023-02-03T12:37:37
+
+[INSTANCE] bnd_s2_i35.mps.gz
+[START] 2023-02-03T12:37:37
+max_cuts: Trying value: 100 at index: 0 Score: -0.389888273 Stdev: 0.222354764
+max_cuts_root: Trying value: 2000 at index: 0 Score: -0.396997529 Stdev: 0.226670027
+provide_hint: Trying value: 1 at index: 0 Score: -0.256149726 Stdev: 0.189213424
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Number of vars hinted = 1280
+Added a common partial solution
+[DUALBOUND] 385.000000000
+Relative gap: 0.000000000
+time_score: 0.273832123
+first_solution_dist: 13.000000000
+first_sol_time: 0.214363000
+total_score: 0.273832123
+adjusted_score: 1.204861343
+Number of runs: 1
+Calls 1 Solns 1 Time 0.205702000
+provide_hint: Updated score of 1 to -0.257509910
+max_cuts: Updated score of 100 to -0.386019734
+max_cuts_root: Updated score of 2000 to -0.392892016
+max_restarts: Updated score of 0 to -0.424434196
+[END] 2023-02-03T12:38:59
+
+[INSTANCE] bnd_s2_i36.mps.gz
+[START] 2023-02-03T12:38:59
+max_cuts: Trying value: 100 at index: 0 Score: -0.386019734 Stdev: 0.219702823
+max_cuts_root: Trying value: 2000 at index: 0 Score: -0.392892016 Stdev: 0.224057508
+provide_hint: Trying value: 1 at index: 0 Score: -0.257509910 Stdev: 0.181169430
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Number of vars hinted = 1280
+Added a common partial solution
+[DUALBOUND] 361.000000000
+Relative gap: 0.000000000
+time_score: 0.223164767
+first_solution_dist: 16.000000000
+first_sol_time: 0.553666000
+total_score: 0.223164767
+adjusted_score: 1.004241450
+Number of runs: 1
+Calls 1 Solns 1 Time 0.544948000
+provide_hint: Updated score of 1 to -0.255056686
+max_cuts: Updated score of 100 to -0.380766348
+max_cuts_root: Updated score of 2000 to -0.387416943
+max_restarts: Updated score of 0 to -0.418683641
+[END] 2023-02-03T12:40:06
+
+[INSTANCE] bnd_s2_i37.mps.gz
+[START] 2023-02-03T12:40:06
+max_cuts: Trying value: 100 at index: 0 Score: -0.380766348 Stdev: 0.218229664
+max_cuts_root: Trying value: 2000 at index: 0 Score: -0.387416943 Stdev: 0.222644046
+provide_hint: Trying value: 1 at index: 0 Score: -0.255056686 Stdev: 0.174737192
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Number of vars hinted = 1271
+Added a common partial solution
+[DUALBOUND] 424.000000000
+Relative gap: 0.000000000
+time_score: 0.458389793
+first_solution_dist: 123.000000000
+first_sol_time: 4.645792000
+total_score: 0.458389793
+adjusted_score: 2.108593049
+Number of runs: 1
+Calls 1 Solns 0 Time 0.055234000
+provide_hint: Updated score of 0 to -0.510978347
+max_cuts: Updated score of 100 to -0.383192081
+max_cuts_root: Updated score of 2000 to -0.389634845
+max_restarts: Updated score of 0 to -0.419786590
+[END] 2023-02-03T12:42:23
+
+[INSTANCE] bnd_s2_i38.mps.gz
+[START] 2023-02-03T12:42:23
+max_cuts: Trying value: 100 at index: 0 Score: -0.383192081 Stdev: 0.215016727
+max_cuts_root: Trying value: 2000 at index: 0 Score: -0.389634845 Stdev: 0.219291443
+provide_hint: Trying value: 1 at index: 0 Score: -0.255056686 Stdev: 0.174737192
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Number of vars hinted = 1260
+Added a common partial solution
+[DUALBOUND] 423.000000000
+Relative gap: 0.000000000
+time_score: 0.198739503
+first_solution_dist: 63.000000000
+first_sol_time: 3.859521000
+total_score: 0.198739503
+adjusted_score: 0.934075666
+Number of runs: 1
+Calls 1 Solns 0 Time 0.056450000
+provide_hint: Updated score of 0 to -0.497402745
+max_cuts: Updated score of 100 to -0.377602609
+max_cuts_root: Updated score of 2000 to -0.383850137
+max_restarts: Updated score of 0 to -0.413812344
+[END] 2023-02-03T12:43:23
+
+[INSTANCE] bnd_s2_i39.mps.gz
+[START] 2023-02-03T12:43:23
+max_cuts: Trying value: 100 at index: 0 Score: -0.377602609 Stdev: 0.214303279
+max_cuts_root: Trying value: 2000 at index: 0 Score: -0.383850137 Stdev: 0.218635231
+provide_hint: Trying value: 1 at index: 0 Score: -0.255056686 Stdev: 0.174737192
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Number of vars hinted = 1262
+Added a common partial solution
+[DUALBOUND] 371.000000000
+Relative gap: 0.000000000
+time_score: 0.280221107
+first_solution_dist: 241.000000000
+first_sol_time: 8.083057000
+total_score: 0.280221107
+adjusted_score: 1.345061312
+Number of runs: 1
+Calls 1 Solns 0 Time 0.058113000
+provide_hint: Updated score of 0 to -0.488353510
+max_cuts: Updated score of 100 to -0.374738447
+max_cuts_root: Updated score of 2000 to -0.380802225
+max_restarts: Updated score of 0 to -0.410296785
+[END] 2023-02-03T12:44:47
+
+[INSTANCE] bnd_s2_i40.mps.gz
+[START] 2023-02-03T12:44:47
+max_cuts: Trying value: 100 at index: 0 Score: -0.374738447 Stdev: 0.211819792
+max_cuts_root: Trying value: 2000 at index: 0 Score: -0.380802225 Stdev: 0.216163220
+provide_hint: Trying value: 1 at index: 0 Score: -0.255056686 Stdev: 0.174737192
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Number of vars hinted = 1261
+Added a common partial solution
+[DUALBOUND] 358.000000000
+Relative gap: 0.000000000
+time_score: 0.303778487
+first_solution_dist: 12.000000000
+first_sol_time: 0.530600000
+total_score: 0.303778487
+adjusted_score: 1.488514585
+Number of runs: 1
+Calls 1 Solns 1 Time 0.522813000
+provide_hint: Updated score of 1 to -0.258304806
+max_cuts: Updated score of 100 to -0.372711020
+max_cuts_root: Updated score of 2000 to -0.378601546
+max_restarts: Updated score of 0 to -0.407565547
+[END] 2023-02-03T12:46:18
+
+[INSTANCE] bnd_s2_i41.mps.gz
+[START] 2023-02-03T12:46:18
+max_cuts: Trying value: 100 at index: 0 Score: -0.372711020 Stdev: 0.209116850
+max_cuts_root: Trying value: 2000 at index: 0 Score: -0.378601546 Stdev: 0.213454426
+provide_hint: Trying value: 1 at index: 0 Score: -0.258304806 Stdev: 0.168528374
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Number of vars hinted = 1281
+Added a common partial solution
+[DUALBOUND] 407.000000000
+Relative gap: 0.000000000
+time_score: 0.264630120
+first_solution_dist: 97.000000000
+first_sol_time: 10.669126000
+total_score: 0.264630120
+adjusted_score: 1.323150600
+Number of runs: 1
+Calls 1 Solns 0 Time 0.062877000
+provide_hint: Updated score of 0 to -0.479404574
+max_cuts: Updated score of 100 to -0.369708772
+max_cuts_root: Updated score of 2000 to -0.375435673
+max_restarts: Updated score of 0 to -0.403992161
+[END] 2023-02-03T12:47:38
+
+[INSTANCE] bnd_s2_i42.mps.gz
+[START] 2023-02-03T12:47:38
+max_cuts: Trying value: 100 at index: 0 Score: -0.369708772 Stdev: 0.207022767
+max_cuts_root: Trying value: 2000 at index: 0 Score: -0.375435673 Stdev: 0.211372018
+provide_hint: Trying value: 1 at index: 0 Score: -0.258304806 Stdev: 0.168528374
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Number of vars hinted = 1281
+Added a common partial solution
+[DUALBOUND] 387.000000000
+Relative gap: 0.000000000
+time_score: 0.506125837
+first_solution_dist: 7.000000000
+first_sol_time: 0.112395000
+total_score: 0.506125837
+adjusted_score: 2.581241767
+Number of runs: 1
+Calls 1 Solns 1 Time 0.103104000
+provide_hint: Updated score of 1 to -0.273793620
+max_cuts: Updated score of 100 to -0.373395720
+max_cuts_root: Updated score of 2000 to -0.378967840
+max_restarts: Updated score of 0 to -0.406483226
+[END] 2023-02-03T12:50:10
+
+[INSTANCE] bnd_s2_i43.mps.gz
+[START] 2023-02-03T12:50:10
+max_cuts: Trying value: 100 at index: 0 Score: -0.373395720 Stdev: 0.205210391
+max_cuts_root: Trying value: 2000 at index: 0 Score: -0.378967840 Stdev: 0.209384092
+provide_hint: Trying value: 1 at index: 0 Score: -0.273793620 Stdev: 0.172488434
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Number of vars hinted = 1277
+Added a common partial solution
+[DUALBOUND] 408.000000000
+Relative gap: 0.000000000
+time_score: 0.467896447
+first_solution_dist: 114.000000000
+first_sol_time: 7.040870000
+total_score: 0.467896447
+adjusted_score: 2.433061523
+Number of runs: 1
+Calls 1 Solns 0 Time 0.057297000
+provide_hint: Updated score of 0 to -0.478961954
+max_cuts: Updated score of 100 to -0.375882581
+max_cuts_root: Updated score of 2000 to -0.381308066
+max_restarts: Updated score of 0 to -0.407945446
+[END] 2023-02-03T12:52:30
+
+[INSTANCE] bnd_s2_i44.mps.gz
+[START] 2023-02-03T12:52:30
+max_cuts: Trying value: 100 at index: 0 Score: -0.375882581 Stdev: 0.202902868
+max_cuts_root: Trying value: 2000 at index: 0 Score: -0.381308066 Stdev: 0.206950913
+provide_hint: Trying value: 1 at index: 0 Score: -0.273793620 Stdev: 0.172488434
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Number of vars hinted = 1272
+Added a common partial solution
+[DUALBOUND] 400.000000000
+Relative gap: 0.000000000
+time_score: 0.402524617
+first_solution_dist: 28.000000000
+first_sol_time: 7.785747000
+total_score: 0.402524617
+adjusted_score: 2.133380468
+Number of runs: 1
+Calls 1 Solns 0 Time 0.060834000
+provide_hint: Updated score of 0 to -0.476130942
+max_cuts: Updated score of 100 to -0.376565710
+max_cuts_root: Updated score of 2000 to -0.381852081
+max_restarts: Updated score of 0 to -0.407819380
+[END] 2023-02-03T12:54:31
+
+[INSTANCE] bnd_s2_i45.mps.gz
+[START] 2023-02-03T12:54:31
+max_cuts: Trying value: 100 at index: 0 Score: -0.376565710 Stdev: 0.200237799
+max_cuts_root: Trying value: 2000 at index: 0 Score: -0.381852081 Stdev: 0.204220862
+provide_hint: Trying value: 1 at index: 0 Score: -0.273793620 Stdev: 0.172488434
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Number of vars hinted = 1272
+Added a common partial solution
+[DUALBOUND] 391.000000000
+Relative gap: 0.000000000
+time_score: 0.567603963
+first_solution_dist: 41.000000000
+first_sol_time: 12.338194000
+total_score: 0.567603963
+adjusted_score: 3.065061402
+Number of runs: 1
+Calls 1 Solns 0 Time 0.064477000
+provide_hint: Updated score of 0 to -0.479397835
+max_cuts: Updated score of 100 to -0.381341667
+max_cuts_root: Updated score of 2000 to -0.386495878
+max_restarts: Updated score of 0 to -0.411450848
+[END] 2023-02-03T12:57:21
+
+[INSTANCE] bnd_s2_i46.mps.gz
+[START] 2023-02-03T12:57:21
+max_cuts: Trying value: 100 at index: 0 Score: -0.381341667 Stdev: 0.199768586
+max_cuts_root: Trying value: 2000 at index: 0 Score: -0.386495878 Stdev: 0.203542138
+provide_hint: Trying value: 1 at index: 0 Score: -0.273793620 Stdev: 0.172488434
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Number of vars hinted = 1268
+Added a common partial solution
+[DUALBOUND] 367.000000000
+Relative gap: 0.000000000
+time_score: 0.439947097
+first_solution_dist: 7.000000000
+first_sol_time: 0.122839000
+total_score: 0.439947097
+adjusted_score: 2.419709032
+Number of runs: 1
+Calls 1 Solns 1 Time 0.111338000
+provide_hint: Updated score of 1 to -0.283567354
+max_cuts: Updated score of 100 to -0.382771067
+max_cuts_root: Updated score of 2000 to -0.387799566
+max_restarts: Updated score of 0 to -0.412084098
+[END] 2023-02-03T12:59:33
+
+[INSTANCE] bnd_s2_i47.mps.gz
+[START] 2023-02-03T12:59:33
+max_cuts: Trying value: 100 at index: 0 Score: -0.382771067 Stdev: 0.197417077
+max_cuts_root: Trying value: 2000 at index: 0 Score: -0.387799566 Stdev: 0.201109839
+provide_hint: Trying value: 1 at index: 0 Score: -0.283567354 Stdev: 0.170794756
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Number of vars hinted = 1265
+Added a common partial solution
+[DUALBOUND] 370.000000000
+Relative gap: 0.000000000
+time_score: 0.155431310
+first_solution_dist: 0.000000000
+first_sol_time: 0.146940000
+total_score: 0.155431310
+adjusted_score: 0.870415336
+Number of runs: 1
+Calls 1 Solns 1 Time 0.137170000
+provide_hint: Updated score of 1 to -0.276448685
+max_cuts: Updated score of 100 to -0.377358216
+max_cuts_root: Updated score of 2000 to -0.382266988
+max_restarts: Updated score of 0 to -0.406504690
+[END] 2023-02-03T13:00:20
+
+[INSTANCE] bnd_s2_i48.mps.gz
+[START] 2023-02-03T13:00:20
+max_cuts: Trying value: 100 at index: 0 Score: -0.377358216 Stdev: 0.198327942
+max_cuts_root: Trying value: 2000 at index: 0 Score: -0.382266988 Stdev: 0.202055771
+provide_hint: Trying value: 1 at index: 0 Score: -0.276448685 Stdev: 0.169220633
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Number of vars hinted = 1266
+Added a common partial solution
+[DUALBOUND] 420.000000000
+Relative gap: 0.000000000
+time_score: 0.316312677
+first_solution_dist: 1.000000000
+first_sol_time: 0.280143000
+total_score: 0.316312677
+adjusted_score: 1.802982257
+Number of runs: 1
+Calls 1 Solns 1 Time 0.271790000
+provide_hint: Updated score of 1 to -0.278546790
+max_cuts: Updated score of 100 to -0.375938552
+max_cuts_root: Updated score of 2000 to -0.380733167
+max_restarts: Updated score of 0 to -0.404585711
+[END] 2023-02-03T13:01:55
+
+[INSTANCE] bnd_s2_i49.mps.gz
+[START] 2023-02-03T13:01:55
+max_cuts: Trying value: 100 at index: 0 Score: -0.375938552 Stdev: 0.196228390
+max_cuts_root: Trying value: 2000 at index: 0 Score: -0.380733167 Stdev: 0.199946830
+provide_hint: Trying value: 1 at index: 0 Score: -0.278546790 Stdev: 0.164538982
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Number of vars hinted = 1263
+Added a common partial solution
+[DUALBOUND] 390.000000000
+Relative gap: 0.000000000
+time_score: 0.324913470
+first_solution_dist: 141.000000000
+first_sol_time: 6.676310000
+total_score: 0.324913470
+adjusted_score: 1.884498126
+Number of runs: 1
+Calls 1 Solns 0 Time 0.059840000
+provide_hint: Updated score of 0 to -0.474070788
+max_cuts: Updated score of 100 to -0.374778891
+max_cuts_root: Updated score of 2000 to -0.379464538
+max_restarts: Updated score of 0 to -0.402925872
+[END] 2023-02-03T13:03:32
+
+[INSTANCE] bnd_s2_i50.mps.gz
+[START] 2023-02-03T13:03:32
+max_cuts: Trying value: 100 at index: 0 Score: -0.374778891 Stdev: 0.194130270
+max_cuts_root: Trying value: 2000 at index: 0 Score: -0.379464538 Stdev: 0.197834828
+provide_hint: Trying value: 1 at index: 0 Score: -0.278546790 Stdev: 0.164538982
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Added a partial solution
+Number of vars hinted = 1262
+Added a common partial solution
+[DUALBOUND] 377.000000000
+Relative gap: 0.000000000
+time_score: 0.162282900
+first_solution_dist: 4.000000000
+first_sol_time: 0.188474000
+total_score: 0.162282900
+adjusted_score: 0.957469110
+Number of runs: 1
+Calls 1 Solns 1 Time 0.179285000
+provide_hint: Updated score of 1 to -0.272733595
+max_cuts: Updated score of 100 to -0.370056758
+max_cuts_root: Updated score of 2000 to -0.374638279
+max_restarts: Updated score of 0 to -0.398014791
+[END] 2023-02-03T13:04:21
+
+provide_hint
+Value 1 count 20 Qscore -0.287733595 Final score -0.272733595
+Value 0 count 29 Qscore -0.484415616 Final score -0.474070788
+max_cuts
+Value 100 count 45 Qscore -0.376723425 Final score -0.370056758
+Value 0 count 4 Qscore -0.712542660 Final score -0.637542660
+max_cuts_root
+Value 2000 count 45 Qscore -0.381304946 Final score -0.374638279
+Value 0 count 4 Qscore -0.661000551 Final score -0.586000551
+max_restarts
+Value 0 count 49 Qscore -0.404137240 Final score -0.398014791
+Value 1 count 0 Qscore 0.000000000 Final score 5.000000000
+Provided hints: 45 successful hints: 20
+fullstrong               calls 2645       maxdepth 0          time 280.866257000
+relpscost                calls 502304     maxdepth 0          time 923.999098000
+adaptivediving           calls 1039       solns 2     bestsolns 2     time 11.494684000
+alns                     calls 275        solns 35    bestsolns 32    time 14.480462000
+clique                   calls 25         solns 0     bestsolns 0     time 0.123972000
+completesol              calls 45         solns 23    bestsolns 23    time 19.005598000
+conflictdiving           calls 706        solns 0     bestsolns 0     time 11.275170000
+crossover                calls 453        solns 88    bestsolns 31    time 7.463163000
+distributiondiving       calls 988        solns 2     bestsolns 2     time 19.087340000
+farkasdiving             calls 25         solns 0     bestsolns 0     time 6.435058000
+feaspump                 calls 313        solns 6     bestsolns 2     time 12.527789000
+fracdiving               calls 1012       solns 5     bestsolns 5     time 12.506240000
+gins                     calls 2          solns 1     bestsolns 1     time 0.073326000
+guideddiving             calls 1003       solns 1     bestsolns 1     time 14.486669000
+linesearchdiving         calls 1008       solns 4     bestsolns 4     time 13.505772000
+locks                    calls 25         solns 0     bestsolns 0     time 0.043902000
+objpscostdiving          calls 424        solns 15    bestsolns 3     time 27.248596000
+oneopt                   calls 217        solns 0     bestsolns 0     time 0.142078000
+pscostdiving             calls 1022       solns 6     bestsolns 6     time 13.855026000
+randrounding             calls 49399      solns 0     bestsolns 0     time 2.553677000
+rens                     calls 25         solns 0     bestsolns 0     time 8.408344000
+rins                     calls 548        solns 118   bestsolns 71    time 19.144084000
+rootsoldiving            calls 464        solns 14    bestsolns 2     time 12.983391000
+rounding                 calls 44044      solns 0     bestsolns 0     time 1.601994000
+shiftandpropagate        calls 16         solns 0     bestsolns 0     time 0.043244000
+shifting                 calls 41800      solns 8     bestsolns 3     time 16.257731000
+trivial                  calls 50         solns 0     bestsolns 0     time 0.032411000
+vbounds                  calls 25         solns 0     bestsolns 0     time 0.145159000
+veclendiving             calls 1007       solns 2     bestsolns 2     time 16.229630000
+zirounding               calls 23946      solns 0     bestsolns 0     time 0.399580000
+domcol                   calls 81         changes 0          time 0.031797000
+dualsparsify             calls 50         changes 4          time 0.028104000
+implics                  calls 379        changes 0          time 0.001312000
+milp                     calls 50         changes 1141       time 0.277162000
+sparsify                 calls 61         changes 126        time 0.271829000
+trivial                  calls 809        changes 16088      time 0.026097000
+aggregation              calls 66591      cuts_found 1143949    cuts_added 526580     time 415.554584000
+clique                   calls 1805       cuts_found 0          cuts_added 0          time 0.318423000
+gomory                   calls 39622      cuts_found 1063409    cuts_added 37829      time 414.591232000
+impliedbounds            calls 66591      cuts_found 1343       cuts_added 3742       time 1.068473000
+mcf                      calls 46         cuts_found 0          cuts_added 0          time 0.014907000
+mixing                   calls 66629      cuts_found 0          cuts_added 0          time 0.041062000
+rapidlearning            calls 226        cuts_found 0          cuts_added 0          time 7.082216000
+rlt                      calls 460        cuts_found 0          cuts_added 0          time 0.001059000
+zerohalf                 calls 40082      cuts_found 103435     cuts_added 64591      time 108.983771000
