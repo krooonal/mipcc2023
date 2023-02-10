@@ -4,60 +4,60 @@ datasets/testfiles/small5/rhs_series_2.test
 RHS changed 
 SCIP Version: 8.02
 [INSTANCE] rhs_s2_i01.mps.gz
-[START] 2023-02-10T04:05:09
+[START] 2023-02-10T04:21:09
 [DUALBOUND] -17208.712602100
 1000
 Common solution set
 Relative gap: 0.002316366
 time_score: 1.000000000
 first_solution_dist: 9699.173713759
-first_sol_time: 1.262195000
+first_sol_time: 1.182050000
 total_score: 1.002316366
 adjusted_score: 1.002316366
 Number of runs: 3
-Calls 0 Solns 0 Time 0.000006000
-[END] 2023-02-10T04:06:07
+Calls 0 Solns 0 Time 0.000005000
+[END] 2023-02-10T04:22:07
 
 [INSTANCE] rhs_s2_i02.mps.gz
-[START] 2023-02-10T04:06:07
+[START] 2023-02-10T04:22:08
 provide_hint: Trying value: 1 at index: 0 Score: 5.000000000 Stdev: 0.000000000
 Added a partial solution
 [DUALBOUND] -17167.436151164
 Relative gap: 0.000000000
-time_score: 0.607104817
+time_score: 0.612435933
 first_solution_dist: 0.318736722
-first_sol_time: 0.385158000
-total_score: 0.607104817
-adjusted_score: 0.667815298
+first_sol_time: 0.371004000
+total_score: 0.612435933
+adjusted_score: 0.673679527
 Number of runs: 1
-Calls 1 Solns 1 Time 0.381215000
-provide_hint: Updated score of 1 to -0.307104817
-max_cuts: Updated score of 100 to -0.307104817
-max_cuts_root: Updated score of 2000 to -0.307104817
-max_restarts: Updated score of 0 to -0.307104817
-[END] 2023-02-10T04:06:43
+Calls 1 Solns 1 Time 0.367264000
+provide_hint: Updated score of 1 to -0.312435933
+max_cuts: Updated score of 100 to -0.312435933
+max_cuts_root: Updated score of 2000 to -0.312435933
+max_restarts: Updated score of 0 to -0.312435933
+[END] 2023-02-10T04:22:44
 
 [INSTANCE] rhs_s2_i03.mps.gz
-[START] 2023-02-10T04:06:43
+[START] 2023-02-10T04:22:44
 provide_hint: Trying value: 0 at index: 1 Score: 5.000000000 Stdev: 0.000000000
 [DUALBOUND] -17167.482618062
 Relative gap: 0.000000000
-time_score: 0.678117433
+time_score: 0.674415133
 first_solution_dist: 9706.313025738
-first_sol_time: 1.030064000
-total_score: 0.678117433
-adjusted_score: 0.813740920
+first_sol_time: 1.007068000
+total_score: 0.674415133
+adjusted_score: 0.809298160
 Number of runs: 1
 Calls 0 Solns 0 Time 0.000001000
-provide_hint: Updated score of 0 to -0.378117433
-max_cuts: Updated score of 100 to -0.492611125
-max_cuts_root: Updated score of 2000 to -0.492611125
-max_restarts: Updated score of 0 to -0.492611125
-[END] 2023-02-10T04:07:24
+provide_hint: Updated score of 0 to -0.374415133
+max_cuts: Updated score of 100 to -0.493425533
+max_cuts_root: Updated score of 2000 to -0.493425533
+max_restarts: Updated score of 0 to -0.493425533
+[END] 2023-02-10T04:23:25
 
 [INSTANCE] rhs_s2_i04.mps.gz
-[START] 2023-02-10T04:07:24
-provide_hint: Trying value: 1 at index: 0 Score: -0.307104817 Stdev: 0.000000000
+[START] 2023-02-10T04:23:25
+provide_hint: Trying value: 1 at index: 0 Score: -0.312435933 Stdev: 0.000000000
 Added a partial solution
 Added a partial solution
 Added a partial solution
@@ -65,88 +65,88 @@ Number of vars hinted = 499
 Added a common partial solution
 [DUALBOUND] -17167.530462696
 Relative gap: 0.000000000
-time_score: 0.583229167
+time_score: 0.586241017
 first_solution_dist: 0.000000000
-first_sol_time: 0.330886000
-total_score: 0.583229167
-adjusted_score: 0.758197917
+first_sol_time: 0.318736000
+total_score: 0.586241017
+adjusted_score: 0.762113322
 Number of runs: 1
-Calls 1 Solns 2 Time 1.616250000
-provide_hint: Updated score of 1 to -0.445166992
-max_cuts: Updated score of 100 to -0.522817139
-max_cuts_root: Updated score of 2000 to -0.522817139
-max_restarts: Updated score of 0 to -0.522817139
-[END] 2023-02-10T04:07:59
+Calls 1 Solns 2 Time 1.573299000
+provide_hint: Updated score of 1 to -0.449338475
+max_cuts: Updated score of 100 to -0.524364028
+max_cuts_root: Updated score of 2000 to -0.524364028
+max_restarts: Updated score of 0 to -0.524364028
+[END] 2023-02-10T04:24:00
 
 [INSTANCE] rhs_s2_i05.mps.gz
-[START] 2023-02-10T04:07:59
-provide_hint: Trying value: 0 at index: 1 Score: -0.378117433 Stdev: 0.000000000
+[START] 2023-02-10T04:24:00
+provide_hint: Trying value: 0 at index: 1 Score: -0.374415133 Stdev: 0.000000000
 [DUALBOUND] -17167.576664778
 Relative gap: 0.000000000
-time_score: 0.702650650
+time_score: 0.679299017
 first_solution_dist: 9706.041561842
-first_sol_time: 1.071732000
-total_score: 0.702650650
-adjusted_score: 0.983710910
+first_sol_time: 1.041564000
+total_score: 0.679299017
+adjusted_score: 0.951018623
 Number of runs: 1
-Calls 0 Solns 0 Time 0.000001000
-provide_hint: Updated score of 0 to -0.540384042
-max_cuts: Updated score of 100 to -0.567775517
-max_cuts_root: Updated score of 2000 to -0.567775517
-max_restarts: Updated score of 0 to -0.567775517
-[END] 2023-02-10T04:08:41
+Calls 0 Solns 0 Time 0.000003000
+provide_hint: Updated score of 0 to -0.526857075
+max_cuts: Updated score of 100 to -0.563097775
+max_cuts_root: Updated score of 2000 to -0.563097775
+max_restarts: Updated score of 0 to -0.563097775
+[END] 2023-02-10T04:24:41
 
 provide_hint
-Value 1 count 2 Qscore -0.595166992 Final score -0.445166992
-Value 0 count 2 Qscore -0.690384042 Final score -0.540384042
+Value 1 count 2 Qscore -0.599338475 Final score -0.449338475
+Value 0 count 2 Qscore -0.676857075 Final score -0.526857075
 max_cuts
-Value 100 count 4 Qscore -0.642775517 Final score -0.567775517
+Value 100 count 4 Qscore -0.638097775 Final score -0.563097775
 Value 0 count 0 Qscore 0.000000000 Final score 5.000000000
 max_cuts_root
-Value 2000 count 4 Qscore -0.642775517 Final score -0.567775517
+Value 2000 count 4 Qscore -0.638097775 Final score -0.563097775
 Value 0 count 0 Qscore 0.000000000 Final score 5.000000000
 max_restarts
-Value 0 count 4 Qscore -0.642775517 Final score -0.567775517
+Value 0 count 4 Qscore -0.638097775 Final score -0.563097775
 Value 1 count 0 Qscore 0.000000000 Final score 5.000000000
 Provided hints: 2 successful hints: 2
-fullstrong               calls 100        maxdepth 0          time 19.819452000
-relpscost                calls 1530       maxdepth 0          time 39.793714000
-adaptivediving           calls 9          solns 0     bestsolns 0     time 0.129325000
-alns                     calls 17         solns 3     bestsolns 3     time 4.781021000
-completesol              calls 2          solns 3     bestsolns 2     time 1.997465000
-conflictdiving           calls 8          solns 0     bestsolns 0     time 0.212210000
-crossover                calls 4          solns 4     bestsolns 0     time 7.317050000
-distributiondiving       calls 5          solns 0     bestsolns 0     time 0.134203000
-feaspump                 calls 5          solns 5     bestsolns 3     time 0.533487000
-fracdiving               calls 6          solns 1     bestsolns 1     time 0.113590000
-guideddiving             calls 4          solns 0     bestsolns 0     time 0.050731000
-intshifting              calls 24         solns 3     bestsolns 3     time 1.838234000
-linesearchdiving         calls 4          solns 0     bestsolns 0     time 0.058892000
-locks                    calls 5          solns 3     bestsolns 3     time 1.406526000
-objpscostdiving          calls 5          solns 5     bestsolns 0     time 1.180673000
-oneopt                   calls 14         solns 0     bestsolns 0     time 0.019153000
-pscostdiving             calls 7          solns 0     bestsolns 0     time 0.314746000
-randrounding             calls 129        solns 0     bestsolns 0     time 0.224516000
-rens                     calls 7          solns 7     bestsolns 4     time 63.804801000
-rins                     calls 4          solns 4     bestsolns 0     time 4.524696000
-rootsoldiving            calls 3          solns 3     bestsolns 0     time 0.852153000
-rounding                 calls 1165       solns 0     bestsolns 0     time 0.018989000
-shifting                 calls 556        solns 0     bestsolns 0     time 2.408824000
-trivial                  calls 10         solns 0     bestsolns 0     time 0.004785000
-veclendiving             calls 5          solns 0     bestsolns 0     time 0.056341000
-zirounding               calls 1142       solns 0     bestsolns 0     time 0.019044000
-domcol                   calls 7          changes 0          time 0.055086000
-dualcomp                 calls 7          changes 0          time 0.050058000
-dualsparsify             calls 5          changes 0          time 0.746202000
+fullstrong               calls 113        maxdepth 0          time 20.712931000
+relpscost                calls 1527       maxdepth 0          time 40.844343000
+adaptivediving           calls 7          solns 1     bestsolns 1     time 0.147642000
+alns                     calls 19         solns 1     bestsolns 1     time 6.398134000
+completesol              calls 2          solns 3     bestsolns 2     time 1.940563000
+conflictdiving           calls 7          solns 0     bestsolns 0     time 0.194572000
+crossover                calls 4          solns 4     bestsolns 0     time 6.918491000
+distributiondiving       calls 5          solns 0     bestsolns 0     time 0.113016000
+feaspump                 calls 5          solns 5     bestsolns 3     time 0.520155000
+fracdiving               calls 5          solns 1     bestsolns 1     time 0.086969000
+guideddiving             calls 3          solns 0     bestsolns 0     time 0.040610000
+intshifting              calls 26         solns 3     bestsolns 3     time 1.964923000
+linesearchdiving         calls 5          solns 0     bestsolns 0     time 0.055824000
+locks                    calls 5          solns 3     bestsolns 3     time 1.354842000
+objpscostdiving          calls 4          solns 4     bestsolns 0     time 1.035137000
+oneopt                   calls 18         solns 0     bestsolns 0     time 0.022582000
+pscostdiving             calls 5          solns 0     bestsolns 0     time 0.244808000
+randrounding             calls 132        solns 0     bestsolns 0     time 0.213828000
+rens                     calls 7          solns 7     bestsolns 4     time 62.278085000
+rins                     calls 4          solns 4     bestsolns 0     time 6.175598000
+rootsoldiving            calls 4          solns 4     bestsolns 0     time 0.698784000
+rounding                 calls 1142       solns 0     bestsolns 0     time 0.017974000
+shifting                 calls 486        solns 0     bestsolns 0     time 2.071912000
+trivial                  calls 10         solns 0     bestsolns 0     time 0.004492000
+veclendiving             calls 5          solns 1     bestsolns 1     time 0.061813000
+zirounding               calls 1131       solns 0     bestsolns 0     time 0.018483000
+domcol                   calls 7          changes 0          time 0.053097000
+dualcomp                 calls 7          changes 0          time 0.048737000
+dualsparsify             calls 5          changes 0          time 0.729137000
 implics                  calls 17         changes 0          time 0.000086000
-milp                     calls 6          changes 0          time 1.982421000
-sparsify                 calls 5          changes 0          time 0.045425000
-trivial                  calls 24         changes 109        time 0.000512000
-aggregation              calls 478        cuts_found 0          cuts_added 0          time 12.390483000
-clique                   calls 7          cuts_found 0          cuts_added 0          time 0.000090000
-gomory                   calls 403        cuts_found 6160       cuts_added 459        time 3.562508000
-impliedbounds            calls 478        cuts_found 6          cuts_added 4          time 0.004469000
-mcf                      calls 7          cuts_found 0          cuts_added 0          time 0.000140000
-mixing                   calls 478        cuts_found 0          cuts_added 0          time 0.009667000
+milp                     calls 6          changes 0          time 1.911160000
+sparsify                 calls 5          changes 0          time 0.044458000
+trivial                  calls 24         changes 109        time 0.000482000
+aggregation              calls 423        cuts_found 0          cuts_added 0          time 11.695436000
+clique                   calls 7          cuts_found 0          cuts_added 0          time 0.000099000
+gomory                   calls 355        cuts_found 5390       cuts_added 406        time 3.077571000
+impliedbounds            calls 423        cuts_found 4          cuts_added 1          time 0.003746000
+mcf                      calls 7          cuts_found 0          cuts_added 0          time 0.000131000
+mixing                   calls 423        cuts_found 0          cuts_added 0          time 0.008332000
 rlt                      calls 70         cuts_found 0          cuts_added 0          time 0.000058000
-zerohalf                 calls 428        cuts_found 0          cuts_added 0          time 0.025089000
+zerohalf                 calls 380        cuts_found 0          cuts_added 0          time 0.021665000
