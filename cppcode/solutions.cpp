@@ -15,6 +15,8 @@
 
 #include "solutions.h"
 
+#define SOLDEBUG false
+
 using namespace std;
 
 void Solution::Populate(SCIP *scip,
@@ -52,12 +54,6 @@ SCIP_RETCODE Solution::AddToModel(SCIP *scip,
     }
     SCIP_Bool is_stored;
     SCIP_CALL(SCIPaddSolFree(scip, &solution, &is_stored));
-    if (is_stored)
-    {
-        cout << "Added a partial solution\n";
-        // cout << "Number of partial solutions: "
-        // << SCIPgetNPartialSols(scip) << "\n";
-    }
     return SCIP_OKAY;
 }
 SCIP_RETCODE Solution::AddToModelComplete(SCIP *scip,
@@ -78,8 +74,6 @@ SCIP_RETCODE Solution::AddToModelComplete(SCIP *scip,
     if (is_stored)
     {
         cout << "Added a Complete solution\n";
-        // cout << "Number of partial solutions: "
-        // << SCIPgetNPartialSols(scip) << "\n";
     }
     return SCIP_OKAY;
 }
@@ -130,10 +124,6 @@ SCIP_RETCODE SolutionPool::AddToModel(SCIP *scip,
     for (int i = 0; i < num_solutions_to_add; ++i)
     {
         Solution &solution = solutions_[num_solutions - 1 - i];
-        // if (i == 0)
-        // {
-        //     SCIP_CALL(solution.AddToModelComplete(scip, scip_variables));
-        // }
         SCIP_CALL(solution.AddToModel(scip, scip_variables));
     }
 
@@ -164,13 +154,12 @@ SCIP_RETCODE SolutionPool::AddToModel(SCIP *scip,
             num_var_hinted++;
         }
     }
-    cout << "Number of vars hinted = " << num_var_hinted << endl;
+    if (SOLDEBUG)
+    {
+        cout << "Number of vars hinted = " << num_var_hinted << endl;
+    }
     SCIP_Bool is_stored;
     SCIP_CALL(SCIPaddSolFree(scip, &common_solution, &is_stored));
-    if (is_stored)
-    {
-        cout << "Added a common partial solution\n";
-    }
     return SCIP_OKAY;
 }
 
@@ -204,7 +193,10 @@ SCIP_RETCODE SolutionPool::AddNextSolutionToModel(SCIP *scip)
     {
         return SCIP_OKAY;
     }
-    cout << "Adding solution " << index << " to model\n";
+    if (SOLDEBUG)
+    {
+        cout << "Adding solution " << index << " to model\n";
+    }
     SCIP_CALL(solutions_[index].AddToModel(scip, *current_scip_variables_));
     last_added_solution_index_ = index;
     return SCIP_OKAY;

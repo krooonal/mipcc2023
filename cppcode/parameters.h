@@ -17,6 +17,8 @@
 #include <time.h>
 #include <random>
 
+#define PARDEBUG false
+
 using namespace std;
 
 // https://www.johndcook.com/blog/standard_deviation/
@@ -129,13 +131,15 @@ void Parameter<T>::AdjustScore(double score)
 template <typename T>
 void Parameter<T>::AdjustScore(double score, int index)
 {
-    // scores_[index] = (scores_[index] * counts_[index] + score) / (counts_[index] + 1);
     scores_[index].Push(score);
     counts_[index] += 1;
     total_counts_ += 1;
     final_scores_[index] = scores_[index].Mean() + (c_fac_ / counts_[index]);
-    cout << name_ << ": Updated score of " << values_[index]
-         << " to " << final_scores_[index] << endl;
+    if (PARDEBUG)
+    {
+        cout << name_ << ": Updated score of " << values_[index]
+             << " to " << final_scores_[index] << endl;
+    }
 }
 
 template <typename T>
@@ -197,11 +201,14 @@ T Parameter<T>::GetBestValue()
     }
 
     current_index_ = best_index;
-    cout << name_ << ": Trying value: " << values_[best_index]
-         << " at index: " << best_index
-         << " Score: " << final_scores_[best_index]
-         << " Stdev: " << scores_[best_index].StandardDeviation()
-         << endl;
+    if (PARDEBUG)
+    {
+        cout << name_ << ": Trying value: " << values_[best_index]
+             << " at index: " << best_index
+             << " Score: " << final_scores_[best_index]
+             << " Stdev: " << scores_[best_index].StandardDeviation()
+             << endl;
+    }
     return values_[best_index];
 }
 
