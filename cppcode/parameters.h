@@ -17,7 +17,7 @@
 #include <time.h>
 #include <random>
 
-#define PARDEBUG false
+#define PARDEBUG true
 
 using namespace std;
 
