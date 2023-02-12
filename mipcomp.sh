@@ -6,7 +6,7 @@ if ! [ -f cppcode/build/cppex ];
 then
     mkdir -p cppcode/build
     cd cppcode/build/
-    cmake .. -DSCIP_DIR=/home/patekrun/scipoptsuite-8.0.2/build/scip/; 
+    cmake .. -DSCIP_DIR=/home/patekrun/scipoptsuite-8.0.2/build/scip/
     make
     cd ../../
 fi
