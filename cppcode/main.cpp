@@ -254,13 +254,6 @@ SCIP_RETCODE execmain(int argc, const char **argv)
     max_cuts_root.AddValue(2000);
     max_cuts_root.AddValue(0);
 
-    // Tune after index 20.
-    Parameter<int> max_restarts(0.3, "max_restarts", /*seed=*/285949);
-    max_restarts.SetExploreCount(8);
-    max_restarts.SetSwitchFlag(1 << 0);
-    max_restarts.AddValue(0);
-    max_restarts.AddValue(1);
-
     SCIP_RESULT *result;
     result = new SCIP_RESULT[3];
 
@@ -328,23 +321,23 @@ SCIP_RETCODE execmain(int argc, const char **argv)
                 SCIP_CALL(SCIPsetIntParam(scip, "branching/pscost/priority", 40000)); // default 2000
             }
             // Disable restarts. We are already using enough information from previous instances.
-            // SCIP_CALL(SCIPsetIntParam(scip, "presolving/maxrestarts", 0));
-            if (index > 20)
-            {
-                SCIP_CALL(SCIPsetIntParam(scip, "presolving/maxrestarts", max_restarts.GetBestValue()));
-            }
-            else
-            {
-                SCIP_CALL(SCIPsetIntParam(scip, "presolving/maxrestarts", 0));
-            }
+            SCIP_CALL(SCIPsetIntParam(scip, "presolving/maxrestarts", 0));
         }
         if (index >= 25)
         {
             // Turn off non performing heuristics
             for (auto heuristic : heuristic_stats)
             {
+                int num_best_solns = max(1, heuristic.second.n_best_solns);
+                double time_per_best_soln = heuristic.second.time_spent / num_best_solns;
                 if (heuristic.second.n_solns == 0)
                 {
+                    string heuristic_param = "heuristics/" + heuristic.first + "/freq";
+                    SCIP_CALL(SCIPsetIntParam(scip, heuristic_param.c_str(), -1));
+                }
+                else if (time_per_best_soln / timeout > 0.2)
+                {
+                    // and some not so effective ones.
                     string heuristic_param = "heuristics/" + heuristic.first + "/freq";
                     SCIP_CALL(SCIPsetIntParam(scip, heuristic_param.c_str(), -1));
                 }
@@ -573,14 +566,6 @@ SCIP_RETCODE execmain(int argc, const char **argv)
             // update the scores as the first value is the default value.
             max_cuts.AdjustScore(-total_score);
             max_cuts_root.AdjustScore(-total_score);
-            if (scip->stat->nruns > 1)
-            {
-                max_restarts.AdjustScore(-total_score, 1);
-            }
-            else
-            {
-                max_restarts.AdjustScore(-total_score, 0);
-            }
         }
         // system("echo -n \"[END] \";date -Iseconds");
         std::cout << "[END] " << CurrentDateTime() << "\n\n"
@@ -589,7 +574,6 @@ SCIP_RETCODE execmain(int argc, const char **argv)
     provide_hint.PrintStats();
     max_cuts.PrintStats();
     max_cuts_root.PrintStats();
-    max_restarts.PrintStats();
     std::cout << "Provided hints: " << hint_total
               << " successful hints: " << hint_success << endl;
 
