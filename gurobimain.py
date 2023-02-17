@@ -28,7 +28,7 @@ print("number of instances:", len(instances))
 time_limit = int(all_lines[0].split(' ')[-1])
 
 solution_folder = os.path.join(
-    "solutions/", os.path.basename(os.path.splitext(meta_file)[0]))
+    "optsolutions/", os.path.basename(os.path.splitext(meta_file)[0]))
 
 if not os.path.isdir(solution_folder):
     os.mkdir(solution_folder)
