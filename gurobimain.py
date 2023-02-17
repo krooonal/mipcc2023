@@ -58,7 +58,7 @@ for index, instance in enumerate(instances):
     print("[END]", datetime.now().isoformat())
     t_end = time()
 
-    primal_bound = model.INFINITY
+    primal_bound = 0.0
     dual_bound = model.ObjBoundC()
 
     # print dual bound
