@@ -59,15 +59,15 @@ for index, instance in enumerate(instances):
     t_end = time()
 
     primal_bound = 0.0
-    dual_bound = model.ObjBoundC()
+    dual_bound = model.ObjBoundC
 
     # print dual bound
     print("[DUALBOUND]", dual_bound)
 
     # write solution to instance_name.sol in 'solutions' directory and store
     # it for future use.
-    if model.SolCount() > 0:
-        primal_bound = model.ObjVal()
+    if model.SolCount > 0:
+        primal_bound = model.ObjVal
         with open(os.path.join(solution_folder, f"{instance_base}.sol"), 'w') as f:
             for v in model.getVars():
                 name = v.VarName
