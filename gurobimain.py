@@ -1,4 +1,5 @@
 import gurobipy as gp
+from gurobipy import GRB
 import os
 import sys
 import math
@@ -58,7 +59,7 @@ for index, instance in enumerate(instances):
     print("[END]", datetime.now().isoformat())
     t_end = time()
 
-    primal_bound = 0.0
+    primal_bound = GRB.INFINITY
     dual_bound = model.ObjBoundC
 
     # print dual bound
@@ -85,14 +86,14 @@ for index, instance in enumerate(instances):
     gap_score = 0
     feasibility_penalty = 0
 
-    is_optimal = (model.getStatus() == "optimal")
+    is_optimal = (model.Status == GRB.OPTIMAL)
 
     if not is_optimal:
         time_score = max(1, time_score)
         gap_score = abs(primal_bound - dual_bound) / \
             max(abs(primal_bound), abs(dual_bound))
 
-    if model.isInfinity(primal_bound) or model.isInfinity(dual_bound):
+    if abs(primal_bound) >= GRB.INFINITY or abs(dual_bound) >= GRB.INFINITY:
         gap_score = 1
     elif primal_bound * dual_bound < 0:
         gap_score = 1
