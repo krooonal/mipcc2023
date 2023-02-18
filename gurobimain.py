@@ -48,7 +48,7 @@ for index, instance in enumerate(instances):
     model = gp.read(instance_path)
 
     # set time limit
-    model.Params.timelimit = time_limit
+    # model.Params.timelimit = time_limit
     model.Params.Threads = 1
     model.Params.OutputFlag = 0
 
