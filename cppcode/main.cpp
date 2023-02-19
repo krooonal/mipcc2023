@@ -323,7 +323,7 @@ SCIP_RETCODE execmain(int argc, const char **argv)
             // Disable restarts. We are already using enough information from previous instances.
             SCIP_CALL(SCIPsetIntParam(scip, "presolving/maxrestarts", 0));
         }
-        if (index >= 20)
+        if (index >= 25)
         {
             // Turn off non performing heuristics
             for (auto heuristic : heuristic_stats)
