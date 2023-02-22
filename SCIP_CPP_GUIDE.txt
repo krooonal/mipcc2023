@@ -1,0 +1,29 @@
+SCIP INSTALL
+Do not use the build as install directory. Specify install and soplex directory.
+
+First Make a project directory
+mkdir CppEx
+cd CppEx
+
+Then add the c++ file
+vim main.cpp
+
+Then create a CMakeLists.txt file with the following content
+cmake_minimum_required(VERSION 3.3)
+project(cppex)
+find_package(SCIP REQUIRED)
+include_directories(${SCIP_INCLUDE_DIRS})
+add_executable(cppex
+  main.cpp)
+target_link_libraries(cppex ${SCIP_LIBRARIES})
+if( TARGET examples )
+    add_dependencies( examples cppex )
+endif()
+
+Create a build directory
+mkdir build; cd build; 
+
+Make the project
+cmake .. -DSCIP_DIR=/home/patekrun/scipoptsuite-8.0.2/build/scip/ -DCMAKE_BUILD_TYPE=Release
+make; 
+./cppex

@@ -1,0 +1,109 @@
+datasets/testfiles/small5/magic_series_1.test
+
+100
+[INSTANCE] sp_3_0.mps.gz
+[START] 2023-01-10T14:56:16
+[DUALBOUND] 14528.084600000
+9599
+Common solution set
+Relative gap: 0.000000000
+time_score: 0.806976690
+first_solution_dist: 7043.667600000
+first_sol_time: 79.117316000
+total_score: 0.806976690
+adjusted_score: 0.806976690
+Branching stats
+Calls 0 Solns 0 Time 0.000018000
+[END] 2023-01-10T14:57:37
+[INSTANCE] sp_3_1.mps.gz
+[START] 2023-01-10T14:57:40
+max_cuts: Trying value: 100 at index: 0 Score: 5.000000000
+max_cuts_root: Trying value: 2000 at index: 0 Score: 5.000000000
+provide_hint: Trying value: 0 at index: 1 Score: 5.000000000
+[DUALBOUND] 14527.084600000
+Relative gap: 0.000000000
+time_score: 0.757724220
+first_solution_dist: 7042.667600000
+first_sol_time: 74.222455000
+total_score: 0.757724220
+adjusted_score: 0.833496642
+Branching stats
+Calls 0 Solns 0 Time 0.000010000
+provide_hint: Updated score of 0 to -0.457724220
+max_cuts: Updated score of 100 to -0.457724220
+max_cuts_root: Updated score of 2000 to -0.457724220
+[END] 2023-01-10T14:58:56
+[INSTANCE] sp_3_2.mps.gz
+[START] 2023-01-10T14:58:57
+max_cuts: Trying value: 0 at index: 1 Score: 5.000000000
+max_cuts_root: Trying value: 2000 at index: 0 Score: -0.457724220
+provide_hint: Trying value: 1 at index: 0 Score: 5.000000000
+Added a partial solution
+Added a partial solution
+Number of vars hinted = 9595
+Added a common partial solution
+[DUALBOUND] 14525.084600000
+Relative gap: 0.000000000
+time_score: 0.656161320
+first_solution_dist: 14576.100000000
+first_sol_time: 0.497130000
+total_score: 0.656161320
+adjusted_score: 0.787393584
+Branching stats
+Calls 1 Solns 2 Time 1.574742000
+provide_hint: Updated score of 1 to -0.356161320
+max_cuts: Updated score of 0 to -0.356161320
+max_cuts_root: Updated score of 2000 to -0.556942770
+[END] 2023-01-10T15:00:03
+[INSTANCE] sp_3_3.mps.gz
+[START] 2023-01-10T15:00:05
+max_cuts: Trying value: 0 at index: 1 Score: -0.356161320
+max_cuts_root: Trying value: 2000 at index: 0 Score: -0.556942770
+provide_hint: Trying value: 0 at index: 1 Score: -0.457724220
+[DUALBOUND] 14525.084600000
+Relative gap: 0.000000000
+time_score: 0.664402160
+first_solution_dist: 7040.667600000
+first_sol_time: 64.445094000
+total_score: 0.664402160
+adjusted_score: 0.863722808
+Branching stats
+Calls 0 Solns 0 Time 0.000009000
+provide_hint: Updated score of 0 to -0.561063190
+max_cuts: Updated score of 0 to -0.510281740
+max_cuts_root: Updated score of 2000 to -0.592762567
+[END] 2023-01-10T15:01:12
+[INSTANCE] sp_3_4.mps.gz
+[START] 2023-01-10T15:01:13
+max_cuts: Trying value: 0 at index: 1 Score: -0.510281740
+max_cuts_root: Trying value: 2000 at index: 0 Score: -0.592762567
+provide_hint: Trying value: 0 at index: 1 Score: -0.561063190
+[DUALBOUND] 14525.084600000
+Relative gap: 0.000000000
+time_score: 0.594862280
+first_solution_dist: 7040.667600000
+first_sol_time: 58.007983000
+total_score: 0.594862280
+adjusted_score: 0.832807192
+Branching stats
+Calls 0 Solns 0 Time 0.000013000
+provide_hint: Updated score of 0 to -0.572329553
+max_cuts: Updated score of 0 to -0.538475253
+max_cuts_root: Updated score of 2000 to -0.593287495
+[END] 2023-01-10T15:02:13
+provide_hint
+Value 1 count 1 Qscore -0.656161320 Final score -0.356161320
+Value 0 count 3 Qscore -0.672329553 Final score -0.572329553
+max_cuts
+Value 100 count 1 Qscore -0.757724220 Final score -0.457724220
+Value 0 count 3 Qscore -0.638475253 Final score -0.538475253
+max_cuts_root
+Value 2000 count 4 Qscore -0.668287495 Final score -0.593287495
+Value 0 count 0 Qscore 0.000000000 Final score 5.000000000
+Provided hints: 1 successful hints: 1
+clique                   calls 5          solns 5     bestsolns 5     time 2.027522000
+completesol              calls 1          solns 2     bestsolns 1     time 1.574742000
+locks                    calls 5          solns 0     bestsolns 0     time 1.277312000
+oneopt                   calls 5          solns 0     bestsolns 0     time 0.065837000
+trivial                  calls 10         solns 0     bestsolns 0     time 0.098560000
+vbounds                  calls 5          solns 0     bestsolns 0     time 1.680913000

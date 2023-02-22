@@ -36,8 +36,10 @@ for instance in instances:
     instance_base = os.path.basename(instance)
     with open(os.path.join(solution_folder, f"{instance_base}.sol")) as f:
         all_vars = [line.rstrip() for line in f]
-        print(instance, len(all_vars))
+        # print(instance, len(all_vars))
         for var in range(len(all_vars)):
+            if all_vars[var].startswith("#"):
+                continue
             var_name, value = all_vars[var].split()
             # print(var_name, value)
             value = float(value)
@@ -53,8 +55,10 @@ avg_distance = 0.0
 min_distance = 99999999999.0
 avg_best_freq = 0.0
 distances = []
+num_non_zero_commons = 0
+num_commons = 0
 for var in variables:
-    print(var)
+    # print(var)
     max_val = -9999999999.0
     min_val = 9999999999.0
     most_freq_val = 0.0
@@ -66,8 +70,12 @@ for var in variables:
             best_val_freq = variables[var][value]
             most_freq_val = value
 
-    print(min_val, max_val, most_freq_val, best_val_freq)
+    # print(min_val, max_val, most_freq_val, best_val_freq)
     distance = max_val - min_val
+    if distance == 0:
+        num_commons += 1
+        if max_val > 0:
+            num_non_zero_commons += 1
     distances.append(distance)
     max_distance = max(max_distance, distance)
     avg_distance += distance
@@ -76,12 +84,15 @@ for var in variables:
 
 avg_best_freq /= len(variables)
 avg_distance /= len(variables)
+print("Total num vars: ", len(variables))
 print("Max distance: ", max_distance)
 print("Min distance: ", min_distance)
 print("Avg distance: ", avg_distance)
 print("Avg besst freq: ", avg_best_freq)
+print("num_non_zero_commons: ", num_non_zero_commons)
+print("num_commons: ", num_commons)
 
 distances.sort()
 
 plt.hist(distances, 100)
-plt.show()
+# plt.show()
