@@ -291,7 +291,7 @@ SCIP_RETCODE execmain(int argc, const char **argv)
         // Use little less than the time limit to ensure that we have
         // sufficient time left for stats collection and solution writing.
         // TODO: use timeout -1
-        SCIP_CALL(SCIPsetRealParam(scip, "limits/time", timeout - 2));
+        SCIP_CALL(SCIPsetRealParam(scip, "limits/time", timeout - 1));
 
         if (index == 0)
         {
