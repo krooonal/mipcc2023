@@ -275,7 +275,7 @@ SCIP_RETCODE execmain(int argc, const char **argv)
         string instance = instances[index];
         int pos = instance.find_last_of('/');
         string instance_name = instance.substr(pos + 1, string::npos);
-        string filename = base_dir + instance;
+        string filename = instance;
 
         std::cout << "[INSTANCE] " << instance_name << "\n"
                   << std::flush;
