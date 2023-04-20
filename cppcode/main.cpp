@@ -275,7 +275,7 @@ SCIP_RETCODE execmain(int argc, const char **argv)
         string instance = instances[index];
         int pos = instance.find_last_of('/');
         string instance_name = instance.substr(pos + 1, string::npos);
-        string filename = base_dir + instance;
+        string filename = instance;
 
         std::cout << "[INSTANCE] " << instance_name << "\n"
                   << std::flush;
@@ -291,7 +291,7 @@ SCIP_RETCODE execmain(int argc, const char **argv)
         // Use little less than the time limit to ensure that we have
         // sufficient time left for stats collection and solution writing.
         // TODO: use timeout -1
-        SCIP_CALL(SCIPsetRealParam(scip, "limits/time", timeout - 2));
+        SCIP_CALL(SCIPsetRealParam(scip, "limits/time", timeout - 1));
 
         if (index == 0)
         {
