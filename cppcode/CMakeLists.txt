@@ -17,6 +17,9 @@ target_link_libraries(cppex parameters)
 
 add_executable(experiment experiment.cpp)
 target_link_libraries(experiment ${SCIP_LIBRARIES})
+target_link_libraries(experiment solutions)
+target_link_libraries(experiment v_history)
+target_link_libraries(experiment parameters)
 
 add_executable(basecppex basemain.cpp)
 target_link_libraries(basecppex ${SCIP_LIBRARIES})
