@@ -65,8 +65,6 @@ SCIP_RETCODE Solution::AddToModelComplete(SCIP *scip,
     {
         const string name = SCIPvarGetName(var);
         double val = varvalues_.at(name);
-        double var_lb = SCIPvarGetLbGlobal(var);
-        double var_ub = SCIPvarGetUbGlobal(var);
         SCIP_CALL(SCIPsetSolVal(scip, solution, var, val));
     }
     SCIP_Bool is_stored;
@@ -127,9 +125,12 @@ SCIP_RETCODE SolutionPool::AddToModel(SCIP *scip,
     for (int i = 0; i < num_solutions_to_add; ++i)
     {
         Solution &solution = solutions_[num_solutions - 1 - i];
-        SCIP_CALL(solution.AddToModel(scip, scip_variables));
+        // SCIP_CALL(solution.AddToModel(scip, scip_variables));
+        SCIP_CALL(solution.AddToModelComplete(scip, scip_variables));
     }
 
+    // EXP: Disable common solution.
+    return SCIP_OKAY;
     if (num_solutions <= 1)
         return SCIP_OKAY;
     SCIP_SOL *common_solution;
@@ -166,6 +167,7 @@ SCIP_RETCODE SolutionPool::AddToModel(SCIP *scip,
     return SCIP_OKAY;
 }
 
+// The following methods are not used.
 Solution SolutionPool::GetSolution(int index)
 {
     assert(index >= 0);
