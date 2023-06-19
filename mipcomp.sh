@@ -11,9 +11,11 @@ then
     cd ../../
 fi
 
-./cppcode/build/cppex $1
+# ./cppcode/build/cppex $1
 
 # Command to compute base benchmarks.
 # ./cppcode/build/basecppex $1
 # With gurobi
 # python gurobimain.py $1
+
+./cppcode/build/experiment $1
