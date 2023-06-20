@@ -125,8 +125,8 @@ SCIP_RETCODE SolutionPool::AddToModel(SCIP *scip,
     for (int i = 0; i < num_solutions_to_add; ++i)
     {
         Solution &solution = solutions_[num_solutions - 1 - i];
-        // SCIP_CALL(solution.AddToModel(scip, scip_variables));
-        SCIP_CALL(solution.AddToModelComplete(scip, scip_variables));
+        SCIP_CALL(solution.AddToModel(scip, scip_variables));
+        // SCIP_CALL(solution.AddToModelComplete(scip, scip_variables));
     }
 
     // EXP: Disable common solution.
