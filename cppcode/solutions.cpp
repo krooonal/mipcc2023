@@ -130,7 +130,7 @@ SCIP_RETCODE SolutionPool::AddToModel(SCIP *scip,
     }
 
     // EXP: Disable common solution.
-    return SCIP_OKAY;
+    // return SCIP_OKAY;
     if (num_solutions <= 1)
         return SCIP_OKAY;
     SCIP_SOL *common_solution;
