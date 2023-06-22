@@ -217,10 +217,10 @@ SCIP_RETCODE execmain(int argc, const char **argv)
         }
         if (index > 0)
         {
-            if (true)
-            {
-                solution_pool.AddToModel(scip, scip_variables);
-            }
+            // if (true)
+            // {
+            //     solution_pool.AddToModel(scip, scip_variables);
+            // }
             // var_histories.AddToModel(scip, scip_variables);
         }
 
