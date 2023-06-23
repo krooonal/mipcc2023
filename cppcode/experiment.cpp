@@ -221,7 +221,7 @@ SCIP_RETCODE execmain(int argc, const char **argv)
             // {
             //     solution_pool.AddToModel(scip, scip_variables);
             // }
-            // var_histories.AddToModel(scip, scip_variables);
+            var_histories.AddToModel(scip, scip_variables);
         }
 
         // Solve
