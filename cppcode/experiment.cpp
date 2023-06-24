@@ -194,14 +194,27 @@ SCIP_RETCODE execmain(int argc, const char **argv)
         // sufficient time left for stats collection and solution writing.
         // TODO: use timeout -1
         SCIP_CALL(SCIPsetRealParam(scip, "limits/time", timeout - 1));
+
+        if (index == 0)
+        {
+            // Solve first instance with pure strong branching.
+            SCIP_CALL(SCIPsetIntParam(scip, "branching/fullstrong/priority", 40000)); // default 0
+        }
         if (index > 0)
         {
+            // Back to normal.
+            SCIP_CALL(SCIPsetIntParam(scip, "branching/fullstrong/priority", 0)); // default 0
             // Increase the efforts of completesol heuristic.
             if (!obj_only_change)
             {
                 // Regular efforts works if only the objective has changed. Otherwise, increase the effort.
                 SCIP_CALL(SCIPsetLongintParam(scip, "heuristics/completesol/nodesofs", 5000)); // default 500
                 SCIP_CALL(SCIPsetIntParam(scip, "heuristics/completesol/solutions", -1));      // default 5
+            }
+            if (rhs_only_change && index > 4)
+            {
+                // Pseudocosts are well trained if objective and bounds are not changed.
+                SCIP_CALL(SCIPsetIntParam(scip, "branching/pscost/priority", 40000)); // default 2000
             }
         }
 
@@ -257,8 +270,22 @@ SCIP_RETCODE execmain(int argc, const char **argv)
         var_histories.Populate(scip, scip_variables);
 
         // Record solve statistics
-        double relative_gap = SCIPgetGap(scip);
-        relative_gap = min(relative_gap, 1.0);
+        // TODO: Compute as per competition rules.
+        double primal_bound = SCIPgetPrimalbound(scip);
+        // double relative_gap = SCIPgetGap(scip);
+        // relative_gap = min(relative_gap, 1.0);
+        double relative_gap = 1.0;
+        if (SCIPisFinite(primal_bound) && SCIPisFinite(dual_bound) && primal_bound * dual_bound >= 0)
+        {
+            if (primal_bound == 0 && dual_bound == 0)
+            {
+                relative_gap = 0.0;
+            }
+            else
+            {
+                relative_gap = abs(primal_bound - dual_bound) / max(abs(primal_bound), abs(dual_bound));
+            }
+        }
         double time_score = SCIPgetSolvingTime(scip) / timeout;
         if (relative_gap > 1e-6)
         {
