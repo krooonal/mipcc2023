@@ -221,6 +221,7 @@ void Parameter<T>::PrintStats()
         cout << "Value " << values_[i]
              << " count " << counts_[i]
              << " Qscore " << scores_[i].Mean()
+             << " Stdev: " << scores_[i].StandardDeviation()
              << " Final score " << final_scores_[i] << endl;
     }
 }

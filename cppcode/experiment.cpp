@@ -158,8 +158,29 @@ SCIP_RETCODE execmain(int argc, const char **argv)
     // disable scip output to stdout
     SCIPmessagehdlrSetQuiet(SCIPgetMessagehdlr(scip), TRUE);
 
+    // Parameters to tune. Use fixed seed for reproducibility.
+    // Provide prev solution?
+    Parameter<bool> provide_hint(0.3, "provide_hint", /*seed=*/56166895);
+    provide_hint.SetExploreCount(8); // Hints are not always converted.
+    provide_hint.SetSwitchFlag(1 << 0);
+    provide_hint.AddValue(true);
+    provide_hint.AddValue(false);
     int hint_success = 0;
     int hint_total = 0;
+
+    // Tune after index 4.
+    Parameter<int> max_cuts(0.3, "max_cuts", /*seed=*/984321);
+    max_cuts.SetExploreCount(8);
+    max_cuts.SetSwitchFlag(1 << 1);
+    max_cuts.AddValue(100);
+    max_cuts.AddValue(0);
+
+    // Tune after index 4.
+    Parameter<int> max_cuts_root(0.3, "max_cuts_root", /*seed=*/5198413);
+    max_cuts_root.SetExploreCount(8);
+    max_cuts_root.SetSwitchFlag(1 << 2);
+    max_cuts_root.AddValue(2000);
+    max_cuts_root.AddValue(0);
 
     SCIP_RESULT *result;
     result = new SCIP_RESULT[3];
@@ -211,11 +232,19 @@ SCIP_RETCODE execmain(int argc, const char **argv)
                 SCIP_CALL(SCIPsetLongintParam(scip, "heuristics/completesol/nodesofs", 5000)); // default 500
                 SCIP_CALL(SCIPsetIntParam(scip, "heuristics/completesol/solutions", -1));      // default 5
             }
+            if (index > 4)
+            {
+                // Tune some parameters after a delay.
+                SCIP_CALL(SCIPsetIntParam(scip, "separating/maxcuts", max_cuts.GetBestValue()));
+                SCIP_CALL(SCIPsetIntParam(scip, "separating/maxcutsroot", max_cuts_root.GetBestValue()));
+            }
             if (rhs_only_change && index > 4)
             {
                 // Pseudocosts are well trained if objective and bounds are not changed.
                 SCIP_CALL(SCIPsetIntParam(scip, "branching/pscost/priority", 40000)); // default 2000
             }
+            // Disable restarts. We are already using enough information from previous instances.
+            SCIP_CALL(SCIPsetIntParam(scip, "presolving/maxrestarts", 0));
         }
 
         // Store the original model variables.
@@ -230,10 +259,10 @@ SCIP_RETCODE execmain(int argc, const char **argv)
         }
         if (index > 0)
         {
-            // if (true)
-            // {
-            //     solution_pool.AddToModel(scip, scip_variables);
-            // }
+            if (provide_hint.GetBestValue())
+            {
+                solution_pool.AddToModel(scip, scip_variables);
+            }
             var_histories.AddToModel(scip, scip_variables);
         }
 
@@ -330,9 +359,43 @@ SCIP_RETCODE execmain(int argc, const char **argv)
                 hint_success++;
             }
         }
+
+        // Update parameter scores.
+        if (index > 0)
+        {
+            if (provide_hint.GetCurrentIndex() == 0) // True value for hint.
+            {
+                if (comp_sol_solns > 0)
+                {
+                    provide_hint.AdjustScore(-total_score);
+                }
+                else
+                {
+                    // Update the false value of hint if hint is not successful.
+                    provide_hint.AdjustScore(-total_score, 1);
+                }
+            }
+            else
+            {
+                provide_hint.AdjustScore(-total_score);
+            }
+            // Cut tuning starts at index 4, but we can still
+            // update the scores as the first value is the default value.
+            max_cuts.AdjustScore(-total_score);
+            max_cuts_root.AdjustScore(-total_score);
+        }
         std::cout << "[END] " << CurrentDateTime() << "\n\n"
                   << std::flush;
+        if (index % 10 == 9)
+        {
+            provide_hint.PrintStats();
+            max_cuts.PrintStats();
+            max_cuts_root.PrintStats();
+        }
     }
+    provide_hint.PrintStats();
+    max_cuts.PrintStats();
+    max_cuts_root.PrintStats();
     std::cout << "Provided hints: " << hint_total
               << " successful hints: " << hint_success << endl;
 
