@@ -235,8 +235,8 @@ SCIP_RETCODE execmain(int argc, const char **argv)
             if (index > 4)
             {
                 // Tune some parameters after a delay.
-                SCIP_CALL(SCIPsetIntParam(scip, "separating/maxcuts", max_cuts.GetBestValue()));
-                SCIP_CALL(SCIPsetIntParam(scip, "separating/maxcutsroot", max_cuts_root.GetBestValue()));
+                // SCIP_CALL(SCIPsetIntParam(scip, "separating/maxcuts", max_cuts.GetBestValue()));
+                // SCIP_CALL(SCIPsetIntParam(scip, "separating/maxcutsroot", max_cuts_root.GetBestValue()));
             }
             if (rhs_only_change && index > 4)
             {
@@ -259,7 +259,8 @@ SCIP_RETCODE execmain(int argc, const char **argv)
         }
         if (index > 0)
         {
-            if (provide_hint.GetBestValue())
+            // if (provide_hint.GetBestValue())
+            if (true)
             {
                 solution_pool.AddToModel(scip, scip_variables);
             }
