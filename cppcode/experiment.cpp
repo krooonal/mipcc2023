@@ -333,13 +333,13 @@ SCIP_RETCODE execmain(int argc, const char **argv)
                 if (heuristic.second.n_solns == 0)
                 {
                     string heuristic_param = "heuristics/" + heuristic.first + "/freq";
-                    SCIP_CALL(SCIPsetIntParam(scip, heuristic_param.c_str(), -1));
+                    // SCIP_CALL(SCIPsetIntParam(scip, heuristic_param.c_str(), -1));
                 }
                 else if (time_per_best_soln / timeout > 0.2)
                 {
                     // and some not so effective ones.
                     string heuristic_param = "heuristics/" + heuristic.first + "/freq";
-                    SCIP_CALL(SCIPsetIntParam(scip, heuristic_param.c_str(), -1));
+                    // SCIP_CALL(SCIPsetIntParam(scip, heuristic_param.c_str(), -1));
                 }
             }
 
@@ -349,7 +349,7 @@ SCIP_RETCODE execmain(int argc, const char **argv)
                 if (separator.second.cuts_added == 0 && separator.second.time_spent > 1.0)
                 {
                     string spea_param = "separating/" + separator.first + "/freq";
-                    SCIP_CALL(SCIPsetIntParam(scip, spea_param.c_str(), -1));
+                    // SCIP_CALL(SCIPsetIntParam(scip, spea_param.c_str(), -1));
                 }
             }
         }
@@ -362,7 +362,7 @@ SCIP_RETCODE execmain(int argc, const char **argv)
                 if (presolve.second.total_changes == 0 && presolve.second.time_spent > 2.0)
                 {
                     string presolve_param = "presolving/" + presolve.first + "/maxrounds";
-                    SCIP_CALL(SCIPsetIntParam(scip, presolve_param.c_str(), 0));
+                    // SCIP_CALL(SCIPsetIntParam(scip, presolve_param.c_str(), 0));
                 }
             }
         }
