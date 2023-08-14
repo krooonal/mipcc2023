@@ -420,8 +420,22 @@ SCIP_RETCODE execmain(int argc, const char **argv)
         var_histories.Populate(scip, scip_variables);
 
         // Record solve statistics
-        double relative_gap = SCIPgetGap(scip);
-        relative_gap = min(relative_gap, 1.0);
+        // Compute as per competition rules.
+        double primal_bound = SCIPgetPrimalbound(scip);
+        // double relative_gap = SCIPgetGap(scip);
+        // relative_gap = min(relative_gap, 1.0);
+        double relative_gap = 1.0;
+        if (SCIPisFinite(primal_bound) && SCIPisFinite(dual_bound) && primal_bound * dual_bound >= 0)
+        {
+            if (primal_bound == 0 && dual_bound == 0)
+            {
+                relative_gap = 0.0;
+            }
+            else
+            {
+                relative_gap = abs(primal_bound - dual_bound) / max(abs(primal_bound), abs(dual_bound));
+            }
+        }
         double time_score = SCIPgetSolvingTime(scip) / timeout;
         if (relative_gap > 1e-6)
         {

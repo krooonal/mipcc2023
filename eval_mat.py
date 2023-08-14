@@ -1,4 +1,5 @@
-# Simple evaluation script for MIPcc23
+# Simple evaluation script for MIPcc23 mat_rhs_bnd_series_1. This series is
+# numerically challenging so requires higher tolerences.
 
 # The evaluation script verifies the correctness and scores a submission for an instance series.
 # Errors are thrown if something critical is missing or incorrect.
@@ -22,7 +23,7 @@ if len(sys.argv) < 4:
 log_path = sys.argv[1]
 solution_folder = sys.argv[2]
 instance_file = sys.argv[3]
-#base_path = os.path.join(os.path.dirname(instance_file), "../..")
+# base_path = os.path.join(os.path.dirname(instance_file), "../..")
 base_path = os.getcwd()
 
 with open(instance_file) as f:
