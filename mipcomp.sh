@@ -1,6 +1,4 @@
 #!/bin/bash
-# Old python code.
-#python scipmain.py $1
 
 if ! [ -f cppcode/build/cppex ];
 then
@@ -12,9 +10,3 @@ then
 fi
 
 ./cppcode/build/cppex $1
-
-# Command to compute base benchmarks.
-# ./cppcode/build/basecppex $1
-
-# Command to perform experimental evaluations.
-# ./cppcode/build/experiment $1

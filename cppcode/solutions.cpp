@@ -15,10 +15,9 @@
 
 #include "solutions.h"
 
-#define SOLDEBUG false
-
 using namespace std;
 
+// Get the solution from SCIP to this class.
 void Solution::Populate(SCIP *scip,
                         const std::vector<SCIP_VAR *> &scip_variables,
                         SCIP_SOL *solution)
@@ -31,6 +30,8 @@ void Solution::Populate(SCIP *scip,
     }
 }
 
+// Populate SCIP partial solution hint using solution values stored in
+// this class.
 SCIP_RETCODE Solution::AddToModel(SCIP *scip,
                                   std::vector<SCIP_VAR *> &scip_variables)
 {
@@ -42,10 +43,10 @@ SCIP_RETCODE Solution::AddToModel(SCIP *scip,
         double val = varvalues_.at(name);
         double var_lb = SCIPvarGetLbGlobal(var);
         double var_ub = SCIPvarGetUbGlobal(var);
+        // Ignore continuous variables.
         if (SCIPvarGetType(var) == SCIP_VARTYPE_CONTINUOUS)
             continue;
-        if (val < var_lb || val > var_ub)
-            continue;
+        // Clip value as per the current bounds.
         if (val < var_lb)
             val = var_lb;
         if (val > var_ub)
@@ -56,6 +57,9 @@ SCIP_RETCODE Solution::AddToModel(SCIP *scip,
     SCIP_CALL(SCIPaddSolFree(scip, &solution, &is_stored));
     return SCIP_OKAY;
 }
+
+// Populate SCIP complete solution hint using solution values stored in
+// this class.
 SCIP_RETCODE Solution::AddToModelComplete(SCIP *scip,
                                           std::vector<SCIP_VAR *> &scip_variables)
 {
@@ -81,18 +85,18 @@ std::map<string, double> Solution::GetVarValue()
     return varvalues_;
 }
 
+// Add new solution to the pool.
 void SolutionPool::AddSolution(Solution solution)
 {
     solutions_.push_back(solution);
+    // First solution is set as the common solution. The common values are
+    // updated based on the later solutions.
     if (solutions_.size() == 1)
     {
         common_sol_ = solution;
-        if (SOLDEBUG)
-        {
-            cout << common_sol_.GetVarValue().size() << endl;
-            cout << "Common solution set\n";
-        }
     }
+
+    // For each variable, update the frequency of each value in the solution.
     std::map<string, double> varvalues = solution.GetVarValue();
     for (auto var_val : varvalues)
     {
@@ -126,13 +130,12 @@ SCIP_RETCODE SolutionPool::AddToModel(SCIP *scip,
     {
         Solution &solution = solutions_[num_solutions - 1 - i];
         SCIP_CALL(solution.AddToModel(scip, scip_variables));
-        // SCIP_CALL(solution.AddToModelComplete(scip, scip_variables));
     }
 
-    // EXP: Disable common solution.
-    // return SCIP_OKAY;
+    // If there is just one solution, no need to add a common solution.
     if (num_solutions <= 1)
         return SCIP_OKAY;
+
     SCIP_SOL *common_solution;
     SCIP_CALL(SCIPcreatePartialSol(scip, &common_solution, NULL));
     std::map<string, double> varvalues = common_sol_.GetVarValue();
@@ -141,15 +144,17 @@ SCIP_RETCODE SolutionPool::AddToModel(SCIP *scip,
     {
         string var_name = var->name;
         double value = varvalues[var_name];
+        // Ignore continuous variables.
         if (SCIPvarGetType(var) == SCIP_VARTYPE_CONTINUOUS)
             continue;
 
+        // Use a variable value pair only if the this pair is observed in
+        // at least the common_sol_factor_ fraction of all solutions.
         if (varvaluefreq_[var_name][value] >= num_solutions * common_sol_factor_)
         {
             double var_lb = SCIPvarGetLbGlobal(var);
             double var_ub = SCIPvarGetUbGlobal(var);
-            if (value < var_lb || value > var_ub)
-                continue;
+            // Clip out of bound values.
             if (value < var_lb)
                 value = var_lb;
             if (value > var_ub)
@@ -158,51 +163,7 @@ SCIP_RETCODE SolutionPool::AddToModel(SCIP *scip,
             num_var_hinted++;
         }
     }
-    if (SOLDEBUG)
-    {
-        cout << "Number of vars hinted = " << num_var_hinted << endl;
-    }
     SCIP_Bool is_stored;
     SCIP_CALL(SCIPaddSolFree(scip, &common_solution, &is_stored));
-    return SCIP_OKAY;
-}
-
-// The following methods are not used.
-Solution SolutionPool::GetSolution(int index)
-{
-    assert(index >= 0);
-    assert(index < solutions_.size());
-    return solutions_[index];
-}
-int SolutionPool::GetNumSolutions()
-{
-    return solutions_.size();
-}
-
-SCIP_RETCODE SolutionPool::AddSolutionToModel(int sol_index, SCIP *scip)
-{
-    assert(sol_index < solutions_.size());
-    SCIP_CALL(solutions_[sol_index].AddToModel(scip, *current_scip_variables_));
-    last_added_solution_index_ = sol_index;
-    return SCIP_OKAY;
-}
-
-SCIP_RETCODE SolutionPool::AddNextSolutionToModel(SCIP *scip)
-{
-    int index = last_added_solution_index_ - 1;
-    if (last_added_solution_index_ == -1)
-    {
-        index = solutions_.size() - 1;
-    }
-    if (index < 0 || index > solutions_.size())
-    {
-        return SCIP_OKAY;
-    }
-    if (SOLDEBUG)
-    {
-        cout << "Adding solution " << index << " to model\n";
-    }
-    SCIP_CALL(solutions_[index].AddToModel(scip, *current_scip_variables_));
-    last_added_solution_index_ = index;
     return SCIP_OKAY;
 }

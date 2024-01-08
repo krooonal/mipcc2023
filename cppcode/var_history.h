@@ -21,8 +21,11 @@ using namespace std;
 class VarHistories
 {
 public:
+    // Get the variable histories and the global history from SCIP.
+    // Clip the pseudocost count to history_count_reset_ if it is larger.
     void Populate(SCIP *scip, std::vector<SCIP_VAR *> &scip_variables);
 
+    // Load the stored variable histories and global history to SCIP.
     void AddToModel(SCIP *scip, std::vector<SCIP_VAR *> &scip_variables);
 
     void SetHistoryResetCount(double count_val)

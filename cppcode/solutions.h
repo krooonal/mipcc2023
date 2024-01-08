@@ -20,50 +20,43 @@ using namespace std;
 class Solution
 {
 public:
+    // Get the solution from SCIP to this class.
     void Populate(SCIP *scip, const std::vector<SCIP_VAR *> &scip_variables,
                   SCIP_SOL *solution);
 
+    // Populate SCIP partial solution hint using solution values stored in
+    // this class. Continuous variables are ignored. The values are clipped
+    // if they lie outside the current bounds.
     SCIP_RETCODE AddToModel(SCIP *scip,
                             std::vector<SCIP_VAR *> &scip_variables);
+
+    // Populate SCIP complete solution hint using solution values stored in
+    // this class. This method was used for experiments only. It is not used
+    // in the final version.
     SCIP_RETCODE AddToModelComplete(SCIP *scip,
                                     std::vector<SCIP_VAR *> &scip_variables);
+
+    // Get the stored solution.
     std::map<string, double> GetVarValue();
 
 private:
     std::map<string, double> varvalues_;
-    double fscore_ = 0.0;
 };
 
 class SolutionPool
 {
 public:
+    // Add new solution to the pool. The first solution is set as the common
+    // solution. Also updates the frequency of observed values for each variable.
     void AddSolution(Solution solution);
 
+    // Adds up to maximum of num_hint_solns_ solution hints and a common hint to
+    // SCIP. Also adds a common solution hint if there are more than one solutions
+    // in the pool.
     SCIP_RETCODE AddToModel(SCIP *scip,
                             std::vector<SCIP_VAR *> &scip_variables);
 
-    Solution GetSolution(int index);
-    int GetNumSolutions();
-
-    // Adds solution to currently stored scip vars.
-    SCIP_RETCODE AddSolutionToModel(int sol_index, SCIP *scip);
-    SCIP_RETCODE AddNextSolutionToModel(SCIP *scip);
-    void SetCurrentScipVars(std::vector<SCIP_VAR *> *current_scip_variables)
-    {
-        current_scip_variables_ = current_scip_variables;
-        last_added_solution_index_ = -1;
-    }
-
-    void ReduceCommonSolFac()
-    {
-        common_sol_factor_ *= decrese_factor_;
-    }
-
-    void IncreaseCommonSolFac()
-    {
-        common_sol_factor_ *= increase_factor_;
-    }
-
+    // Number of solutions added as hints by 'AddToModel' method.
     void SetNumHintSolns(int num)
     {
         num_hint_solns_ = num;
@@ -73,11 +66,7 @@ private:
     std::vector<Solution> solutions_;
     Solution common_sol_;
     double common_sol_factor_ = 0.9;
-    double decrese_factor_ = 0.99;
-    double increase_factor_ = 1.01;
     std::map<string, std::map<double, int>> varvaluefreq_;
-    std::vector<SCIP_VAR *> *current_scip_variables_;
-    int last_added_solution_index_ = -1;
     int num_hint_solns_ = 9;
 };
 

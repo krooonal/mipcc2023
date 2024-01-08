@@ -17,8 +17,6 @@
 #include <time.h>
 #include <random>
 
-#define PARDEBUG false
-
 using namespace std;
 
 // https://www.johndcook.com/blog/standard_deviation/
@@ -83,19 +81,37 @@ class Parameter
 {
 public:
     Parameter(double impact_factor, string name, int seed);
+    // Add a value to be tuned.
     void AddValue(T value);
+
+    // Update the score of the current value.
     void AdjustScore(double score);
+
+    // Update the score of the value at given index.
     void AdjustScore(double score, int index);
+
+    // Get the best value.
     T GetBestValue();
+
+    // Get the best value index.
     int GetCurrentIndex()
     {
         return current_index_;
     }
+
+    // Print scores for all values.
     void PrintStats();
+
+    // Set count for deterministic exploration.
     void SetExploreCount(int explore_count)
     {
         explore_count_ = explore_count;
     }
+
+    // Switch flag is used for fixing the deterministic exploration pattern for binary parameters.
+    // 1 -> Alternate between 'on' and 'off'.
+    // 2 -> Use 'on' twice then 'off' twice. Repeat
+    // 4 -> Try 'on' for 4 instances then 'off' for next 4 instance. Repeat
     void SetSwitchFlag(int switch_flag)
     {
         switch_flag_ = switch_flag;
@@ -104,13 +120,13 @@ public:
 private:
     string name_ = "";
     std::vector<T> values_;
-    std::vector<RunningStat> scores_;
-    std::vector<double> final_scores_;
-    std::vector<int> counts_;
-    double c_fac_ = 0.3;
+    std::vector<RunningStat> scores_;  // Provided scores for each value.
+    std::vector<double> final_scores_; // Computed UCB scores for each value.
+    std::vector<int> counts_;          // Score update counts for each value.
+    double c_fac_ = 0.3;               // A hyperparameter to balance between exploration and exploitation.
     int current_index_ = 0;
-    int total_counts_ = 0;
-    mt19937 mt_;
+    int total_counts_ = 0; // Total number of score updates.
+    mt19937 mt_;           // For generating random numbers.
     int explore_count_ = 10;
     int switch_flag_ = 0; // Only for binary parameters.
 };
@@ -134,12 +150,9 @@ void Parameter<T>::AdjustScore(double score, int index)
     scores_[index].Push(score);
     counts_[index] += 1;
     total_counts_ += 1;
+    // Final UCB score is the average of provided scores adjusted with the
+    // confidence score (which decreases with each update.)
     final_scores_[index] = scores_[index].Mean() + (c_fac_ / counts_[index]);
-    if (PARDEBUG)
-    {
-        cout << name_ << ": Updated score of " << values_[index]
-             << " to " << final_scores_[index] << endl;
-    }
 }
 
 template <typename T>
@@ -158,24 +171,28 @@ T Parameter<T>::GetBestValue()
 {
     int best_index = 0;
 
-    if (explore_count_ > 0)
+    if (explore_count_ > 0) // We are still in the exploration stage.
     {
-        if (values_.size() == 2)
+        if (values_.size() == 2) // Pick based on the switch flag.
             best_index = (switch_flag_ & explore_count_) ? 1 : 0;
-        else
+        else // Randomly pick value to explore. Non deterministic.
             best_index = mt_() % values_.size();
         explore_count_--;
     }
     else // Exploit.
     {
         vector<int> bucket;
+        // If there is a value that is not sufficiently explored, try that first.
         for (int i = 0; i < values_.size(); ++i)
         {
             if (counts_[i] < 4)
                 bucket.push_back(i);
         }
+
+        // When all values are sufficiently explored...
         if (bucket.empty())
         {
+            // Pick the value with best UCB score.
             for (int i = 0; i < values_.size(); ++i)
             {
                 if (final_scores_[i] > final_scores_[best_index])
@@ -183,6 +200,8 @@ T Parameter<T>::GetBestValue()
                     best_index = i;
                 }
             }
+            // Also pick values that are near to the best UCB score.
+            // This depends on the standard deviation of the provided score.
             for (int i = 0; i < values_.size(); ++i)
             {
                 // Only converge if gains are significant.
@@ -201,27 +220,20 @@ T Parameter<T>::GetBestValue()
     }
 
     current_index_ = best_index;
-    if (PARDEBUG)
-    {
-        cout << name_ << ": Trying value: " << values_[best_index]
-             << " at index: " << best_index
-             << " Score: " << final_scores_[best_index]
-             << " Stdev: " << scores_[best_index].StandardDeviation()
-             << endl;
-    }
     return values_[best_index];
 }
 
 template <typename T>
 void Parameter<T>::PrintStats()
 {
-    cout << name_ << endl;
+    cout << name_ << endl; // Name of the parameter tuned.
     for (int i = 0; i < values_.size(); ++i)
     {
+        // Scores and other stats for each value.
         cout << "Value " << values_[i]
              << " count " << counts_[i]
              << " Qscore " << scores_[i].Mean()
-             << " Stdev: " << scores_[i].StandardDeviation()
+             << " Stdev " << scores_[i].StandardDeviation()
              << " Final score " << final_scores_[i] << endl;
     }
 }
