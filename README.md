@@ -8,8 +8,6 @@ The execution file mipcomp.sh already has commands to compile the code if the co
 
 The compiled code is in cppcode/build directory.
 
-Use experiment.cpp file for any experimental evaluation. Modify the mipcomp.sh accordingly.
-
 Instructions to run the code:
 Provide the desired series '.test' file (containing the list of instances in the series) to mipcomp.sh. Record the logs in a text file.
 Example: 
