@@ -6,14 +6,12 @@ include_directories(${SCIP_INCLUDE_DIRS})
 
 add_library(solutions solutions.cpp)
 add_library(v_history var_history.cpp)
-add_library(parameters parameters.h)
 
 add_executable(cppex
   main.cpp)
 target_link_libraries(cppex ${SCIP_LIBRARIES})
 target_link_libraries(cppex solutions)
 target_link_libraries(cppex v_history)
-target_link_libraries(cppex parameters)
 
 if( TARGET examples )
     add_dependencies( examples cppex )
