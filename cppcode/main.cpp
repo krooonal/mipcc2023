@@ -21,8 +21,6 @@
 #include "solutions.h"
 #include "parameters.h"
 
-#define DEBUG false
-
 using namespace std;
 
 // Get current date/time, format is YYYY-MM-DDTHH:mm:ss
@@ -113,8 +111,12 @@ struct SpearatorStats
 
 SCIP_RETCODE execmain(int argc, const char **argv)
 {
+    // The meta file contains the list of all instance file paths in the series.
     string meta_file_path = argv[1];
     std::cout << meta_file_path << endl;
+
+    // Extract the series name from the meta file path. We assume that the meta
+    // file is present in the directory 'datasets'.
     int pos = meta_file_path.find("datasets");
     string base_dir = meta_file_path.substr(0, pos);
     std::cout << base_dir << endl;
@@ -123,7 +125,7 @@ SCIP_RETCODE execmain(int argc, const char **argv)
     pos = meta_file_name.find(".");
     string meta_file_name_wo_ext = meta_file_name.substr(0, pos);
 
-    // Create solutions directory
+    // Create solutions directory using the series name.
     string command = "mkdir -p solutions/" + meta_file_name_wo_ext;
     system(command.c_str());
 
@@ -135,12 +137,21 @@ SCIP_RETCODE execmain(int argc, const char **argv)
     ifstream meta_file(meta_file_path);
     if (meta_file.is_open())
     {
+        // The first line in the file contains the time limit to solve each instance.
         string timeout_str;
         string line;
         getline(meta_file, line);
         stringstream ss(line);
         ss >> timeout_str >> timeout;
         std::cout << timeout << endl;
+
+        // The following 7 lines contain the information about the changing
+        // components (OBJ, LO, UP, LHS, RHS, and MAT). In this code, we do not
+        // use the detailed information about changing components i.e. which
+        // variables/constraints are changing. We only need to know which
+        // component is changing.
+
+        // Objective change.
         getline(meta_file, line); // OBJ
         string obj_str = "[OBJ] ";
         std::string::size_type i = line.find(obj_str);
@@ -152,6 +163,7 @@ SCIP_RETCODE execmain(int argc, const char **argv)
             rhs_only_change = false;
         }
 
+        // Variable lower bound change.
         getline(meta_file, line); // LO
         string lo_str = "[LO] ";
         i = line.find(lo_str);
@@ -159,11 +171,11 @@ SCIP_RETCODE execmain(int argc, const char **argv)
             line.erase(i, lo_str.length());
         if (line != "-")
         {
-            std::cout << "LO changed " << endl;
             obj_only_change = false;
             rhs_only_change = false;
         }
 
+        // Variable upper bound change.
         getline(meta_file, line); // UP
         string up_str = "[UP] ";
         i = line.find(up_str);
@@ -171,11 +183,11 @@ SCIP_RETCODE execmain(int argc, const char **argv)
             line.erase(i, up_str.length());
         if (line != "-")
         {
-            std::cout << "UP changed " << endl;
             obj_only_change = false;
             rhs_only_change = false;
         }
 
+        // Constraint lower bound change.
         getline(meta_file, line); // LHS
         string lhs_str = "[LHS] ";
         i = line.find(lhs_str);
@@ -183,10 +195,10 @@ SCIP_RETCODE execmain(int argc, const char **argv)
             line.erase(i, lhs_str.length());
         if (line != "-")
         {
-            std::cout << "LHS changed " << endl;
             obj_only_change = false;
         }
 
+        // Constraint upper bound change.
         getline(meta_file, line); // RHS
         string rhs_str = "[RHS] ";
         i = line.find(rhs_str);
@@ -194,10 +206,10 @@ SCIP_RETCODE execmain(int argc, const char **argv)
             line.erase(i, rhs_str.length());
         if (line != "-")
         {
-            std::cout << "RHS changed " << endl;
             obj_only_change = false;
         }
 
+        // Constraint coefficients change.
         getline(meta_file, line); // MAT
         string mat_str = "[MAT] ";
         i = line.find(mat_str);
@@ -205,59 +217,62 @@ SCIP_RETCODE execmain(int argc, const char **argv)
             line.erase(i, mat_str.length());
         if (line != "-")
         {
-            std::cout << "MAT changed " << endl;
             obj_only_change = false;
             rhs_only_change = false;
         }
 
+        // The next 50 lines are the paths of instnace files in this series.
         while (getline(meta_file, line))
         {
             instances.push_back(line);
         }
-        // DO NOT PRINT INSTANCE NAMES. IT SPOILS THE EVAL.
+        // WARNING: DO NOT PRINT INSTANCE NAMES. IT SPOILS THE EVAL.
         meta_file.close();
     }
 
     SCIP *scip = nullptr;
     SCIP_READER *reader;
-    SCIP_CALL(SCIPcreate(&scip)); // Creating the SCIP environment
+    // Create the SCIP environment.
+    SCIP_CALL(SCIPcreate(&scip));
     // include default plugins.
     SCIP_CALL(SCIPincludeDefaultPlugins(scip));
     std::cout << "SCIP Version: " << SCIPversion() << endl;
-    // Creating the SCIP Problem.
+    // Create the SCIP Problem.
     SCIP_CALL(SCIPcreateProbBasic(scip, "Reoptimization"));
 
-    // disable scip output to stdout
+    // Disable scip output to stdout.
     SCIPmessagehdlrSetQuiet(SCIPgetMessagehdlr(scip), TRUE);
 
     // Parameters to tune. Use fixed seed for reproducibility.
-    // Provide prev solution?
+    // Provide prev solution? Hints are not always converted.
     Parameter<bool> provide_hint(0.3, "provide_hint", /*seed=*/56166895);
-    provide_hint.SetExploreCount(8); // Hints are not always converted.
+    provide_hint.SetExploreCount(8);
     provide_hint.SetSwitchFlag(1 << 0);
-    provide_hint.AddValue(true);
+    provide_hint.AddValue(true); // Default value.
     provide_hint.AddValue(false);
     int hint_success = 0;
     int hint_total = 0;
 
-    // Tune after index 4.
+    // Use cuts? Tune after index 4.
     Parameter<int> max_cuts(0.3, "max_cuts", /*seed=*/984321);
     max_cuts.SetExploreCount(8);
     max_cuts.SetSwitchFlag(1 << 1);
-    max_cuts.AddValue(100);
+    max_cuts.AddValue(100); // Default value.
     max_cuts.AddValue(0);
 
-    // Tune after index 4.
+    // Use root node cuts? Tune after index 4.
     Parameter<int> max_cuts_root(0.3, "max_cuts_root", /*seed=*/5198413);
     max_cuts_root.SetExploreCount(8);
     max_cuts_root.SetSwitchFlag(1 << 2);
-    max_cuts_root.AddValue(2000);
+    max_cuts_root.AddValue(2000); // Default value.
     max_cuts_root.AddValue(0);
 
     SCIP_RESULT *result;
     result = new SCIP_RESULT[3];
 
+    // Store best found solution for each instance.
     SolutionPool solution_pool;
+    // Store branching histories for each variable.
     VarHistories var_histories;
     if (obj_only_change)
     {
@@ -265,32 +280,36 @@ SCIP_RETCODE execmain(int argc, const char **argv)
         solution_pool.SetNumHintSolns(5); // Default is 9.
     }
 
+    // Store statistics about heurisitcs, branhcing, presolvers, and cuts.
+    // The keys are names of the component and the values are their aggregated
+    // statistics collected from the solver.
     std::map<string, HeuristicStats> heuristic_stats;
     std::map<string, BranchingStats> branching_stats;
     std::map<string, PresolveStats> presolve_stats;
     std::map<string, SpearatorStats> sepa_stats;
 
+    // Solve each instance sequentially.
     for (int index = 0; index < instances.size(); ++index)
     {
+        // Extract the instnace name.
         string instance = instances[index];
         int pos = instance.find_last_of('/');
         string instance_name = instance.substr(pos + 1, string::npos);
         string filename = instance;
 
+        // Print the instance name.
         std::cout << "[INSTANCE] " << instance_name << "\n"
                   << std::flush;
         // Read in *.MPS file
         SCIP_CALL(SCIPreadMps(scip, reader, filename.c_str(), result, NULL, NULL,
                               NULL, NULL, NULL, NULL));
 
-        // Print the time
-        // system("echo -n \"[START] \"; date -Iseconds");
+        // Print the start time for solving.
         std::cout << "[START] " << CurrentDateTime() << "\n"
                   << std::flush;
 
         // Use little less than the time limit to ensure that we have
         // sufficient time left for stats collection and solution writing.
-        // TODO: use timeout -1
         SCIP_CALL(SCIPsetRealParam(scip, "limits/time", timeout - 1));
 
         if (index == 0)
@@ -318,6 +337,7 @@ SCIP_RETCODE execmain(int argc, const char **argv)
             if (rhs_only_change && index > 4)
             {
                 // Pseudocosts are well trained if objective and bounds are not changed.
+                // No need to use reliability branching.
                 SCIP_CALL(SCIPsetIntParam(scip, "branching/pscost/priority", 40000)); // default 2000
             }
             // Disable restarts. We are already using enough information from previous instances.
@@ -325,19 +345,20 @@ SCIP_RETCODE execmain(int argc, const char **argv)
         }
         if (index >= 25)
         {
-            // Turn off non performing heuristics
+            // Turn off non performing heuristics.
             for (auto heuristic : heuristic_stats)
             {
                 int num_best_solns = max(1, heuristic.second.n_best_solns);
                 double time_per_best_soln = heuristic.second.time_spent / num_best_solns;
                 if (heuristic.second.n_solns == 0)
                 {
+                    // It failed to find any solution in any instance so far.
                     string heuristic_param = "heuristics/" + heuristic.first + "/freq";
                     SCIP_CALL(SCIPsetIntParam(scip, heuristic_param.c_str(), -1));
                 }
                 else if (time_per_best_soln / timeout > 0.2)
                 {
-                    // and some not so effective ones.
+                    // It found solutions, but spent too much time for it.
                     string heuristic_param = "heuristics/" + heuristic.first + "/freq";
                     SCIP_CALL(SCIPsetIntParam(scip, heuristic_param.c_str(), -1));
                 }
@@ -348,6 +369,7 @@ SCIP_RETCODE execmain(int argc, const char **argv)
             {
                 if (separator.second.cuts_added == 0 && separator.second.time_spent > 1.0)
                 {
+                    // No cuts have been added by this separator and it has spent too much time.
                     string spea_param = "separating/" + separator.first + "/freq";
                     SCIP_CALL(SCIPsetIntParam(scip, spea_param.c_str(), -1));
                 }
@@ -361,6 +383,7 @@ SCIP_RETCODE execmain(int argc, const char **argv)
             {
                 if (presolve.second.total_changes == 0 && presolve.second.time_spent > 2.0)
                 {
+                    // No changes have been made by this presolve rule and it has spent too much time.
                     string presolve_param = "presolving/" + presolve.first + "/maxrounds";
                     SCIP_CALL(SCIPsetIntParam(scip, presolve_param.c_str(), 0));
                 }
@@ -377,32 +400,37 @@ SCIP_RETCODE execmain(int argc, const char **argv)
             SCIP_VAR *var = vars[i];
             scip_variables.push_back(var);
         }
+
+        // After the first instance, use the previous instance solutions as hints (if parameter tuning allows it)
+        // and warm start the pseudocosts using the branching history of previous instance.
         if (index > 0)
         {
             if (provide_hint.GetBestValue())
             {
                 solution_pool.AddToModel(scip, scip_variables);
             }
-            // solution_pool.SetCurrentScipVars(&scip_variables);
             var_histories.AddToModel(scip, scip_variables);
         }
 
         // Solve
         SCIP_CALL(SCIPsolve(scip));
+
+        // Print the dual bound.
+        double dual_bound = SCIPgetDualbound(scip);
+        std::cout << "[DUALBOUND] " << std::fixed << std::setprecision(9)
+                  << dual_bound << "\n"
+                  << std::flush;
+
         // Write solution
         if (SCIPgetNSols(scip) <= 0)
         {
+            // TODO: Throw an error when no solution was found?
             continue;
         }
         SCIP_SOL *sol;
         sol = SCIPgetBestSol(scip);
 
-        // Dual bound.
-        double dual_bound = SCIPgetDualbound(scip);
-        std::cout << "[DUALBOUND] " << std::fixed << std::setprecision(9)
-                  << dual_bound << "\n"
-                  << std::flush;
-        // Add solution to file and pool.
+        // Write solution to file.
         ofstream solution_file;
         solution_file.open("solutions/" + meta_file_name_wo_ext + "/" + instance_name + ".sol");
         for (SCIP_VAR *scip_var : scip_variables)
@@ -414,38 +442,37 @@ SCIP_RETCODE execmain(int argc, const char **argv)
                           << std::flush;
         }
         solution_file.close();
+
+        // Add solution to the solution pool.
         Solution solution;
         solution.Populate(scip, scip_variables, sol);
         solution_pool.AddSolution(solution);
         var_histories.Populate(scip, scip_variables);
 
-        // Record solve statistics
-        double relative_gap = SCIPgetGap(scip);
-        relative_gap = min(relative_gap, 1.0);
+        // Record solve statistics.
+        // Compute scores as per competition rules. The total score is used for parameter tuning.
+        double primal_bound = SCIPgetPrimalbound(scip);
+        double relative_gap = 1.0;
+        if (SCIPisFinite(primal_bound) && SCIPisFinite(dual_bound) && primal_bound * dual_bound >= 0)
+        {
+            if (primal_bound == 0 && dual_bound == 0)
+            {
+                relative_gap = 0.0;
+            }
+            else
+            {
+                relative_gap = abs(primal_bound - dual_bound) / max(abs(primal_bound), abs(dual_bound));
+            }
+        }
         double time_score = SCIPgetSolvingTime(scip) / timeout;
         if (relative_gap > 1e-6)
         {
             time_score = 1.0;
         }
         double total_score = time_score + relative_gap;
-        if (DEBUG)
-        {
-            double adjusted_score = total_score * (1 + 0.1 * index);
-            double first_sol_gap = scip->stat->firstsolgap;
-            double first_solution_val = scip->stat->firstprimalbound;
-            double best_solution_val = SCIPgetPrimalbound(scip);
-            double first_solution_dist = abs(first_solution_val - best_solution_val);
-            double first_sol_time = scip->stat->firstprimaltime;
-            std::cout << "Relative gap: " << relative_gap << endl;
-            std::cout << "time_score: " << time_score << endl;
-            std::cout << "first_solution_dist: " << first_solution_dist << endl;
-            std::cout << "first_sol_time: " << first_sol_time << endl;
-            std::cout << "total_score: " << total_score << endl;
-            std::cout << "adjusted_score: " << adjusted_score << endl;
-            std::cout << "Number of runs: " << scip->stat->nruns << endl;
-        }
 
-        // Record branching stats
+        // Record branching stats. This is only used for observations and not used
+        // for tuning the performance of the solver.
         SCIP_BRANCHRULE **branch_rules = SCIPgetBranchrules(scip);
         int n_branch_rules = SCIPgetNBranchrules(scip);
         for (int i = 0; i < n_branch_rules; ++i)
@@ -461,7 +488,7 @@ SCIP_RETCODE execmain(int argc, const char **argv)
             }
         }
 
-        // Record heuristic stats
+        // Record heuristic stats.
         SCIP_HEUR **heuristics = SCIPgetHeurs(scip);
         int n_heuristics = SCIPgetNHeurs(scip);
         for (int i = 0; i < n_heuristics; ++i)
@@ -478,7 +505,7 @@ SCIP_RETCODE execmain(int argc, const char **argv)
             }
         }
 
-        // Record Presolve stats
+        // Record Presolve stats.
         SCIP_PRESOL **presolvers = SCIPgetPresols(scip);
         int n_presolvers = SCIPgetNPresols(scip);
         for (int i = 0; i < n_presolvers; ++i)
@@ -504,7 +531,7 @@ SCIP_RETCODE execmain(int argc, const char **argv)
             }
         }
 
-        // Record Cuts stats
+        // Record Cuts stats.
         SCIP_SEPA **separators = SCIPgetSepas(scip);
         int n_sepas = SCIPgetNSepas(scip);
         for (int i = 0; i < n_sepas; ++i)
@@ -521,19 +548,14 @@ SCIP_RETCODE execmain(int argc, const char **argv)
             }
         }
 
-        // Solution feedback
+        // Solution hint feedback.
+        // Solution hints are processed by completesol heuristic. We extract the
+        // statistics of this heuristic to know if the hint was converted into
+        // a feasible solution.
         SCIP_HEUR *comp_sol_heur = SCIPfindHeur(scip, "completesol");
         assert(comp_sol_heur != NULL);
         SCIP_Longint comp_sol_calls = SCIPheurGetNCalls(comp_sol_heur);
         SCIP_Longint comp_sol_solns = SCIPheurGetNSolsFound(comp_sol_heur);
-        SCIP_Real comp_soln_time = SCIPheurGetTime(comp_sol_heur);
-        if (DEBUG)
-        {
-            std::cout << "Calls " << comp_sol_calls
-                      << " Solns " << comp_sol_solns
-                      << " Time " << comp_soln_time
-                      << endl;
-        }
         if (comp_sol_calls > 0)
         {
             hint_total++;
@@ -548,17 +570,19 @@ SCIP_RETCODE execmain(int argc, const char **argv)
         {
             if (provide_hint.GetCurrentIndex() == 0) // True value for hint.
             {
+                // The hint was provided. We update the true value if the hint
+                // was converted to a feasible solution. Othwerwise, we update
+                // the score of false value (equivalent to not providing the hint).
                 if (comp_sol_solns > 0)
                 {
                     provide_hint.AdjustScore(-total_score);
                 }
                 else
                 {
-                    // Update the false value of hint if hint is not successful.
                     provide_hint.AdjustScore(-total_score, 1);
                 }
             }
-            else
+            else // The hint was not provided.
             {
                 provide_hint.AdjustScore(-total_score);
             }
@@ -567,16 +591,19 @@ SCIP_RETCODE execmain(int argc, const char **argv)
             max_cuts.AdjustScore(-total_score);
             max_cuts_root.AdjustScore(-total_score);
         }
-        // system("echo -n \"[END] \";date -Iseconds");
+
+        // Print the end time for this instance.
         std::cout << "[END] " << CurrentDateTime() << "\n\n"
                   << std::flush;
     }
+    // Print the parameter tuning stats after solving all instances.
     provide_hint.PrintStats();
     max_cuts.PrintStats();
     max_cuts_root.PrintStats();
     std::cout << "Provided hints: " << hint_total
               << " successful hints: " << hint_success << endl;
 
+    // Also print aggregated stats for different solver components.
     for (auto branching : branching_stats)
     {
         branching.second.printstat();
