@@ -154,11 +154,9 @@ SCIP_RETCODE SolutionPool::AddToModel(SCIP *scip,
         {
             double var_lb = SCIPvarGetLbGlobal(var);
             double var_ub = SCIPvarGetUbGlobal(var);
-            // Clip out of bound values.
-            if (value < var_lb)
-                value = var_lb;
-            if (value > var_ub)
-                value = var_ub;
+            // Let solver figure out the value if it is out of bound.
+            if (value < var_lb || value > var_ub)
+                continue;
             SCIP_CALL(SCIPsetSolVal(scip, common_solution, var, value));
             num_var_hinted++;
         }
