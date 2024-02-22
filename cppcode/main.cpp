@@ -129,7 +129,7 @@ SCIP_RETCODE execmain(int argc, const char **argv)
     string command = "mkdir -p solutions/" + meta_file_name_wo_ext;
     system(command.c_str());
 
-    if (argc >= 2)
+    if (argc > 2)
     {
         // Create solutions directory using the series name.
         string command = "mkdir -p solutionsD/" + meta_file_name_wo_ext;
@@ -320,7 +320,7 @@ SCIP_RETCODE execmain(int argc, const char **argv)
         SCIP_CALL(SCIPsetRealParam(scip, "limits/time", timeout - 1));
 
         // Use the discounted pseudo costs?
-        if (argc >= 2) 
+        if (argc > 2) 
         {
             cout << "Turning on discounted pscost mode" << endl << std::flush;
             SCIP_CALL(SCIPsetBoolParam(scip, "branching/discountedpscost" , TRUE));
@@ -447,7 +447,7 @@ SCIP_RETCODE execmain(int argc, const char **argv)
         // Write solution to file.
         string solution_dir = "solutions/";
         ofstream solution_file;
-        if (argc >= 2)
+        if (argc > 2)
             solution_dir = "solutionsD/";
         solution_file.open(solution_dir + meta_file_name_wo_ext + "/" + instance_name + ".sol");
         for (SCIP_VAR *scip_var : scip_variables)
