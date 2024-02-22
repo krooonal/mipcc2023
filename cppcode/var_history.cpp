@@ -27,6 +27,8 @@ void VarHistories::Populate(SCIP *scip,
     // Clip the pseudocost count to history_count_reset_ if it is larger.
     global_history_.pscostcount[0] = min(global_history_.pscostcount[0], history_count_reset_);
     global_history_.pscostcount[1] = min(global_history_.pscostcount[1], history_count_reset_);
+    global_history_.dpscostcount[0] = min(global_history_.pscostcount[0], history_count_reset_);
+    global_history_.dpscostcount[1] = min(global_history_.pscostcount[1], history_count_reset_);
 
     // Get history for each variable.
     for (SCIP_VAR *var : scip_variables)
@@ -37,6 +39,8 @@ void VarHistories::Populate(SCIP *scip,
         // Clip the pseudocost count to history_count_reset_ if it is larger.
         var_history.pscostcount[0] = min(var_history.pscostcount[0], history_count_reset_);
         var_history.pscostcount[1] = min(var_history.pscostcount[1], history_count_reset_);
+        var_history.dpscostcount[0] = min(var_history.pscostcount[0], history_count_reset_);
+        var_history.dpscostcount[1] = min(var_history.pscostcount[1], history_count_reset_);
         var_histories_[name] = var_history;
     }
 }
